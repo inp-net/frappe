@@ -1,0 +1,11 @@
+spring:
+  config:
+    import:
+    - optional:file:../.env[.properties]
+
+  application:
+    name: frappe
+  
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
