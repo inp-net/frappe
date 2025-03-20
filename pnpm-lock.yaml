@@ -10,7 +10,7 @@ importers:
 
   apps/api: {}
 
-  apps/frontend:
+  apps/app:
     devDependencies:
       '@eslint/compat':
         specifier: ^1.2.5
