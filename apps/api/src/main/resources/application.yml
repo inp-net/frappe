@@ -9,3 +9,13 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: none  # Désactive la création automatique par Hibernate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog.yaml

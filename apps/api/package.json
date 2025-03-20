@@ -1,6 +1,8 @@
 {
 	"name": "@frappe/api",
 	"scripts": {
-		"dev": "mvn spring-boot:run"
+		"dev": "mvn spring-boot:run",
+		"migration:make": "./generate_migration.sh",
+		"reset": "./mvnw liquibase:dropAll && ./mvnw liquibase:update"
 	}
 }
