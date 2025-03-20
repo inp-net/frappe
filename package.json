@@ -1,0 +1,17 @@
+{
+	"name": "frappe",
+	"version": "0.0.0",
+	"description": "",
+	"scripts": {
+		"dev:api": "pnpm --filter @frappe/api run dev",
+		"dev:app": "pnpm --filter @frappe/app run dev"
+	},
+	"keywords": [],
+	"author": "",
+	"packageManager": "pnpm@10.6.5",
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	}
+}

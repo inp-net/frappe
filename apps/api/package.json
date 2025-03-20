@@ -1,0 +1,6 @@
+{
+	"name": "@frappe/api",
+	"scripts": {
+		"dev": "mvn spring-boot:run"
+	}
+}
