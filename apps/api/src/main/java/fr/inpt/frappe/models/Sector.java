@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,12 +17,21 @@ public class Sector {
 
     private String nom;
 
-    public Sector() {}
+    @OneToMany
+    private Specialisation specialisation;
+
+    public Sector() {
+    }
 
     public Sector(String nom) {
         this.nom = nom;
     }
-    
+
+    public Sector(String nom, Specialisation specialisation) {
+        this.nom = nom;
+        this.specialisation = specialisation;
+    }
+
     public long getId() {
         return id;
     }
@@ -32,5 +42,13 @@ public class Sector {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public Specialisation getSpecialisation() {
+        return specialisation;
+    }
+
+    public void setSpecialisation(Specialisation specialisation) {
+        this.specialisation = specialisation;
     }
 }
