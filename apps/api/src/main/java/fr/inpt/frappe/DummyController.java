@@ -15,9 +15,7 @@ public class DummyController {
 
 	@GetMapping("/")
 	public String hello() {
-		User user = new User();
-		user.setName("bonjour");
-		users.save(user);
+		users.save(new User("dupont", "dupond", 1));
 
 		return "hello world";
 	}
