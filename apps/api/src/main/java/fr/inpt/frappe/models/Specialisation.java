@@ -23,7 +23,13 @@ public class Specialisation {
 	@OneToMany
 	private Collection<EducationEntity> educationEntities;
 
-	public Specialisation() {}
+	public Specialisation() {
+	}
+
+	public Specialisation(String name, Collection<EducationEntity> educationEntities) {
+		this.name = name;
+		this.educationEntities = educationEntities;
+	}
 
 	public long getId() {
 		return id;

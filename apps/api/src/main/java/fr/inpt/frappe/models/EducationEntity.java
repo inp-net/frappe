@@ -15,20 +15,26 @@ public class EducationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-    
+    private long id;
+
     private String name;
-    
+
     /** An education entity have several courses. */
     @OneToMany
     private Collection<Course> courses;
 
-    public EducationEntity() {}
+    public EducationEntity() {
+    }
+
+    public EducationEntity(String name, Collection<Course> courses) {
+        this.name = name;
+        this.courses = courses;
+    }
 
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }

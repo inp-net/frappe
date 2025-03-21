@@ -15,19 +15,25 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-    
+    private long id;
+
     private String name;
-    
+
     @OneToMany
     private Collection<Document> documents;
 
-    public Course() {}
+    public Course() {
+    }
+
+    public Course(String name, Collection<Document> documents) {
+        this.name = name;
+        this.documents = documents;
+    }
 
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
