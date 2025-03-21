@@ -2,7 +2,6 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
-
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,16 +15,16 @@ import jakarta.persistence.Table;
 @Table(name = "documents")
 public class Document {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-	private String title;
+    private String title;
 
     @ManyToOne
-    @JoinColumn(name="idcourse")
+    @JoinColumn(name = "idcourse")
     private long idCourse;
-    
+
     @ElementCollection
     private Collection<Long> listIdTags;
 

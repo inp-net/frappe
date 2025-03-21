@@ -38,11 +38,11 @@ public class Course {
         this.name = name;
     }
 
-    public Collection<Document> getCourses() {
+    public Collection<Document> getDocuments() {
         return documents;
     }
 
-    public void setCourses(Collection<Course> documents) {
+    public void setDocuments(Collection<Document> documents) {
         this.documents = documents;
     }
 }
