@@ -1,9 +1,12 @@
 package fr.inpt.frappe.models;
 
+import java.util.Collection;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Tag {
@@ -14,11 +17,15 @@ public class Tag {
 
 	private String name;
 
+	@ManyToMany
+	private Collection<Document> documents;
+
 	public Tag() {
 	}
 
-	public Tag(String name) {
+	public Tag(String name, Collection<Document> documents) {
 		this.name = name;
+		this.documents = documents;
 	}
 
 	public long getId() {
@@ -33,4 +40,11 @@ public class Tag {
 		this.name = name;
 	}
 
+	public Collection<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Collection<Document> documents) {
+		this.documents = documents;
+	}
 }
