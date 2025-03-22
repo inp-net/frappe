@@ -22,7 +22,7 @@ public class Subject {
 
     private boolean forApprentices;
 
-    @OneToMany
+    @OneToMany(mappedBy = "subject")
     private Collection<Document> documents;
 
     @ManyToOne

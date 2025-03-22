@@ -17,7 +17,7 @@ public class School {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "school")
     private Collection<Major> majors;
 
     public School() {

@@ -19,8 +19,8 @@ public class Minor {
 	private String name;
 
 	/** A minor have several teaching units. */
-	@OneToMany
-	private Collection<TeachingUnit> teachingUnit;
+	@OneToMany(mappedBy = "minor")
+	private Collection<TeachingUnit> teachingUnits;
 
 	@ManyToOne
 	private Major major;
@@ -28,9 +28,9 @@ public class Minor {
 	public Minor() {
 	}
 
-	public Minor(String name, Collection<TeachingUnit> teachingUnit, Major major) {
+	public Minor(String name, Collection<TeachingUnit> teachingUnits, Major major) {
 		this.name = name;
-		this.teachingUnit = teachingUnit;
+		this.teachingUnits = teachingUnits;
 		this.major = major;
 	}
 
@@ -46,12 +46,12 @@ public class Minor {
 		this.name = name;
 	}
 
-	public Collection<TeachingUnit> getTeachingUnit() {
-		return teachingUnit;
+	public Collection<TeachingUnit> getTeachingUnits() {
+		return teachingUnits;
 	}
 
-	public void setTeachingUnit(Collection<TeachingUnit> teachingUnit) {
-		this.teachingUnit = teachingUnit;
+	public void setTeachingUnits(Collection<TeachingUnit> teachingUnits) {
+		this.teachingUnits = teachingUnits;
 	}
 
 	public Major getMajor() {

@@ -1,5 +1,6 @@
 package fr.inpt.frappe.models;
 
+import java.util.Collection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +19,8 @@ public class Major {
 
     private boolean discontinued;
 
-    @OneToMany
-    private Minor minor;
+    @OneToMany(mappedBy = "major")
+    private Collection<Minor> minors;
 
     @ManyToOne
     private School school;
@@ -27,9 +28,9 @@ public class Major {
     public Major() {
     }
 
-    public Major(String name, Minor minor, School school, boolean discontinued) {
+    public Major(String name, Collection<Minor> minors, School school, boolean discontinued) {
         this.name = name;
-        this.minor = minor;
+        this.minors = minors;
         this.school = school;
         this.discontinued = discontinued;
     }
@@ -46,12 +47,12 @@ public class Major {
         this.name = name;
     }
 
-    public Minor getMinor() {
-        return minor;
+    public Collection<Minor> getMinor() {
+        return minors;
     }
 
-    public void setMinor(Minor minor) {
-        this.minor = minor;
+    public void setMinor(Collection<Minor> minors) {
+        this.minors = minors;
     }
 
     public School getSchool() {
