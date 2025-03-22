@@ -7,10 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "school")
 public class School {
 
     @Id
@@ -20,7 +18,7 @@ public class School {
     private String name;
 
     @OneToMany
-    private Collection<Sector> sector;
+    private Collection<Major> majors;
 
     public School() {
     }
@@ -29,9 +27,9 @@ public class School {
         this.name = name;
     }
 
-    public School(String name, Collection<Sector> sector) {
+    public School(String name, Collection<Major> majors) {
         this.name = name;
-        this.sector = sector;
+        this.majors = majors;
     }
 
     public long getId() {
@@ -46,11 +44,11 @@ public class School {
         this.name = name;
     }
 
-    public Collection<Sector> getSector() {
-        return sector;
+    public Collection<Major> getMajors() {
+        return majors;
     }
 
-    public void setSector(Collection<Sector> sector) {
-        this.sector = sector;
+    public void setMajors(Collection<Major> majors) {
+        this.majors = majors;
     }
 }

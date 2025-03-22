@@ -7,11 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "educationentity")
-public class Course {
+public class TeachingUnit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +17,16 @@ public class Course {
 
     private String name;
 
+    /** A teching unit have several subjects. */
     @OneToMany
-    private Collection<Document> documents;
+    private Collection<Subject> subjects;
 
-    public Course() {
+    public TeachingUnit() {
     }
 
-    public Course(String name, Collection<Document> documents) {
+    public TeachingUnit(String name, Collection<Subject> subjects) {
         this.name = name;
-        this.documents = documents;
+        this.subjects = subjects;
     }
 
     public String getName() {
@@ -38,11 +37,11 @@ public class Course {
         this.name = name;
     }
 
-    public Collection<Document> getDocuments() {
-        return documents;
+    public Collection<Subject> getSubjects() {
+        return subjects;
     }
 
-    public void setDocuments(Collection<Document> documents) {
-        this.documents = documents;
+    public void setSubjects(Collection<Subject> subjects) {
+        this.subjects = subjects;
     }
 }

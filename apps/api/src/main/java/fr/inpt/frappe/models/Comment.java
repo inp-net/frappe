@@ -4,12 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "comments")
 public class Comment {
 
     @Id
@@ -19,40 +16,34 @@ public class Comment {
     private String text;
 
     @ManyToOne
-    @JoinColumn(name = "idDocument")
-    private long idDocument;
+    private Document document;
 
     @ManyToOne
-    @JoinColumn(name = "iduser")
-    private long idUser;
-
-    public Comment(String text, long idDocument, long idUser) {
-        this.text = text;
-        this.idDocument = idDocument;
-        this.idUser = idUser;
-    }
+    private User user;
 
     public Comment() {
     }
 
-    public long getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(long idUser) {
-        this.idUser = idUser;
-    }
-
-    public long getIdDocument() {
-        return idDocument;
-    }
-
-    public void setIdDocument(long idDocument) {
-        this.idDocument = idDocument;
+    public Comment(String text, Document document, User user) {
+        this.text = text;
+        this.document = document;
+        this.user = user;
     }
 
     public long getId() {
         return id;
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getText() {

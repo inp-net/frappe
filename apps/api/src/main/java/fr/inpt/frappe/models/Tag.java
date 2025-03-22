@@ -4,10 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tags")
 public class Tag {
 
 	@Id
@@ -15,6 +13,13 @@ public class Tag {
 	private long id;
 
 	private String name;
+
+	public Tag() {
+	}
+
+	public Tag(String name) {
+		this.name = name;
+	}
 
 	public long getId() {
 		return id;
@@ -26,13 +31,6 @@ public class Tag {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Tag(String name) {
-		this.name = name;
-	}
-
-	public Tag() {
 	}
 
 }

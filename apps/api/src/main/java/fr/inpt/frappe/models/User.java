@@ -25,28 +25,21 @@ public class User {
 	private School school;
 
 	@ManyToOne
-	private Sector sector;
+	private Major major;
 
 	@ManyToOne
-	private Specialisation specialisation;
+	private Minor minor;
 
 	public User() {
 	}
 
-	public User(String firsname, String lastname, int year) {
-		this.firstname = firsname;
-		this.lastname = lastname;
-		this.year = year;
-	}
-
-	public User(String firstname, String lastname, int year, School school, Sector sector,
-			Specialisation specialisation) {
+	public User(String firstname, String lastname, int year, School school, Major major, Minor minor) {
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.year = year;
 		this.school = school;
-		this.sector = sector;
-		this.specialisation = specialisation;
+		this.major = major;
+		this.minor = minor;
 	}
 
 	public long getId() {
@@ -85,20 +78,20 @@ public class User {
 		this.school = school;
 	}
 
-	public Sector getSector() {
-		return sector;
+	public Major getMajor() {
+		return major;
 	}
 
-	public void setSector(Sector sector) {
-		this.sector = sector;
+	public void setMajor(Major major) {
+		this.major = major;
 	}
 
-	public Specialisation getSpecialisation() {
-		return specialisation;
+	public Minor getMinor() {
+		return minor;
 	}
 
-	public void setSpecialisation(Specialisation specialisation) {
-		this.specialisation = specialisation;
+	public void setMinor(Minor minor) {
+		this.minor = minor;
 	}
 
 }

@@ -2,6 +2,6 @@ package fr.inpt.frappe.models;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CourseRepository extends JpaRepository<Course, Long> {
+public interface TeachingUnitRepository extends JpaRepository<TeachingUnit, Long> {
 
 }

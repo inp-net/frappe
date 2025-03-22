@@ -1,18 +1,14 @@
 package fr.inpt.frappe.models;
 
 import java.util.Collection;
-
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
 
 @Entity
-@Table(name = "documents")
 public class Document {
 
     @Id
@@ -22,16 +18,15 @@ public class Document {
     private String title;
 
     @ManyToOne
-    @JoinColumn(name = "idcourse")
-    private long idCourse;
+    private Subject subject;
 
-    @ElementCollection
-    private Collection<Long> listIdTags;
+    @OneToMany
+    private Collection<Tag> tags;
 
-    public Document(String title, long idCourse, Collection<Long> listIdTags) {
+    public Document(String title, Subject subject, Collection<Tag> tags) {
         this.title = title;
-        this.idCourse = idCourse;
-        this.listIdTags = listIdTags;
+        this.subject = subject;
+        this.tags = tags;
     }
 
     public Document() {
@@ -49,20 +44,20 @@ public class Document {
         this.title = title;
     }
 
-    public long getIdCourse() {
-        return idCourse;
+    public Subject getSubject() {
+        return subject;
     }
 
-    public void setIdCourse(long idCourse) {
-        this.idCourse = idCourse;
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
-    public Collection<Long> getListIdTags() {
-        return listIdTags;
+    public Collection<Tag> getTags() {
+        return tags;
     }
 
-    public void setListIdTags(Collection<Long> listIdTags) {
-        this.listIdTags = listIdTags;
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
     }
 
 }
