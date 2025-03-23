@@ -8,8 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "teaching_units")
 public class TeachingUnit {
 
     @Id
@@ -19,7 +21,7 @@ public class TeachingUnit {
     private String name;
 
     /** A teching unit have several subjects. */
-    @OneToMany(mappedBy = "teachingUnit")
+    @OneToMany(mappedBy = "teaching_unit")
     private Collection<Subject> subjects;
 
     @ManyToOne

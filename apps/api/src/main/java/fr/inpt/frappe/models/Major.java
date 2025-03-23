@@ -7,8 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "majors")
 public class Major {
 
     @Id
@@ -16,6 +18,8 @@ public class Major {
     private long id;
 
     private String name;
+
+    private String short_name;
 
     private boolean discontinued;
 
@@ -28,11 +32,12 @@ public class Major {
     public Major() {
     }
 
-    public Major(String name, Collection<Minor> minors, School school, boolean discontinued) {
+    public Major(String name, String short_name, Collection<Minor> minors, School school, boolean discontinued) {
         this.name = name;
         this.minors = minors;
         this.school = school;
         this.discontinued = discontinued;
+        this.short_name = short_name;
     }
 
     public long getId() {
@@ -45,6 +50,14 @@ public class Major {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getShortName() {
+        return short_name;
+    }
+
+    public void setShortName(String short_name) {
+        this.short_name = short_name;
     }
 
     public Collection<Minor> getMinor() {

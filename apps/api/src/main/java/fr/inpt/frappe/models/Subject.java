@@ -8,8 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "subjects")
 public class Subject {
 
     @Id
@@ -20,24 +22,21 @@ public class Subject {
 
     private int semester;
 
-    private boolean forApprentices;
-
     @OneToMany(mappedBy = "subject")
     private Collection<Document> documents;
 
     @ManyToOne
-    private TeachingUnit teachingUnit;
+    private TeachingUnit teaching_unit;
 
     public Subject() {
     }
 
-    public Subject(String name, int semester, boolean forApprentices, Collection<Document> documents,
-            TeachingUnit teachingUnit) {
+    public Subject(String name, int semester, Collection<Document> documents,
+            TeachingUnit teaching_unit) {
         this.name = name;
         this.documents = documents;
-        this.teachingUnit = teachingUnit;
+        this.teaching_unit = teaching_unit;
         this.semester = semester;
-        this.forApprentices = forApprentices;
     }
 
     public String getName() {
@@ -56,14 +55,6 @@ public class Subject {
         this.semester = semester;
     }
 
-    public boolean isForApprentices() {
-        return forApprentices;
-    }
-
-    public void setForApprentices(boolean forApprentices) {
-        this.forApprentices = forApprentices;
-    }
-
     public Collection<Document> getDocuments() {
         return documents;
     }
@@ -72,12 +63,12 @@ public class Subject {
         this.documents = documents;
     }
 
-    public TeachingUnit getTeachingUnit() {
-        return teachingUnit;
+    public TeachingUnit getTeaching_unit() {
+        return teaching_unit;
     }
 
-    public void setTeachingUnit(TeachingUnit teachingUnit) {
-        this.teachingUnit = teachingUnit;
+    public void setTeaching_unit(TeachingUnit teaching_unit) {
+        this.teaching_unit = teaching_unit;
     }
 
 }
