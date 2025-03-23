@@ -17,7 +17,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     private UUID id;
 
-    private String text;
+    private String content;
 
     @ManyToOne
     private Document document;
@@ -28,8 +28,8 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(String text, Document document, User user) {
-        this.text = text;
+    public Comment(String content, Document document, User user) {
+        this.content = content;
         this.document = document;
         this.user = user;
     }
@@ -51,11 +51,11 @@ public class Comment {
     }
 
     public String getText() {
-        return text;
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setText(String content) {
+        this.content = content;
     }
 
 }
