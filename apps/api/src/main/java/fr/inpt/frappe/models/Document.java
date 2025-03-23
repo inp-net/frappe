@@ -22,6 +22,8 @@ public class Document {
 
     private String title;
 
+    private String description;
+
     @ManyToOne
     private Subject subject;
 
@@ -31,11 +33,12 @@ public class Document {
     @OneToMany(mappedBy = "document")
     private Collection<Comment> comments;
 
-    public Document(String title, Subject subject, Collection<Tag> tags, Collection<Comment> comments) {
+    public Document(String title, String description, Subject subject, Collection<Tag> tags, Collection<Comment> comments) {
         this.title = title;
         this.subject = subject;
         this.tags = tags;
         this.comments = comments;
+        this.description = description;
     }
 
     public Document() {
@@ -51,6 +54,14 @@ public class Document {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Subject getSubject() {
