@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.inpt.frappe.models.User;
-import fr.inpt.frappe.models.UserRepository;
+import fr.inpt.frappe.repositories.UserRepository;
 
 @RestController
 public class DummyController {
@@ -15,10 +15,8 @@ public class DummyController {
 
 	@GetMapping("/")
 	public String hello() {
-		User user = new User();
-		user.setName("bonjour");
-		users.save(user);
+		users.save(new User("un", "homme", 0, null, null, null));
 
-		return "hello world";
+		return "hello world ";
 	}
 }
