@@ -47,6 +47,10 @@ public class User {
 	public User() {
 	}
 
+	public User(String uid) {
+		this.uid = uid;
+	}
+
 	public User(String uid, String firstname, String lastname, int year) {
 		this.uid = uid;
 		this.firstname = firstname;

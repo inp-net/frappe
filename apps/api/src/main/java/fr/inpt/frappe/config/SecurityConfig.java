@@ -47,22 +47,19 @@ public class SecurityConfig {
 		final OidcUserService delegate = new OidcUserService();
 
 		return (userRequest) -> {
-			logger.debug("Handling OIDC user request");
+			logger.debug("OIDC user request");
 			OidcUser oidcUser = delegate.loadUser(userRequest);
 
-			logger.debug("OIDC user request handled, fetching user from database");
+			logger.debug("Fetch user from database");
 			User user = userRepository
 					.findByUid(oidcUser.getPreferredUsername())
-					.orElseGet(() -> {
-						logger.debug("No matching user found, creating a new one from OIDC user");
-						User newUser = new User(
-								oidcUser.getPreferredUsername(),
-								oidcUser.getAttribute("firstName"),
-								oidcUser.getAttribute("lastName"),
-								utils.parseYearTier(oidcUser.getAttribute("yearTier")));
-						userRepository.save(newUser);
-						return newUser;
-					});
+					.orElse(new User(oidcUser.getPreferredUsername()));
+
+			logger.debug("Update user data");
+			user.setFirstname(oidcUser.getAttribute("firstName"));
+			user.setLastname(oidcUser.getAttribute("lastName"));
+			user.setYear(utils.parseYearTier(oidcUser.getAttribute("yearTier")));
+			userRepository.save(user);
 
 			return new AuthUser(user, oidcUser);
 		};
