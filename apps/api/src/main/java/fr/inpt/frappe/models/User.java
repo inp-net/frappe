@@ -2,6 +2,7 @@ package fr.inpt.frappe.models;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,10 +18,21 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
 	private UUID id;
 
+	/**
+	 * Unique identifier for the user
+	 * Used to map oauth2 user to local user using
+	 * OIDC preferred_username
+	 */
+	@Column(unique = true, nullable = false)
+	private String uid;
+
+	@Column(nullable = false)
 	private String firstname;
 
+	@Column(nullable = false)
 	private String lastname;
 
+	@Column(nullable = false)
 	private int year;
 
 	@ManyToOne
@@ -35,13 +47,15 @@ public class User {
 	public User() {
 	}
 
-	public User(String firstname, String lastname, int year) {
+	public User(String uid, String firstname, String lastname, int year) {
+		this.uid = uid;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.year = year;
 	}
 
-	public User(String firstname, String lastname, int year, School school, Major major, Minor minor) {
+	public User(String uid, String firstname, String lastname, int year, School school, Major major, Minor minor) {
+		this.uid = uid;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.year = year;
@@ -52,6 +66,10 @@ public class User {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public String getUid() {
+		return uid;
 	}
 
 	public String getFirstname() {

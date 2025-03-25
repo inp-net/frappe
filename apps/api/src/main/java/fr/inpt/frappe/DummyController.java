@@ -1,9 +1,11 @@
 package fr.inpt.frappe;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.inpt.frappe.auth.AuthUser;
 import fr.inpt.frappe.models.User;
 import fr.inpt.frappe.repositories.UserRepository;
 
@@ -14,9 +16,9 @@ public class DummyController {
 	UserRepository users;
 
 	@GetMapping("/")
-	public String hello() {
-		users.save(new User("un", "homme", 0, null, null, null));
+	public String hello(@AuthenticationPrincipal AuthUser principal) {
+		User user = principal.getUser();
 
-		return "hello world ";
+		return "Hello, " + principal.getName() + " (id: " + user.getId() + ")";
 	}
 }
