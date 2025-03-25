@@ -2,6 +2,7 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,44 +14,51 @@ import jakarta.persistence.Table;
 @Table(name = "schools")
 public class School {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private String name;
+	@Column(unique = true, nullable = false)
+	private String uid;
 
-    @OneToMany(mappedBy = "school")
-    private Collection<Major> majors;
+	@Column(nullable = false)
+	private String name;
 
-    public School() {
-    }
+	@OneToMany(mappedBy = "school")
+	private Collection<Major> majors;
 
-    public School(String name) {
-        this.name = name;
-    }
+	public School(String uid, String name) {
+		this.uid = uid;
+		this.name = name;
+	}
 
-    public School(String name, Collection<Major> majors) {
-        this.name = name;
-        this.majors = majors;
-    }
+	public School(String uid, String name, Collection<Major> majors) {
+		this.uid = uid;
+		this.name = name;
+		this.majors = majors;
+	}
 
-    public long getId() {
-        return id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getUid() {
+		return uid;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Collection<Major> getMajors() {
-        return majors;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setMajors(Collection<Major> majors) {
-        this.majors = majors;
-    }
+	public Collection<Major> getMajors() {
+		return majors;
+	}
+
+	public void setMajors(Collection<Major> majors) {
+		this.majors = majors;
+	}
 }
