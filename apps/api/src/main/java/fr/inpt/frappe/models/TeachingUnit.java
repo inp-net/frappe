@@ -14,49 +14,49 @@ import jakarta.persistence.Table;
 @Table(name = "teaching_units")
 public class TeachingUnit {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private String name;
+	private String name;
 
-    /** A teching unit have several subjects. */
-    @OneToMany(mappedBy = "teaching_unit")
-    private Collection<Subject> subjects;
+	/** A teching unit have several subjects. */
+	@OneToMany(mappedBy = "teaching_unit")
+	private Collection<Subject> subjects;
 
-    @ManyToOne
-    private Minor minor;
+	@ManyToOne
+	private Minor minor;
 
-    public TeachingUnit() {
-    }
+	public TeachingUnit() {
+	}
 
-    public TeachingUnit(String name, Collection<Subject> subjects, Minor minor) {
-        this.name = name;
-        this.subjects = subjects;
-        this.minor = minor;
-    }
+	public TeachingUnit(String name, Collection<Subject> subjects, Minor minor) {
+		this.name = name;
+		this.subjects = subjects;
+		this.minor = minor;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Collection<Subject> getSubjects() {
-        return subjects;
-    }
+	public Collection<Subject> getSubjects() {
+		return subjects;
+	}
 
-    public void setSubjects(Collection<Subject> subjects) {
-        this.subjects = subjects;
-    }
+	public void setSubjects(Collection<Subject> subjects) {
+		this.subjects = subjects;
+	}
 
-    public Minor getMinor() {
-        return minor;
-    }
+	public Minor getMinor() {
+		return minor;
+	}
 
-    public void setMinor(Minor minor) {
-        this.minor = minor;
-    }
+	public void setMinor(Minor minor) {
+		this.minor = minor;
+	}
 }
