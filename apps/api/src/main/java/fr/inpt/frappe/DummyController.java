@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.inpt.frappe.auth.AuthUser;
 import fr.inpt.frappe.models.User;
+import fr.inpt.frappe.repositories.SchoolRepository;
 import fr.inpt.frappe.repositories.UserRepository;
 
 @RestController
@@ -14,6 +15,9 @@ public class DummyController {
 
 	@Autowired
 	UserRepository users;
+
+	@Autowired
+	SchoolRepository schools;
 
 	@GetMapping("/")
 	public String hello(@AuthenticationPrincipal AuthUser principal) {

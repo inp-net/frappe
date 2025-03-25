@@ -1,6 +1,9 @@
 package fr.inpt.frappe.config;
 
+import fr.inpt.frappe.repositories.SchoolRepository;
 import fr.inpt.frappe.repositories.UserRepository;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +27,16 @@ import fr.inpt.frappe.utils;
 public class SecurityConfig {
 
 	@Autowired
-	private final UserRepository userRepository;
+	private final UserRepository users;
+
+	@Autowired
+	private final SchoolRepository schools;
 
 	private Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-	SecurityConfig(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	SecurityConfig(UserRepository users, SchoolRepository schools) {
+		this.users = users;
+		this.schools = schools;
 	}
 
 	@Bean
@@ -51,7 +58,7 @@ public class SecurityConfig {
 			OidcUser oidcUser = delegate.loadUser(userRequest);
 
 			logger.debug("Fetch user from database");
-			User user = userRepository
+			User user = users
 					.findByUid(oidcUser.getPreferredUsername())
 					.orElse(new User(oidcUser.getPreferredUsername()));
 
@@ -59,7 +66,12 @@ public class SecurityConfig {
 			user.setFirstname(oidcUser.getAttribute("firstName"));
 			user.setLastname(oidcUser.getAttribute("lastName"));
 			user.setYear(utils.parseYearTier(oidcUser.getAttribute("yearTier")));
-			userRepository.save(user);
+
+			// Map the user's major school to a local school
+			List<String> oidcSchools = utils.getSchoolsFromMajor(oidcUser.getAttribute("major"));
+			utils.findSchool(oidcSchools, schools).ifPresent((school) -> user.setSchool(school));
+
+			users.save(user);
 
 			return new AuthUser(user, oidcUser);
 		};

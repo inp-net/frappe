@@ -1,6 +1,21 @@
 package fr.inpt.frappe;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import fr.inpt.frappe.models.School;
+import fr.inpt.frappe.repositories.SchoolRepository;
+
 public class utils {
+	/**
+	 * Parse the yearTier object present in the OIDC token into an integer.
+	 * 
+	 * @param yearTierObj The object to parse
+	 * @return The parsed integer
+	 */
 	public static int parseYearTier(Object yearTierObj) {
 		int yearTier = 0;
 
@@ -19,4 +34,53 @@ public class utils {
 
 		return yearTier;
 	}
+
+	/**
+	 * Get the schools from the major object present in the OIDC token.
+	 * 
+	 * @param major Major object
+	 * @return The list of schools if found, empty otherwise
+	 */
+	public static List<String> getSchoolsFromMajor(Map<String, Object> major) {
+		if (major == null)
+			return new ArrayList<>();
+
+		// Type checking is omitted here because we assume that if data exists,
+		// it is correctly formatted and validated by authentik / churros.
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> schools = (List<Map<String, String>>) major.get("schools");
+		return schools.stream()
+				.map(school -> school.get("uid"))
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Get the major from the major object present in the OIDC token.
+	 * 
+	 * @param major Major object
+	 * @return The major if found, empty otherwise
+	 */
+	public static Optional<String> getMajorFromMajor(Map<String, Object> major) {
+		if (major == null)
+			return Optional.empty();
+
+		return Optional.of((String) major.get("uid"));
+	}
+
+	/**
+	 * Find the first school in the list of schools that is present in the database.
+	 * 
+	 * @param oidcSchools List of schools from the OIDC token
+	 * @param schools     Repository of schools
+	 * @return The school if found, empty otherwise
+	 */
+	public static Optional<School> findSchool(List<String> oidcSchools, SchoolRepository schools) {
+		for (String oidcSchool : oidcSchools) {
+			Optional<School> school = schools.findByUid(oidcSchool);
+			return school;
+		}
+
+		return Optional.empty();
+	}
+
 }
