@@ -1,9 +1,11 @@
 package fr.inpt.frappe.config;
 
+import fr.inpt.frappe.repositories.MajorRepository;
 import fr.inpt.frappe.repositories.SchoolRepository;
 import fr.inpt.frappe.repositories.UserRepository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +34,15 @@ public class SecurityConfig {
 	@Autowired
 	private final SchoolRepository schools;
 
+	@Autowired
+	private final MajorRepository majors;
+
 	private Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-	SecurityConfig(UserRepository users, SchoolRepository schools) {
+	SecurityConfig(UserRepository users, SchoolRepository schools, MajorRepository majors) {
 		this.users = users;
 		this.schools = schools;
+		this.majors = majors;
 	}
 
 	@Bean
@@ -67,9 +73,15 @@ public class SecurityConfig {
 			user.setLastname(oidcUser.getAttribute("lastName"));
 			user.setYear(utils.parseYearTier(oidcUser.getAttribute("yearTier")));
 
+			Map<String, Object> oidcMajor = oidcUser.getAttribute("major");
+
 			// Map the user's major school to a local school
-			List<String> oidcSchools = utils.getSchoolsFromMajor(oidcUser.getAttribute("major"));
+			List<String> oidcSchools = utils.getSchoolsFromMajor(oidcMajor);
 			utils.findSchool(oidcSchools, schools).ifPresent((school) -> user.setSchool(school));
+
+			// Map the user's major to a local major
+			utils.getMajorFromMajor(oidcMajor)
+					.ifPresent((majorUid) -> majors.findByUid(majorUid).ifPresent(major -> user.setMajor(major)));
 
 			users.save(user);
 
