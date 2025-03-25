@@ -3,6 +3,7 @@ package fr.inpt.frappe.models;
 import java.util.Collection;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,11 +21,12 @@ public class Document {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
 	private UUID id;
 
+	@Column(nullable = false)
 	private String title;
 
 	private String description;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Subject subject;
 
 	@ManyToMany(mappedBy = "documents")
@@ -40,9 +42,6 @@ public class Document {
 		this.tags = tags;
 		this.comments = comments;
 		this.description = description;
-	}
-
-	public Document() {
 	}
 
 	public UUID getId() {

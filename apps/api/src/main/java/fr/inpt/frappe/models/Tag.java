@@ -2,6 +2,7 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,13 +18,11 @@ public class Tag {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(nullable = false)
 	private String name;
 
 	@ManyToMany
 	private Collection<Document> documents;
-
-	public Tag() {
-	}
 
 	public Tag(String name, Collection<Document> documents) {
 		this.name = name;

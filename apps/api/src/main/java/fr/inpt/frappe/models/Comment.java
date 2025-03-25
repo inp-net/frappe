@@ -2,6 +2,7 @@ package fr.inpt.frappe.models;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,16 +18,14 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
 	private UUID id;
 
+	@Column(nullable = false)
 	private String content;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Document document;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private User user;
-
-	public Comment() {
-	}
 
 	public Comment(String content, Document document, User user) {
 		this.content = content;

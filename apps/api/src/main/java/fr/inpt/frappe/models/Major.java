@@ -28,6 +28,10 @@ public class Major {
 	@Column(nullable = false)
 	private boolean discontinued = false;
 
+	@Column(name = "teaching_units")
+	@OneToMany(mappedBy = "major")
+	private Collection<TeachingUnit> teachingUnits;
+
 	@OneToMany(mappedBy = "major")
 	private Collection<Minor> minors;
 

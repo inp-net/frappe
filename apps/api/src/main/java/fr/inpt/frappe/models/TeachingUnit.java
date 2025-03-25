@@ -2,6 +2,7 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,22 +19,30 @@ public class TeachingUnit {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(nullable = false)
 	private String name;
 
 	/** A teching unit have several subjects. */
-	@OneToMany(mappedBy = "teaching_unit")
+	@OneToMany(mappedBy = "teachingUnit")
 	private Collection<Subject> subjects;
 
 	@ManyToOne
 	private Minor minor;
 
-	public TeachingUnit() {
-	}
+	@ManyToOne
+	private Major major;
+
 
 	public TeachingUnit(String name, Collection<Subject> subjects, Minor minor) {
 		this.name = name;
 		this.subjects = subjects;
 		this.minor = minor;
+	}
+
+	public TeachingUnit(String name, Collection<Subject> subjects, Major major) {
+		this.name = name;
+		this.subjects = subjects;
+		this.major = major;
 	}
 
 	public String getName() {
@@ -58,5 +67,13 @@ public class TeachingUnit {
 
 	public void setMinor(Minor minor) {
 		this.minor = minor;
+	}
+
+	public Major getMajor() {
+		return major;
+	}
+
+	public void setMajor(Major major) {
+		this.major = major;
 	}
 }

@@ -2,10 +2,12 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -18,25 +20,24 @@ public class Subject {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(nullable = false)
 	private String name;
-
-	private int semester;
 
 	@OneToMany(mappedBy = "subject")
 	private Collection<Document> documents;
 
-	@ManyToOne
-	private TeachingUnit teaching_unit;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "teaching_unit_id")
+	private TeachingUnit teachingUnit;
 
 	public Subject() {
 	}
 
-	public Subject(String name, int semester, Collection<Document> documents,
-			TeachingUnit teaching_unit) {
+	public Subject(String name, Collection<Document> documents,
+			TeachingUnit teachingUnit) {
 		this.name = name;
 		this.documents = documents;
-		this.teaching_unit = teaching_unit;
-		this.semester = semester;
+		this.teachingUnit = teachingUnit;
 	}
 
 	public String getName() {
@@ -47,14 +48,6 @@ public class Subject {
 		this.name = name;
 	}
 
-	public int getSemester() {
-		return semester;
-	}
-
-	public void setSemester(int semester) {
-		this.semester = semester;
-	}
-
 	public Collection<Document> getDocuments() {
 		return documents;
 	}
@@ -63,12 +56,12 @@ public class Subject {
 		this.documents = documents;
 	}
 
-	public TeachingUnit getTeaching_unit() {
-		return teaching_unit;
+	public TeachingUnit getTeachingUnit() {
+		return teachingUnit;
 	}
 
-	public void setTeaching_unit(TeachingUnit teaching_unit) {
-		this.teaching_unit = teaching_unit;
+	public void setTeachingUnit(TeachingUnit teachingUnit) {
+		this.teachingUnit = teachingUnit;
 	}
 
 }
