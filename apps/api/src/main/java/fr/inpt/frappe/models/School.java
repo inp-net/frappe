@@ -27,6 +27,9 @@ public class School {
 	@OneToMany(mappedBy = "school")
 	private Collection<Major> majors;
 
+	public School() {
+	}
+
 	public School(String uid, String name) {
 		this.uid = uid;
 		this.name = name;

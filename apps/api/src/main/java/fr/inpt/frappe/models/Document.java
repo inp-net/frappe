@@ -35,6 +35,9 @@ public class Document {
 	@OneToMany(mappedBy = "document")
 	private Collection<Comment> comments;
 
+	public Document() {
+	}
+
 	public Document(String title, String description, Subject subject, Collection<Tag> tags,
 			Collection<Comment> comments) {
 		this.title = title;

@@ -27,6 +27,9 @@ public class Comment {
 	@ManyToOne(optional = false)
 	private User user;
 
+	public Comment() {
+	}
+
 	public Comment(String content, Document document, User user) {
 		this.content = content;
 		this.document = document;

@@ -32,6 +32,8 @@ public class TeachingUnit {
 	@ManyToOne
 	private Major major;
 
+	public TeachingUnit() {
+	}
 
 	public TeachingUnit(String name, Collection<Subject> subjects, Minor minor) {
 		this.name = name;

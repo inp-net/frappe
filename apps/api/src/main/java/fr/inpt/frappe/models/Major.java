@@ -38,6 +38,9 @@ public class Major {
 	@ManyToOne(optional = false)
 	private School school;
 
+	public Major() {
+	}
+
 	public Major(String uid, String name, Collection<Minor> minors, School school) {
 		this.name = name;
 		this.minors = minors;

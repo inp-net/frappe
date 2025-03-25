@@ -30,6 +30,9 @@ public class Minor {
 	@ManyToOne(optional = false)
 	private Major major;
 
+	public Minor() {
+	}
+
 	public Minor(String name, Collection<TeachingUnit> teachingUnits, Major major) {
 		this.name = name;
 		this.teachingUnits = teachingUnits;

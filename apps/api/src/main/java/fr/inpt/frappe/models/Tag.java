@@ -24,6 +24,9 @@ public class Tag {
 	@ManyToMany
 	private Collection<Document> documents;
 
+	public Tag() {
+	}
+
 	public Tag(String name, Collection<Document> documents) {
 		this.name = name;
 		this.documents = documents;
