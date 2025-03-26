@@ -6,7 +6,8 @@
 		"dev:api": "pnpm --filter @frappe/api run dev",
 		"dev:app": "pnpm --filter @frappe/app run dev",
 		"migration:make": "pnpm --filter @frappe/api run migration:make",
-		"db:reset": "pnpm --filter @frappe/api run reset"
+		"db:reset": "pnpm --filter @frappe/api run reset",
+		"db:seed": "pnpm --filter @frappe/api run seed"
 	},
 	"keywords": [],
 	"author": "",

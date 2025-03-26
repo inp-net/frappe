@@ -1,6 +1,8 @@
 package fr.inpt.frappe.models;
 
 import java.util.Collection;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,74 +15,82 @@ import jakarta.persistence.Table;
 @Table(name = "majors")
 public class Major {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private String name;
+	@Column(unique = true, nullable = false)
+	private String uid;
 
-    private String short_name;
+	@Column(nullable = false)
+	private String name;
 
-    private boolean discontinued;
+	@Column(nullable = false)
+	private boolean discontinued = false;
 
-    @OneToMany(mappedBy = "major")
-    private Collection<Minor> minors;
+	@Column(name = "teaching_units")
+	@OneToMany(mappedBy = "major")
+	private Collection<TeachingUnit> teachingUnits;
 
-    @ManyToOne
-    private School school;
+	@OneToMany(mappedBy = "major")
+	private Collection<Minor> minors;
 
-    public Major() {
-    }
+	@ManyToOne(optional = false)
+	private School school;
 
-    public Major(String name, String short_name, Collection<Minor> minors, School school, boolean discontinued) {
-        this.name = name;
-        this.minors = minors;
-        this.school = school;
-        this.discontinued = discontinued;
-        this.short_name = short_name;
-    }
+	public Major() {
+	}
 
-    public long getId() {
-        return id;
-    }
+	public Major(String uid, String name, Collection<Minor> minors, School school) {
+		this.name = name;
+		this.minors = minors;
+		this.school = school;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Major(String uid, String name, Collection<Minor> minors, School school, boolean discontinued) {
+		this.name = name;
+		this.minors = minors;
+		this.school = school;
+		this.discontinued = discontinued;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getShortName() {
-        return short_name;
-    }
+	public String getUid() {
+		return uid;
+	}
 
-    public void setShortName(String short_name) {
-        this.short_name = short_name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Collection<Minor> getMinor() {
-        return minors;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setMinor(Collection<Minor> minors) {
-        this.minors = minors;
-    }
+	public Collection<Minor> getMinors() {
+		return minors;
+	}
 
-    public School getSchool() {
-        return school;
-    }
+	public void setMinor(Collection<Minor> minors) {
+		this.minors = minors;
+	}
 
-    public void setSchool(School school) {
-        this.school = school;
-    }
+	public School getSchool() {
+		return school;
+	}
 
-    public boolean isDiscontinued() {
-        return discontinued;
-    }
+	public void setSchool(School school) {
+		this.school = school;
+	}
 
-    public void setDiscontinued(boolean discontinued) {
-        this.discontinued = discontinued;
-    }
+	public boolean isDiscontinued() {
+		return discontinued;
+	}
+
+	public void setDiscontinued(boolean discontinued) {
+		this.discontinued = discontinued;
+	}
 }

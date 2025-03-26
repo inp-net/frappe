@@ -2,6 +2,7 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,24 +19,23 @@ public class Minor {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Column(nullable = false)
 	private String name;
 
-	private String short_name;
-
 	/** A minor have several teaching units. */
+	@Column(name = "teaching_units")
 	@OneToMany(mappedBy = "minor")
-	private Collection<TeachingUnit> teaching_units;
+	private Collection<TeachingUnit> teachingUnits;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Major major;
 
 	public Minor() {
 	}
 
-	public Minor(String name, String short_name, Collection<TeachingUnit> teaching_units, Major major) {
+	public Minor(String name, Collection<TeachingUnit> teachingUnits, Major major) {
 		this.name = name;
-		this.short_name = short_name;
-		this.teaching_units = teaching_units;
+		this.teachingUnits = teachingUnits;
 		this.major = major;
 	}
 
@@ -51,20 +51,12 @@ public class Minor {
 		this.name = name;
 	}
 
-	public String getShortName() {
-		return short_name;
+	public Collection<TeachingUnit> getteachingUnits() {
+		return teachingUnits;
 	}
 
-	public void setShortName(String short_name) {
-		this.short_name = short_name;
-	}
-
-	public Collection<TeachingUnit> getTeaching_units() {
-		return teaching_units;
-	}
-
-	public void setTeaching_units(Collection<TeachingUnit> teaching_units) {
-		this.teaching_units = teaching_units;
+	public void setteachingUnits(Collection<TeachingUnit> teachingUnits) {
+		this.teachingUnits = teachingUnits;
 	}
 
 	public Major getMajor() {

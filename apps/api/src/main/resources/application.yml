@@ -19,3 +19,25 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/changelog.yaml
+  
+  security:
+    oauth2:
+      client:
+        registration:
+          authentik:
+            client-id: ${OIDC_CLIENT_ID}
+            client-secret: ${OIDC_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            scope: ${OIDC_SCOPE}
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          authentik:
+            authorization-uri: ${OIDC_AUTHORIZATION_URI}
+            token-uri: ${OIDC_TOKEN_URI}
+            user-info-uri: ${OIDC_USER_INFO_URI}
+            jwk-set-uri: ${OIDC_JWK_SET_URI}
+            user-name-attribute: ${OIDC_USER_NAME_ATTRIBUTE}
+  
+logging:
+  level:
+    '[fr.inpt.frappe]': DEBUG

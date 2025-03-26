@@ -2,6 +2,7 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,49 +15,67 @@ import jakarta.persistence.Table;
 @Table(name = "teaching_units")
 public class TeachingUnit {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
-    private String name;
+	@Column(nullable = false)
+	private String name;
 
-    /** A teching unit have several subjects. */
-    @OneToMany(mappedBy = "teaching_unit")
-    private Collection<Subject> subjects;
+	/** A teching unit have several subjects. */
+	@OneToMany(mappedBy = "teachingUnit")
+	private Collection<Subject> subjects;
 
-    @ManyToOne
-    private Minor minor;
+	@ManyToOne
+	private Minor minor;
 
-    public TeachingUnit() {
-    }
+	@ManyToOne
+	private Major major;
 
-    public TeachingUnit(String name, Collection<Subject> subjects, Minor minor) {
-        this.name = name;
-        this.subjects = subjects;
-        this.minor = minor;
-    }
+	public TeachingUnit() {
+	}
 
-    public String getName() {
-        return name;
-    }
+	public TeachingUnit(String name, Collection<Subject> subjects, Minor minor) {
+		this.name = name;
+		this.subjects = subjects;
+		this.minor = minor;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public TeachingUnit(String name, Collection<Subject> subjects, Major major) {
+		this.name = name;
+		this.subjects = subjects;
+		this.major = major;
+	}
 
-    public Collection<Subject> getSubjects() {
-        return subjects;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setSubjects(Collection<Subject> subjects) {
-        this.subjects = subjects;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Minor getMinor() {
-        return minor;
-    }
+	public Collection<Subject> getSubjects() {
+		return subjects;
+	}
 
-    public void setMinor(Minor minor) {
-        this.minor = minor;
-    }
+	public void setSubjects(Collection<Subject> subjects) {
+		this.subjects = subjects;
+	}
+
+	public Minor getMinor() {
+		return minor;
+	}
+
+	public void setMinor(Minor minor) {
+		this.minor = minor;
+	}
+
+	public Major getMajor() {
+		return major;
+	}
+
+	public void setMajor(Major major) {
+		this.major = major;
+	}
 }

@@ -3,6 +3,7 @@
 	"scripts": {
 		"dev": "mvn spring-boot:run",
 		"migration:make": "./generate_migration.sh",
-		"reset": "./mvnw liquibase:dropAll && ./mvnw liquibase:update"
+		"reset": "./mvnw liquibase:dropAll && ./mvnw liquibase:update",
+		"seed": "./mvnw liquibase:update -Dliquibase.changeLogFile=src/main/resources/db/seed.yaml"
 	}
 }
