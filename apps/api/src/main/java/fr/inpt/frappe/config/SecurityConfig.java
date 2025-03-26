@@ -51,7 +51,9 @@ public class SecurityConfig {
 				.authorizeHttpRequests(authorize -> authorize
 						.anyRequest().authenticated())
 				.oauth2Login(oauth2 -> oauth2
-						.userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())));
+						.userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
+				.formLogin(form -> form.disable())
+				.logout(logout -> logout.disable());
 
 		return http.build();
 	}
