@@ -2,6 +2,8 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,7 @@ public class TeachingUnit {
 
 	/** A teching unit have several subjects. */
 	@OneToMany(mappedBy = "teachingUnit")
+	@JsonIgnore
 	private Collection<Subject> subjects;
 
 	@ManyToOne
