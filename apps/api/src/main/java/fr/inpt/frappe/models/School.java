@@ -2,6 +2,8 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,7 @@ public class School {
 	private String name;
 
 	@OneToMany(mappedBy = "school")
+	@JsonIgnore
 	private Collection<Major> majors;
 
 	public School() {

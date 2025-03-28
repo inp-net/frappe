@@ -13,14 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import fr.inpt.frappe.auth.AuthUser;
+import fr.inpt.frappe.auth.JwtAuthenticationFilter;
+import fr.inpt.frappe.auth.OAuth2AuthenticationSuccessHandler;
 import fr.inpt.frappe.models.User;
 import fr.inpt.frappe.utils;
 
@@ -37,21 +41,35 @@ public class SecurityConfig {
 	@Autowired
 	private final MajorRepository majors;
 
+	@Autowired
+	private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+	@Autowired
+	private JwtAuthenticationFilter jwtAuthenticationFilter;
+
 	private Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-	SecurityConfig(UserRepository users, SchoolRepository schools, MajorRepository majors) {
+	SecurityConfig(UserRepository users, SchoolRepository schools, MajorRepository majors,
+			OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) {
 		this.users = users;
 		this.schools = schools;
 		this.majors = majors;
+		this.oAuth2AuthenticationSuccessHandler = oAuth2AuthenticationSuccessHandler;
 	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
+				.csrf(csrf -> csrf.disable())
+				.sessionManagement(
+						sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
 						.anyRequest().authenticated())
 				.oauth2Login(oauth2 -> oauth2
-						.userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
+						.userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService()))
+						.successHandler(oAuth2AuthenticationSuccessHandler))
+				.addFilterBefore(
+						jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
 				.formLogin(form -> form.disable())
 				.logout(logout -> logout.disable());
 
