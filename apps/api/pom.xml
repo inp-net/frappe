@@ -58,6 +58,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>10.0.2</version>
+		</dependency>
 		
 		
 		<dependency>
@@ -68,6 +73,12 @@
 			<groupId>org.liquibase.ext</groupId>
 			<artifactId>liquibase-hibernate6</artifactId>
 			<version>4.31.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.6</version>
 		</dependency>
 
 		<dependency>
@@ -104,6 +115,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<jvmArguments>--add-opens java.base/java.time=ALL-UNNAMED</jvmArguments>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.liquibase</groupId>
@@ -114,5 +128,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

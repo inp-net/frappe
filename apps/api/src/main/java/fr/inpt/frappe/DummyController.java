@@ -1,5 +1,7 @@
 package fr.inpt.frappe;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +22,12 @@ public class DummyController {
 	SchoolRepository schools;
 
 	@GetMapping("/")
-	public String hello(@AuthenticationPrincipal AuthUser principal) {
-		User user = principal.getUser();
+	public List<User> hello(@AuthenticationPrincipal AuthUser principal) {
+		return users.findAll();
+	}
 
-		return "Hello, " + principal.getName() + " (id: " + user.getId() + ")";
+	@GetMapping("/me")
+	public User me(@AuthenticationPrincipal AuthUser principal) {
+		return principal.getUser();
 	}
 }
