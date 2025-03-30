@@ -1,4 +1,4 @@
-package fr.inpt.frappe;
+package fr.inpt.frappe.controllers;
 
 import java.util.List;
 
