@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,8 +18,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-
+import fr.inpt.frappe.controllers.dtos.SchoolDTO;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.SchoolRepository;
 
@@ -48,9 +48,8 @@ public class SchoolController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<School> create(
-			@RequestBody(description = "The school uid") String uid,
-			@RequestBody(description = "The school name") String name) {
-		School createdSchool = schools.save(new School(uid, name));
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") SchoolDTO school) {
+		School createdSchool = schools.save(new School(school.getUid(), school.getName()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdSchool);
 	}
 
@@ -73,7 +72,8 @@ public class SchoolController {
 			@ApiResponse(responseCode = "404", description = "School not found", content = @Content)
 	})
 	@PatchMapping("/{id}")
-	public School update(@PathVariable Long id, @RequestBody(description = "The updated school name") String name) {
+	public School update(@PathVariable Long id,
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated school name") String name) {
 		School school = schools.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"School not found"));
