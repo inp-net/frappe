@@ -1,0 +1,6 @@
+stages:
+  - build
+  - test
+
+include:
+  - apps/api/.gitlab-ci.yml
