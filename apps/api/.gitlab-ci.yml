@@ -1,0 +1,21 @@
+.api:
+  image: maven:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  before_script:
+    - cd apps/api
+
+build:api:
+  extends: .api
+  stage: build
+  script:
+    - mvn clean package -DskipTests=true
+
+test:api:
+  extends: .api
+  needs:
+    - job: build:api
+  stage: test
+  script:
+    - mvn test
