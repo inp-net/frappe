@@ -47,10 +47,11 @@ public class SchoolController {
 			@ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
 	})
 	@PostMapping("/")
-	public School create(
+	public ResponseEntity<School> create(
 			@RequestBody(description = "The school uid") String uid,
 			@RequestBody(description = "The school name") String name) {
-		return schools.save(new School(uid, name));
+		School createdSchool = schools.save(new School(uid, name));
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdSchool);
 	}
 
 	@Operation(summary = "Get a school by ID", description = "Retrieves a school by its ID.")
