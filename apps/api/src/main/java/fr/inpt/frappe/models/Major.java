@@ -46,11 +46,13 @@ public class Major {
 	}
 
 	public Major(String uid, String name, School school) {
+		this.uid = uid;
 		this.name = name;
 		this.school = school;
 	}
 
 	public Major(String uid, String name, School school, boolean discontinued) {
+		this.uid = uid;
 		this.name = name;
 		this.school = school;
 		this.discontinued = discontinued;
