@@ -45,15 +45,13 @@ public class Major {
 	public Major() {
 	}
 
-	public Major(String uid, String name, Collection<Minor> minors, School school) {
+	public Major(String uid, String name, School school) {
 		this.name = name;
-		this.minors = minors;
 		this.school = school;
 	}
 
-	public Major(String uid, String name, Collection<Minor> minors, School school, boolean discontinued) {
+	public Major(String uid, String name, School school, boolean discontinued) {
 		this.name = name;
-		this.minors = minors;
 		this.school = school;
 		this.discontinued = discontinued;
 	}
@@ -74,20 +72,16 @@ public class Major {
 		this.name = name;
 	}
 
-	public Collection<Minor> getMinors() {
-		return minors;
-	}
-
-	public void setMinor(Collection<Minor> minors) {
-		this.minors = minors;
-	}
-
 	public School getSchool() {
 		return school;
 	}
 
 	public void setSchool(School school) {
 		this.school = school;
+	}
+
+	public Collection<Minor> getMinors() {
+		return minors;
 	}
 
 	public boolean isDiscontinued() {
