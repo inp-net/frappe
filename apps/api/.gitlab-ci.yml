@@ -19,7 +19,7 @@ test:api:
     - job: build:api
   stage: test
   script:
-    - mvn test
+    - mvn org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
   services:
     - name: postgres:17
       alias: postgres
@@ -28,3 +28,8 @@ test:api:
     POSTGRES_USER: frappe
     POSTGRES_PASSWORD: frappe
     DATABASE_URL: postgresql://frappe:frappe@postgres:5432/frappe
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: jacoco
+        path: apps/api/target/site/jacoco/jacoco.xml
