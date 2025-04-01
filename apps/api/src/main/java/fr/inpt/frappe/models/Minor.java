@@ -33,9 +33,8 @@ public class Minor {
 	public Minor() {
 	}
 
-	public Minor(String name, Collection<TeachingUnit> teachingUnits, Major major) {
+	public Minor(String name, Major major) {
 		this.name = name;
-		this.teachingUnits = teachingUnits;
 		this.major = major;
 	}
 
@@ -53,10 +52,6 @@ public class Minor {
 
 	public Collection<TeachingUnit> getteachingUnits() {
 		return teachingUnits;
-	}
-
-	public void setteachingUnits(Collection<TeachingUnit> teachingUnits) {
-		this.teachingUnits = teachingUnits;
 	}
 
 	public Major getMajor() {
