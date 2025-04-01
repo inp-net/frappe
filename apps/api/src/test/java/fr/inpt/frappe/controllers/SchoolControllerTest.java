@@ -65,6 +65,11 @@ class SchoolControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value(school.getName()));
+
+		when(schoolRepository.findById(anyLong())).thenReturn(Optional.empty());
+		mockMvc.perform(get("/school/1")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -76,6 +81,12 @@ class SchoolControllerTest {
 				.content(objectMapper.writeValueAsString(school)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value(school.getName()));
+
+		when(schoolRepository.findById(anyLong())).thenReturn(Optional.empty());
+		mockMvc.perform(patch("/school/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(school)))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -85,5 +96,10 @@ class SchoolControllerTest {
 		mockMvc.perform(delete("/school/1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
+
+		when(schoolRepository.findById(anyLong())).thenReturn(Optional.empty());
+		mockMvc.perform(delete("/school/1")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 }

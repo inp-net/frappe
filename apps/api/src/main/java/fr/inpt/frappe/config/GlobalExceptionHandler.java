@@ -1,17 +1,14 @@
 package fr.inpt.frappe.config;
 
-import java.util.Map;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Map<String, String>> handleException(Exception e) {
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body(Map.of("error", e.getMessage()));
+	@ExceptionHandler(ResponseStatusException.class)
+	public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
+		return new ResponseEntity<>(ex.getReason(), ex.getStatusCode());
 	}
 }
