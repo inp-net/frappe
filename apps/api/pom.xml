@@ -144,6 +144,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>fr/inpt/frappe/config/**</exclude>
+						<exclude>fr/inpt/frappe/auth/**</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
