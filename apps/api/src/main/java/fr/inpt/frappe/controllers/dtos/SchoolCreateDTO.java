@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SchoolDTO {
+public class SchoolCreateDTO {
 	private String uid;
 	private String name;
 }

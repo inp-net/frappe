@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import fr.inpt.frappe.controllers.dtos.SchoolDTO;
+import fr.inpt.frappe.controllers.dtos.SchoolCreateDTO;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.SchoolRepository;
 
@@ -48,7 +48,7 @@ public class SchoolController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<School> create(
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") SchoolDTO school) {
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") SchoolCreateDTO school) {
 		School createdSchool = schools.save(new School(school.getUid(), school.getName()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdSchool);
 	}
