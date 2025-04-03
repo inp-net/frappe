@@ -164,8 +164,9 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>fr/inpt/frappe/config/**</exclude>
 						<exclude>fr/inpt/frappe/auth/**</exclude>
+						<exclude>fr/inpt/frappe/config/**</exclude>
+						<exclude>fr/inpt/frappe/models/**</exclude> <!-- Mostly hibernate generated code -->
 					</excludes>
 				</configuration>
 			</plugin>
