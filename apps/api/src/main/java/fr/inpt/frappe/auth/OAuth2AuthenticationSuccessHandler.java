@@ -20,6 +20,13 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException {
 		String token = jwtProvider.generateToken(authentication);
+		String callback = (String) request.getSession().getAttribute("login_callback_url");
+
+		if (callback != null) {
+			request.getSession().removeAttribute("login_callback_url");
+			response.sendRedirect(callback + "?token=" + token);
+			return;
+		}
 
 		response.setContentType("application/json");
 		response.getWriter().write("{\"token\": \"" + token + "\"}");

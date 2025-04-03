@@ -64,9 +64,11 @@ public class SecurityConfig {
 				.sessionManagement(
 						sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers("/auth/login").permitAll() // login endpoint
 						.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // springdoc
 						.anyRequest().authenticated())
 				.oauth2Login(oauth2 -> oauth2
+						.loginPage("/auth/login")
 						.userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService()))
 						.successHandler(oAuth2AuthenticationSuccessHandler))
 				.addFilterBefore(
