@@ -2,11 +2,12 @@ package fr.inpt.frappe.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.inpt.frappe.controllers.dtos.major.MajorCreateDTO;
-import fr.inpt.frappe.controllers.dtos.major.MajorUpdateDTO;
+import fr.inpt.frappe.controllers.dtos.MinorCreateDTO;
 import fr.inpt.frappe.models.Major;
+import fr.inpt.frappe.models.Minor;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.MajorRepository;
+import fr.inpt.frappe.repositories.MinorRepository;
 import fr.inpt.frappe.repositories.SchoolRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,10 +30,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-class MajorControllerTest {
+class MinorControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@MockitoBean
+	private MinorRepository minorRepository;
 
 	@MockitoBean
 	private MajorRepository majorRepository;
@@ -42,87 +46,87 @@ class MajorControllerTest {
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
+	private Minor minor;
 	private Major major;
 	private School school;
 
-	private MajorCreateDTO majorCreateDTO;
-	private MajorUpdateDTO majorUpdateDTO;
+	private MinorCreateDTO minorCreateDTO;
 
 	@BeforeEach
 	void setUp() {
 		school = new School("n7", "ENSEEIHT");
 		major = new Major("sdn", "Science du Numérique", school);
-		majorCreateDTO = new MajorCreateDTO("sdn", "Science du Numérique", "n7");
-		majorUpdateDTO = new MajorUpdateDTO("SN", false);
+		minor = new Minor("Archi système rézo", major);
+		minorCreateDTO = new MinorCreateDTO("ASR", "sdn");
 	}
 
 	@Test
-	void testListMajors() throws Exception {
-		when(majorRepository.findAll()).thenReturn(Arrays.asList(major));
-		mockMvc.perform(get("/major/")
+	void testListMinors() throws Exception {
+		when(minorRepository.findAll()).thenReturn(Arrays.asList(minor));
+		mockMvc.perform(get("/minor/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].name").value(major.getName()));
+				.andExpect(jsonPath("$[0].name").value(minor.getName()));
 	}
 
 	@Test
-	void testCreateMajor() throws Exception {
-		when(majorRepository.save(any(Major.class))).thenReturn(major);
-		when(schoolRepository.findByUid(anyString())).thenReturn(Optional.of(school));
-		mockMvc.perform(post("/major/")
+	void testCreateMinor() throws Exception {
+		when(minorRepository.save(any(Minor.class))).thenReturn(minor);
+		when(majorRepository.findByUid(anyString())).thenReturn(Optional.of(major));
+		mockMvc.perform(post("/minor/")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(majorCreateDTO)))
+				.content(objectMapper.writeValueAsString(minorCreateDTO)))
 				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.name").value(major.getName()));
-		when(majorRepository.save(any(Major.class))).thenReturn(major);
-		when(schoolRepository.findByUid(anyString())).thenReturn(Optional.empty());
-		mockMvc.perform(post("/major/")
+				.andExpect(jsonPath("$.name").value(minor.getName()));
+		when(minorRepository.save(any(Minor.class))).thenReturn(minor);
+		when(majorRepository.findByUid(anyString())).thenReturn(Optional.empty());
+		mockMvc.perform(post("/minor/")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(majorCreateDTO)))
+				.content(objectMapper.writeValueAsString(minorCreateDTO)))
 				.andExpect(status().isNotFound());
 	}
 
 	@Test
-	void testReadMajor() throws Exception {
-		when(majorRepository.findById(anyLong())).thenReturn(Optional.of(major));
-		mockMvc.perform(get("/major/1")
+	void testReadMinor() throws Exception {
+		when(minorRepository.findById(anyLong())).thenReturn(Optional.of(minor));
+		mockMvc.perform(get("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.name").value(major.getName()));
+				.andExpect(jsonPath("$.name").value(minor.getName()));
 
-		when(majorRepository.findById(anyLong())).thenReturn(Optional.empty());
-		mockMvc.perform(get("/major/1")
+		when(minorRepository.findById(anyLong())).thenReturn(Optional.empty());
+		mockMvc.perform(get("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
 	}
 
 	@Test
-	void testUpdateMajor() throws Exception {
-		when(majorRepository.findById(anyLong())).thenReturn(Optional.of(major));
-		when(majorRepository.save(any(Major.class))).thenReturn(major);
-		mockMvc.perform(patch("/major/1")
+	void testUpdateMinor() throws Exception {
+		when(minorRepository.findById(anyLong())).thenReturn(Optional.of(minor));
+		when(minorRepository.save(any(Minor.class))).thenReturn(minor);
+		mockMvc.perform(patch("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(majorUpdateDTO)))
+				.content("ASR"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.name").value(major.getName()));
+				.andExpect(jsonPath("$.name").value("ASR"));
 
-		when(majorRepository.findById(anyLong())).thenReturn(Optional.empty());
-		mockMvc.perform(patch("/major/1")
+		when(minorRepository.findById(anyLong())).thenReturn(Optional.empty());
+		mockMvc.perform(patch("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(major)))
+				.content(objectMapper.writeValueAsString(minor)))
 				.andExpect(status().isNotFound());
 	}
 
 	@Test
-	void testDeleteMajor() throws Exception {
-		when(majorRepository.findById(anyLong())).thenReturn(Optional.of(major));
-		doNothing().when(majorRepository).delete(any(Major.class));
-		mockMvc.perform(delete("/major/1")
+	void testDeleteminor() throws Exception {
+		when(minorRepository.findById(anyLong())).thenReturn(Optional.of(minor));
+		doNothing().when(minorRepository).delete(any(Minor.class));
+		mockMvc.perform(delete("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
 
-		when(majorRepository.findById(anyLong())).thenReturn(Optional.empty());
-		mockMvc.perform(delete("/major/1")
+		when(minorRepository.findById(anyLong())).thenReturn(Optional.empty());
+		mockMvc.perform(delete("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
 	}

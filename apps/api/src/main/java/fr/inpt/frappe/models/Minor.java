@@ -2,6 +2,8 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,7 @@ public class Minor {
 	private Collection<TeachingUnit> teachingUnits;
 
 	@ManyToOne(optional = false)
+	@JsonIgnore
 	private Major major;
 
 	public Minor() {
