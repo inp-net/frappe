@@ -90,8 +90,7 @@ public class MajorController {
 	public Major update(@PathVariable Long id,
 			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated major name and discontinued value") MajorUpdateDTO major) {
 		Major majorUpdate = majors.findById(id).orElseThrow(() -> new ResponseStatusException(
-				HttpStatus.NOT_FOUND,
-				"School not found"));
+				HttpStatus.NOT_FOUND, "Major not found"));
 
 		majorMapper.updateMajorFromDto(major, majorUpdate);
 		majors.save(majorUpdate);
