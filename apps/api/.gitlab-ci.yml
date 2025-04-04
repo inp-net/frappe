@@ -20,6 +20,8 @@ test:api:
   stage: test
   script:
     - mvn org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report
+    - awk -F"," '{ instructions += $4 + $5; covered += $5 } END { print covered, "/", instructions, "instructions covered"; print 100*covered/instructions, "% covered" }' target/site/jacoco/jacoco.csv
+  coverage: /\d+.\d+ \% covered/
   services:
     - name: postgres:17
       alias: postgres
