@@ -8,15 +8,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "subjects")
 public class Subject {
 
 	@Id
+	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
@@ -26,42 +34,13 @@ public class Subject {
 	@OneToMany(mappedBy = "subject")
 	private Collection<Document> documents;
 
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "teaching_unit_id")
-	private TeachingUnit teachingUnit;
+	@ManyToMany
+	@JoinTable(name = "subjects_teaching_units", joinColumns = @JoinColumn(name = "teaching_unit_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
+	private Collection<TeachingUnit> teachingUnits;
 
-	public Subject() {
-	}
-
-	public Subject(String name, Collection<Document> documents,
-			TeachingUnit teachingUnit) {
+	public Subject(String name, Collection<TeachingUnit> teachingUnits) {
 		this.name = name;
-		this.documents = documents;
-		this.teachingUnit = teachingUnit;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Collection<Document> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(Collection<Document> documents) {
-		this.documents = documents;
-	}
-
-	public TeachingUnit getTeachingUnit() {
-		return teachingUnit;
-	}
-
-	public void setTeachingUnit(TeachingUnit teachingUnit) {
-		this.teachingUnit = teachingUnit;
+		this.teachingUnits = teachingUnits;
 	}
 
 }
