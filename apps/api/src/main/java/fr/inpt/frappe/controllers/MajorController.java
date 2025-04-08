@@ -27,6 +27,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/major")
@@ -59,7 +60,7 @@ public class MajorController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<Major> create(
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") MajorCreateDTO major) {
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") @Valid MajorCreateDTO major) {
 		School school = schools.findByUid(major.getSchool_uid())
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
 
@@ -88,7 +89,7 @@ public class MajorController {
 	})
 	@PatchMapping("/{id}")
 	public Major update(@PathVariable Long id,
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated major name and discontinued value") MajorUpdateDTO major) {
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated major name and discontinued value") @Valid MajorUpdateDTO major) {
 		Major majorUpdate = majors.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND, "Major not found"));
 

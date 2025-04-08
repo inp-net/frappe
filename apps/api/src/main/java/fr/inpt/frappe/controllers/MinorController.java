@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/minor")
@@ -54,7 +55,7 @@ public class MinorController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<Minor> create(
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The minor name and major uid") MinorCreateDTO minor) {
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The minor name and major uid") @Valid MinorCreateDTO minor) {
 		Major major = majors.findByUid(minor.getMajor_uid())
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Major not found"));
 

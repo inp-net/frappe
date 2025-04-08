@@ -1,4 +1,6 @@
-package fr.inpt.frappe.controllers.dtos.major;
+package fr.inpt.frappe.controllers.dtos.subject;
+
+import java.util.Collection;
 
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MajorUpdateDTO {
+public class SubjectUpdateDTO {
 
-	@Size(max = 255, message = "Major name must be less than 255 chars")
+	@Size(max = 255, message = "Document title must be less than 255 chars")
 	private String name;
 
-	private Boolean discontinued;
+	private Collection<Long> teaching_units;
 }
