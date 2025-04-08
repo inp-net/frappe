@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import fr.inpt.frappe.models.Comment;
+import fr.inpt.frappe.models.Document;
 
-public interface DocumentRepository extends JpaRepository<Comment, UUID> {
+public interface DocumentRepository extends JpaRepository<Document, UUID> {
 
 }
