@@ -24,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,7 +70,7 @@ class CommentControllerTest {
 		school = new School("n7", "ENSEEIHT");
 		major = new Major("sdn", "Science du Numérique", school);
 		teachingUnit = new TeachingUnit("Architecture des systèmes d'exploitation", null, major);
-		subject = new Subject("Archi système", null, teachingUnit);
+		subject = new Subject("Archi système", List.of(teachingUnit));
 		document = new Document("un partiel", "Cool ce partiel", subject, null, null);
 		comment = new Comment("En effet ce partiel est trop cool", document, user);
 
