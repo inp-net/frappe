@@ -27,9 +27,8 @@ public class Tag {
 	public Tag() {
 	}
 
-	public Tag(String name, Collection<Document> documents) {
+	public Tag(String name) {
 		this.name = name;
-		this.documents = documents;
 	}
 
 	public long getId() {
