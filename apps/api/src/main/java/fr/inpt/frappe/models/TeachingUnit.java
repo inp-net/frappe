@@ -10,75 +10,41 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.AccessLevel;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "teaching_units")
 public class TeachingUnit {
 
 	@Id
+	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@Column(nullable = false)
 	private String name;
 
-	/** A teching unit have several subjects. */
+	/** A teaching unit have several subjects. */
 	@ManyToMany(mappedBy = "teachingUnits")
 	@JsonIgnore
 	private Collection<Subject> subjects;
 
-	@ManyToOne
-	private Minor minor;
+	@ManyToMany
+	private Collection<Minor> minors;
 
-	@ManyToOne
-	private Major major;
+	@ManyToMany
+	private Collection<Major> majors;
 
-	public TeachingUnit() {
-	}
-
-	public TeachingUnit(String name, Collection<Subject> subjects, Minor minor) {
+	public TeachingUnit(String name, Collection<Minor> minors, Collection<Major> majors) {
 		this.name = name;
-		this.subjects = subjects;
-		this.minor = minor;
+		this.minors = minors;
+		this.majors = majors;
 	}
 
-	public TeachingUnit(String name, Collection<Subject> subjects, Major major) {
-		this.name = name;
-		this.subjects = subjects;
-		this.major = major;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Collection<Subject> getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(Collection<Subject> subjects) {
-		this.subjects = subjects;
-	}
-
-	public Minor getMinor() {
-		return minor;
-	}
-
-	public void setMinor(Minor minor) {
-		this.minor = minor;
-	}
-
-	public Major getMajor() {
-		return major;
-	}
-
-	public void setMajor(Major major) {
-		this.major = major;
-	}
 }

@@ -9,8 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,10 +31,10 @@ public class Major {
 	private boolean discontinued = false;
 
 	@Column(name = "teaching_units")
-	@OneToMany(mappedBy = "major")
+	@ManyToMany(mappedBy = "majors")
 	private Collection<TeachingUnit> teachingUnits;
 
-	@OneToMany(mappedBy = "major")
+	@ManyToMany(mappedBy = "major")
 	@JsonIgnore
 	private Collection<Minor> minors;
 

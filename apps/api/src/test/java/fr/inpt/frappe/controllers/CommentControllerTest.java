@@ -69,7 +69,7 @@ class CommentControllerTest {
 		user = new User("dupondd", "dupont", "dupond", 1);
 		school = new School("n7", "ENSEEIHT");
 		major = new Major("sdn", "Science du Numérique", school);
-		teachingUnit = new TeachingUnit("Architecture des systèmes d'exploitation", null, major);
+		teachingUnit = new TeachingUnit("Architecture des systèmes d'exploitation", null, List.of(major));
 		subject = new Subject("Archi système", List.of(teachingUnit));
 		document = new Document("un partiel", "Cool ce partiel", subject, null, null);
 		comment = new Comment("En effet ce partiel est trop cool", document, user);
