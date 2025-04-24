@@ -68,7 +68,7 @@ class SubjectControllerTest {
 	void setUp() {
 		school = new School("n7", "ENSEEIHT");
 		major = new Major("sdn", "Science du Numérique", school);
-		teachingUnit = new TeachingUnit("UE appli web", null, major);
+		teachingUnit = new TeachingUnit("UE appli web", null, List.of(major));
 		ArrayList<TeachingUnit> ltu = new ArrayList<>();
 		ltu.add(teachingUnit);
 		subject = new Subject("Application WEB", ltu);

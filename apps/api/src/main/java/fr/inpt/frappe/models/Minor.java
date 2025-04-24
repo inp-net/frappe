@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,7 +26,7 @@ public class Minor {
 
 	/** A minor have several teaching units. */
 	@Column(name = "teaching_units")
-	@OneToMany(mappedBy = "minor")
+	@ManyToMany(mappedBy = "minors")
 	private Collection<TeachingUnit> teachingUnits;
 
 	@ManyToOne(optional = false)
@@ -53,7 +53,7 @@ public class Minor {
 		this.name = name;
 	}
 
-	public Collection<TeachingUnit> getteachingUnits() {
+	public Collection<TeachingUnit> getTeachingUnits() {
 		return teachingUnits;
 	}
 
