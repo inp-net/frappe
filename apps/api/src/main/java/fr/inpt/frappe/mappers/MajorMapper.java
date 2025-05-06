@@ -39,6 +39,7 @@ public abstract class MajorMapper {
 	public abstract Major createMajorFromDto(MajorCreateDTO dto);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	@Mapping(target = "uid", ignore = true)
 	@Mapping(target = "school", ignore = true)
 	@Mapping(target = "minors", ignore = true)
 	@Mapping(target = "teachingUnits", ignore = true)

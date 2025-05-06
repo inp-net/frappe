@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -36,9 +38,11 @@ public class TeachingUnit {
 	private Collection<Subject> subjects;
 
 	@ManyToMany
+	@JoinTable(name = "teaching_units_minors", joinColumns = @JoinColumn(name = "teaching_unit_id"), inverseJoinColumns = @JoinColumn(name = "minor_id"))
 	private Collection<Minor> minors;
 
 	@ManyToMany
+	@JoinTable(name = "teaching_units_majors", joinColumns = @JoinColumn(name = "teaching_unit_id"), inverseJoinColumns = @JoinColumn(name = "major_id"))
 	private Collection<Major> majors;
 
 	public TeachingUnit(String name, Collection<Minor> minors, Collection<Major> majors) {
