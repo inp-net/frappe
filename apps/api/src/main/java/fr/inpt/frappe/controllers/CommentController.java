@@ -89,7 +89,7 @@ public class CommentController {
 	})
 	@PatchMapping("/{id}")
 	public Comment update(@PathVariable UUID id,
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated comment name") @Valid CommentUpdateDTO comment) {
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated comment") @Valid CommentUpdateDTO comment) {
 		Comment commentUpdate = comments.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"Comment not found"));

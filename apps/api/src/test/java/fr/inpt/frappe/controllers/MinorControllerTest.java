@@ -2,7 +2,8 @@ package fr.inpt.frappe.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.inpt.frappe.controllers.dtos.MinorCreateDTO;
+import fr.inpt.frappe.controllers.dtos.minor.MinorCreateDTO;
+import fr.inpt.frappe.controllers.dtos.minor.MinorUpdateDTO;
 import fr.inpt.frappe.models.Major;
 import fr.inpt.frappe.models.Minor;
 import fr.inpt.frappe.models.School;
@@ -51,6 +52,7 @@ class MinorControllerTest {
 	private School school;
 
 	private MinorCreateDTO minorCreateDTO;
+	private MinorUpdateDTO minorUpdateDTO;
 
 	@BeforeEach
 	void setUp() {
@@ -58,6 +60,7 @@ class MinorControllerTest {
 		major = new Major("sdn", "Science du Numérique", school);
 		minor = new Minor("Archi système rézo", major);
 		minorCreateDTO = new MinorCreateDTO("ASR", "sdn");
+		minorUpdateDTO = new MinorUpdateDTO("ASR");
 	}
 
 	@Test
@@ -106,14 +109,14 @@ class MinorControllerTest {
 		when(minorRepository.save(any(Minor.class))).thenReturn(minor);
 		mockMvc.perform(patch("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("ASR"))
+				.content(objectMapper.writeValueAsString(minorUpdateDTO)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value("ASR"));
 
 		when(minorRepository.findById(anyLong())).thenReturn(Optional.empty());
 		mockMvc.perform(patch("/minor/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(minor)))
+				.content(objectMapper.writeValueAsString(minorUpdateDTO)))
 				.andExpect(status().isNotFound());
 	}
 

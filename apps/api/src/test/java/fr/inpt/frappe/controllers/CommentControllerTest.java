@@ -108,6 +108,14 @@ class CommentControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(commentCreateDTO)))
 				.andExpect(status().isNotFound());
+
+		when(commentRepository.save(any(Comment.class))).thenReturn(comment);
+		when(documentRepository.findById(any(UUID.class))).thenReturn(Optional.of(document));
+		when(userRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+		mockMvc.perform(post("/comment/")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(commentCreateDTO)))
+				.andExpect(status().isNotFound());
 	}
 
 	@Test

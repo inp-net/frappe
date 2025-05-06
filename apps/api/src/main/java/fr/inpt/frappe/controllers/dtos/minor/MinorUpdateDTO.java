@@ -1,4 +1,4 @@
-package fr.inpt.frappe.controllers.dtos;
+package fr.inpt.frappe.controllers.dtos.minor;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,15 +12,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MinorCreateDTO {
+public class MinorUpdateDTO {
 
 	@NotNull(message = "Minor name is required")
 	@NotBlank(message = "Minor name should not be empty")
 	@Size(max = 255, message = "Minor name must be less than 255 chars")
 	private String name;
 
-	@NotNull(message = "Minor should be linked to a major")
-	@NotBlank(message = "Major id should not be empty")
-	@Size(max = 255, message = "Major id must be less than 255 chars")
-	private String major_uid;
 }

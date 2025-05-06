@@ -19,9 +19,7 @@ import fr.inpt.frappe.controllers.dtos.major.MajorCreateDTO;
 import fr.inpt.frappe.controllers.dtos.major.MajorUpdateDTO;
 import fr.inpt.frappe.mappers.MajorMapper;
 import fr.inpt.frappe.models.Major;
-import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.MajorRepository;
-import fr.inpt.frappe.repositories.SchoolRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,10 +36,7 @@ public class MajorController {
 	private MajorRepository majors;
 
 	@Autowired
-	private SchoolRepository schools;
-
-	@Autowired
-	private MajorMapper majorMapper;
+	private MajorMapper mapper;
 
 	@Operation(summary = "Get all majors", description = "Returns a list of all available majors.")
 	@ApiResponses(value = {
@@ -60,12 +55,10 @@ public class MajorController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<Major> create(
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") @Valid MajorCreateDTO major) {
-		School school = schools.findByUid(major.getSchool_uid())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "School not found"));
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The major") @Valid MajorCreateDTO major) {
 
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(majors.save(new Major(major.getUid(), major.getName(), school, false)));
+				.body(majors.save(mapper.createMajorFromDto(major)));
 
 	}
 
@@ -93,7 +86,7 @@ public class MajorController {
 		Major majorUpdate = majors.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND, "Major not found"));
 
-		majorMapper.updateMajorFromDto(major, majorUpdate);
+		mapper.updateMajorFromDto(major, majorUpdate);
 		majors.save(majorUpdate);
 		return majorUpdate;
 	}

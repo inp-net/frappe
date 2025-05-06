@@ -28,4 +28,6 @@ public class MajorCreateDTO {
 	@NotBlank(message = "School uid should not be empty")
 	@Size(max = 255, message = "School uid must be less than 255 chars")
 	private String school_uid;
+
+	private Boolean discontinued;
 }
