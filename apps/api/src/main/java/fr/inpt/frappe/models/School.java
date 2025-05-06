@@ -11,60 +11,36 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "schools")
 public class School {
 
 	@Id
+	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Setter(AccessLevel.NONE)
 	@Column(unique = true, nullable = false)
 	private String uid;
 
 	@Column(nullable = false)
 	private String name;
 
+	@Setter(AccessLevel.NONE)
 	@OneToMany(mappedBy = "school")
 	@JsonIgnore
 	private Collection<Major> majors;
 
-	public School() {
-	}
-
 	public School(String uid, String name) {
 		this.uid = uid;
 		this.name = name;
-	}
-
-	public School(String uid, String name, Collection<Major> majors) {
-		this.uid = uid;
-		this.name = name;
-		this.majors = majors;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Collection<Major> getMajors() {
-		return majors;
-	}
-
-	public void setMajors(Collection<Major> majors) {
-		this.majors = majors;
 	}
 }
