@@ -6,6 +6,7 @@
 		"reset": "./mvnw liquibase:dropAll && ./mvnw liquibase:update",
 		"seed": "./mvnw liquibase:update -Dliquibase.changeLogFile=src/main/resources/db/seed.yaml",
 		"test": "./mvnw test",
-		"coverage": "./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report && xdg-open target/site/jacoco/index.html"
+		"coverage": "./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent test jacoco:report && xdg-open target/site/jacoco/index.html",
+		"generate": "mvn springdoc-openapi:generate"
 	}
 }

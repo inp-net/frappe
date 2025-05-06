@@ -9,7 +9,8 @@
 		"db:reset": "pnpm --filter @frappe/api run reset",
 		"db:seed": "pnpm --filter @frappe/api run seed",
 		"test:api": "pnpm --filter @frappe/api run test",
-		"coverage:api": "pnpm --filter @frappe/api run coverage"
+		"coverage:api": "pnpm --filter @frappe/api run coverage",
+		"generate": "pnpm --filter @frappe/api run generate && pnpm --filter @frappe/app run generate"
 	},
 	"keywords": [],
 	"author": "",
