@@ -82,7 +82,7 @@ public class SubjectController {
 	})
 	@PatchMapping("/{id}")
 	public Subject update(@PathVariable Long id,
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated subject name and teaching unit") @Valid SubjectUpdateDTO subject) {
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated subject") @Valid SubjectUpdateDTO subject) {
 		Subject subjectToUpdate = subjects.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"Subject not found"));

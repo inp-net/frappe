@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import fr.inpt.frappe.controllers.dtos.TagDTO;
 import fr.inpt.frappe.models.Tag;
 import fr.inpt.frappe.repositories.TagRepository;
 
@@ -41,10 +42,13 @@ public class TagControllerTest {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	private Tag tag;
+	private TagDTO tagDTO;
 
 	@BeforeEach
 	void setUp() {
 		tag = new Tag("cours");
+
+		tagDTO = new TagDTO("cours");
 	}
 
 	@Test
@@ -61,7 +65,7 @@ public class TagControllerTest {
 		when(tagRepository.save(any(Tag.class))).thenReturn(tag);
 		mockMvc.perform(post("/tag/")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(tag)))
+				.content(objectMapper.writeValueAsString(tagDTO)))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.name").value(tag.getName()));
 	}
@@ -86,14 +90,14 @@ public class TagControllerTest {
 		when(tagRepository.save(any(Tag.class))).thenReturn(tag);
 		mockMvc.perform(patch("/tag/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(tag)))
+				.content(objectMapper.writeValueAsString(tagDTO)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value(tag.getName()));
 
 		when(tagRepository.findById(anyLong())).thenReturn(Optional.empty());
 		mockMvc.perform(patch("/tag/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(tag)))
+				.content(objectMapper.writeValueAsString(tagDTO)))
 				.andExpect(status().isNotFound());
 	}
 

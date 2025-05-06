@@ -18,7 +18,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import fr.inpt.frappe.controllers.dtos.SchoolCreateDTO;
+import jakarta.validation.Valid;
+import fr.inpt.frappe.controllers.dtos.school.SchoolCreateDTO;
+import fr.inpt.frappe.controllers.dtos.school.SchoolUpdateDTO;
+import fr.inpt.frappe.mappers.SchoolMapper;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.SchoolRepository;
 
@@ -31,6 +34,9 @@ public class SchoolController {
 
 	@Autowired
 	private SchoolRepository schools;
+
+	@Autowired
+	private SchoolMapper mapper;
 
 	@Operation(summary = "Get all schools", description = "Returns a list of all available schools.")
 	@ApiResponses(value = {
@@ -48,9 +54,9 @@ public class SchoolController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<School> create(
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") SchoolCreateDTO school) {
-		School createdSchool = schools.save(new School(school.getUid(), school.getName()));
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdSchool);
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The school") @Valid SchoolCreateDTO school) {
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(schools.save(mapper.createSchoolFromDto(school)));
 	}
 
 	@Operation(summary = "Get a school by ID", description = "Retrieves a school by its ID.")
@@ -73,13 +79,14 @@ public class SchoolController {
 	})
 	@PatchMapping("/{id}")
 	public School update(@PathVariable Long id,
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated school name") String name) {
-		School school = schools.findById(id).orElseThrow(() -> new ResponseStatusException(
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated school") @Valid SchoolUpdateDTO school) {
+		School schoolUpdate = schools.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"School not found"));
-		school.setName(name);
-		schools.save(school);
-		return school;
+
+		mapper.updateSchoolFromDto(school, schoolUpdate);
+
+		return schools.save(schoolUpdate);
 	}
 
 	@Operation(summary = "Delete a school", description = "Deletes the desired school.")

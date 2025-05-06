@@ -27,10 +27,10 @@ import fr.inpt.frappe.repositories.UserRepository;
 public abstract class CommentMapper {
 
 	@Autowired
-	private DocumentRepository documentRepository;
+	protected DocumentRepository documentRepository;
 
 	@Autowired
-	private UserRepository userRepository;
+	protected UserRepository userRepository;
 
 	@Named("mapDocument")
 	public Document mapDocument(UUID document_id) {

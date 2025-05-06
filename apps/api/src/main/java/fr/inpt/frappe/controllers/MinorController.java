@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import fr.inpt.frappe.controllers.dtos.MinorCreateDTO;
-import fr.inpt.frappe.models.Major;
+import fr.inpt.frappe.controllers.dtos.minor.MinorCreateDTO;
+import fr.inpt.frappe.controllers.dtos.minor.MinorUpdateDTO;
+import fr.inpt.frappe.mappers.MinorMapper;
 import fr.inpt.frappe.models.Minor;
-import fr.inpt.frappe.repositories.MajorRepository;
 import fr.inpt.frappe.repositories.MinorRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,7 +36,7 @@ public class MinorController {
 	private MinorRepository minors;
 
 	@Autowired
-	private MajorRepository majors;
+	private MinorMapper mapper;
 
 	@Operation(summary = "Get all minors", description = "Returns a list of all available minors.")
 	@ApiResponses(value = {
@@ -51,17 +51,15 @@ public class MinorController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Minor created successfully"),
 			@ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-			@ApiResponse(responseCode = "404", description = "School uid not found", content = @Content)
+			@ApiResponse(responseCode = "404", description = "Major uid not found", content = @Content)
 	})
 	@PostMapping("/")
 	public ResponseEntity<Minor> create(
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The minor name and major uid") @Valid MinorCreateDTO minor) {
-		Major major = majors.findByUid(minor.getMajor_uid())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Major not found"));
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The minor") @Valid MinorCreateDTO minor) {
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(minors.save(new Minor(minor.getName(), major)));
-
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(minors.save(mapper.createMinorFromDto(minor)));
 	}
 
 	@Operation(summary = "Get a minor by ID", description = "Retrieves a minor by its ID.")
@@ -84,12 +82,14 @@ public class MinorController {
 	})
 	@PatchMapping("/{id}")
 	public Minor update(@PathVariable Long id,
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated minor name") String name) {
-		Minor minor = minors.findById(id).orElseThrow(() -> new ResponseStatusException(
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated minor") @Valid MinorUpdateDTO minor) {
+		Minor minorUpdate = minors.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"Minor not found"));
-		minor.setName(name);
-		return minors.save(minor);
+
+		mapper.updateMinorFromDto(minor, minorUpdate);
+
+		return minors.save(minorUpdate);
 	}
 
 	@Operation(summary = "Delete a minor", description = "Deletes the desired minor.")

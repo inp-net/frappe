@@ -25,7 +25,7 @@ import fr.inpt.frappe.repositories.TeachingUnitRepository;
 public abstract class SubjectMapper {
 
 	@Autowired
-	TeachingUnitRepository teachingUnits;
+	protected TeachingUnitRepository teachingUnits;
 
 	@Named("mapTeachingUnit")
 	public Collection<TeachingUnit> mapTeachingUnit(Collection<Long> teaching_units) {

@@ -52,7 +52,7 @@ class MajorControllerTest {
 	void setUp() {
 		school = new School("n7", "ENSEEIHT");
 		major = new Major("sdn", "Science du Numérique", school);
-		majorCreateDTO = new MajorCreateDTO("sdn", "Science du Numérique", "n7");
+		majorCreateDTO = new MajorCreateDTO("sdn", "Science du Numérique", "n7", null);
 		majorUpdateDTO = new MajorUpdateDTO("SN", false);
 	}
 

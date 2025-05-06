@@ -17,8 +17,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+import jakarta.validation.Valid;
 import fr.inpt.frappe.repositories.TagRepository;
+import fr.inpt.frappe.controllers.dtos.TagDTO;
+import fr.inpt.frappe.mappers.TagMapper;
 import fr.inpt.frappe.models.Tag;
 
 import java.util.List;
@@ -30,6 +32,9 @@ public class TagController {
 
 	@Autowired
 	private TagRepository tags;
+
+	@Autowired
+	TagMapper mapper;
 
 	@Operation(summary = "Get all tags", description = "Returns a list of all available tags.")
 	@ApiResponses(value = {
@@ -47,9 +52,11 @@ public class TagController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<Tag> create(
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The Tag name") String name) {
-		Tag createdTag = tags.save(new Tag(name));
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdTag);
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The tag") @Valid TagDTO tag) {
+
+		return ResponseEntity
+				.status(HttpStatus.CREATED)
+				.body(tags.save(mapper.createTagFromDto(tag)));
 	}
 
 	@Operation(summary = "Get a tag by ID", description = "Retrieves a tag by its ID.")
@@ -72,12 +79,14 @@ public class TagController {
 	})
 	@PatchMapping("/{id}")
 	public Tag update(@PathVariable Long id,
-			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated tag name") String name) {
-		Tag tag = tags.findById(id).orElseThrow(() -> new ResponseStatusException(
+			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The updated tag") @Valid TagDTO tag) {
+		Tag tagUpdate = tags.findById(id).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"Tag not found"));
-		tag.setName(name);
-		return tags.save(tag);
+
+		mapper.updateTagFromDto(tag, tagUpdate);
+
+		return tags.save(tagUpdate);
 	}
 
 	@Operation(summary = "Delete a tag", description = "Deletes the desired tag.")

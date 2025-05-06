@@ -1,6 +1,9 @@
 package fr.inpt.frappe.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import fr.inpt.frappe.controllers.dtos.school.SchoolCreateDTO;
+import fr.inpt.frappe.controllers.dtos.school.SchoolUpdateDTO;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.SchoolRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,10 +36,16 @@ class SchoolControllerTest {
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	private School school;
+	private SchoolUpdateDTO schoolUpdateDTO;
+	private SchoolCreateDTO schoolCreateDTO;
 
 	@BeforeEach
 	void setUp() {
 		school = new School("n7", "ENSEEIHT");
+
+		schoolCreateDTO = new SchoolCreateDTO("n7", "ENSEEIHT");
+		schoolUpdateDTO = new SchoolUpdateDTO("ENSEEIHT");
+
 	}
 
 	@Test
@@ -53,7 +62,7 @@ class SchoolControllerTest {
 		when(schoolRepository.save(any(School.class))).thenReturn(school);
 		mockMvc.perform(post("/school/")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(school)))
+				.content(objectMapper.writeValueAsString(schoolCreateDTO)))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.name").value(school.getName()));
 	}
@@ -78,14 +87,14 @@ class SchoolControllerTest {
 		when(schoolRepository.save(any(School.class))).thenReturn(school);
 		mockMvc.perform(patch("/school/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(school)))
+				.content(objectMapper.writeValueAsString(schoolUpdateDTO)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name").value(school.getName()));
 
 		when(schoolRepository.findById(anyLong())).thenReturn(Optional.empty());
 		mockMvc.perform(patch("/school/1")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(school)))
+				.content(objectMapper.writeValueAsString(schoolUpdateDTO)))
 				.andExpect(status().isNotFound());
 	}
 
