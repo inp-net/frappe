@@ -175,6 +175,22 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outputFileName>schema.json</outputFileName>
+					<outputDir>${project.basedir}/../../</outputDir>
+					<failOnError>true</failOnError>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

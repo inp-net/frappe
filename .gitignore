@@ -144,3 +144,6 @@ dist
 
 .env
 .vscode
+
+# OpenAPI schema
+schema.json
