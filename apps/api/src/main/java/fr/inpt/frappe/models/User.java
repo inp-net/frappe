@@ -9,12 +9,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
 
 	@Id
+	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
 	private UUID id;
 
@@ -23,6 +30,7 @@ public class User {
 	 * Used to map oauth2 user to local user using
 	 * OIDC preferred_username
 	 */
+	@Setter(AccessLevel.NONE)
 	@Column(unique = true, nullable = false)
 	private String uid;
 
@@ -44,9 +52,6 @@ public class User {
 	@ManyToOne
 	private Minor minor;
 
-	public User() {
-	}
-
 	public User(String uid) {
 		this.uid = uid;
 	}
@@ -67,61 +72,4 @@ public class User {
 		this.major = major;
 		this.minor = minor;
 	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public String getFirstname() {
-		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
-	public School getSchool() {
-		return school;
-	}
-
-	public void setSchool(School school) {
-		this.school = school;
-	}
-
-	public Major getMajor() {
-		return major;
-	}
-
-	public void setMajor(Major major) {
-		this.major = major;
-	}
-
-	public Minor getMinor() {
-		return minor;
-	}
-
-	public void setMinor(Minor minor) {
-		this.minor = minor;
-	}
-
 }

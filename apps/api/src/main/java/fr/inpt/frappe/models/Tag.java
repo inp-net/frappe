@@ -9,12 +9,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "tags")
 public class Tag {
 
 	@Id
+	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
@@ -24,30 +31,7 @@ public class Tag {
 	@ManyToMany
 	private Collection<Document> documents;
 
-	public Tag() {
-	}
-
 	public Tag(String name) {
 		this.name = name;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Collection<Document> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(Collection<Document> documents) {
-		this.documents = documents;
 	}
 }

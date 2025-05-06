@@ -12,12 +12,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "minors")
 public class Minor {
 
 	@Id
+	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
@@ -25,6 +32,7 @@ public class Minor {
 	private String name;
 
 	/** A minor have several teaching units. */
+	@Setter(AccessLevel.NONE)
 	@Column(name = "teaching_units")
 	@ManyToMany(mappedBy = "minors")
 	private Collection<TeachingUnit> teachingUnits;
@@ -33,36 +41,8 @@ public class Minor {
 	@JsonIgnore
 	private Major major;
 
-	public Minor() {
-	}
-
 	public Minor(String name, Major major) {
 		this.name = name;
 		this.major = major;
 	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Collection<TeachingUnit> getTeachingUnits() {
-		return teachingUnits;
-	}
-
-	public Major getMajor() {
-		return major;
-	}
-
-	public void setMajor(Major major) {
-		this.major = major;
-	}
-
 }

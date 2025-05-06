@@ -11,16 +11,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table(name = "majors")
 public class Major {
 
 	@Id
+	@Setter(AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	@Setter(AccessLevel.NONE)
 	@Column(unique = true, nullable = false)
 	private String uid;
 
@@ -34,16 +43,14 @@ public class Major {
 	@ManyToMany(mappedBy = "majors")
 	private Collection<TeachingUnit> teachingUnits;
 
-	@ManyToMany(mappedBy = "major")
+	@Setter(AccessLevel.NONE)
+	@OneToMany(mappedBy = "major")
 	@JsonIgnore
 	private Collection<Minor> minors;
 
 	@ManyToOne(optional = false)
 	@JsonIgnore
 	private School school;
-
-	public Major() {
-	}
 
 	public Major(String uid, String name, School school) {
 		this.uid = uid;
@@ -55,42 +62,6 @@ public class Major {
 		this.uid = uid;
 		this.name = name;
 		this.school = school;
-		this.discontinued = discontinued;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public School getSchool() {
-		return school;
-	}
-
-	public void setSchool(School school) {
-		this.school = school;
-	}
-
-	public Collection<Minor> getMinors() {
-		return minors;
-	}
-
-	public boolean isDiscontinued() {
-		return discontinued;
-	}
-
-	public void setDiscontinued(boolean discontinued) {
 		this.discontinued = discontinued;
 	}
 }
