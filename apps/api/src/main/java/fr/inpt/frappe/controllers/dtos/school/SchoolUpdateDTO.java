@@ -14,6 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SchoolUpdateDTO {
 
+	@NotNull(message = "School uid is required")
+	@NotBlank(message = "School uid should not be empty")
+	@Size(max = 255, message = "School uid must be less than 255 chars")
+	private String uid;
+
 	@NotNull(message = "School name is required")
 	@NotBlank(message = "School name should not be empty")
 	@Size(max = 255, message = "School name must be less than 255 chars")

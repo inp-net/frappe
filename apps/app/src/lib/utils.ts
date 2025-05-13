@@ -5,13 +5,19 @@ import type { AuthUser } from './types/AuthUser';
  * @param token JWT token string
  * @returns Parsed payload or throws an error
  */
-export function parseJWT(token: string): { [key: string]: any } {
-	var base64Url = token.split('.')[1];
-	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-	var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-	    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-	}).join(''));
-	
+
+export function parseJWT(token: string): Record<string, unknown> {
+	const base64Url = token.split('.')[1];
+	const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	const jsonPayload = decodeURIComponent(
+		atob(base64)
+			.split('')
+			.map(function (c) {
+				return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+			})
+			.join('')
+	);
+
 	return JSON.parse(jsonPayload);
 }
 

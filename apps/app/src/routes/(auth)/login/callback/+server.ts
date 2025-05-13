@@ -12,7 +12,7 @@ export const GET: RequestHandler = ({ url, cookies }) => {
 	cookies.set('token', token, {
 		path: '/',
 		httpOnly: false,
-		expires: new Date(payload['exp'] * 1000) || undefined
+		expires: new Date(payload['exp'] * 1000)
 	});
 
 	throw redirect(302, '/');

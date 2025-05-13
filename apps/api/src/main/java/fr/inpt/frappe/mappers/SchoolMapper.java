@@ -17,10 +17,9 @@ import fr.inpt.frappe.models.School;
 public abstract class SchoolMapper {
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "majors", ignore = true)
+	@Mapping(target = "majors", ignore = true)
 	public abstract School createSchoolFromDto(SchoolCreateDTO dto);
 
-	@Mapping(target = "uid", ignore = true)
-    @Mapping(target = "majors", ignore = true)
+	@Mapping(target = "majors", ignore = true)
 	public abstract School updateSchoolFromDto(SchoolUpdateDTO dto, @MappingTarget School school);
 }

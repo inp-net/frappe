@@ -44,7 +44,7 @@ class SchoolControllerTest {
 		school = new School("n7", "ENSEEIHT");
 
 		schoolCreateDTO = new SchoolCreateDTO("n7", "ENSEEIHT");
-		schoolUpdateDTO = new SchoolUpdateDTO("ENSEEIHT");
+		schoolUpdateDTO = new SchoolUpdateDTO("n7", "ENSEEIHT");
 
 	}
 

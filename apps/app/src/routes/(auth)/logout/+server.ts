@@ -1,4 +1,3 @@
-import { parseJWT } from '$lib/utils';
 import { json, redirect, type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = ({ cookies }) => {
