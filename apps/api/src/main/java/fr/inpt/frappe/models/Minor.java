@@ -34,6 +34,7 @@ public class Minor {
 	/** A minor have several teaching units. */
 	@Setter(AccessLevel.NONE)
 	@ManyToMany(mappedBy = "minors")
+	@JsonIgnore
 	private Collection<TeachingUnit> teachingUnits;
 
 	@ManyToOne(optional = false)

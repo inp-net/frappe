@@ -39,6 +39,7 @@ public class Major {
 	private boolean discontinued = false;
 
 	@ManyToMany(mappedBy = "majors")
+	@JsonIgnore
 	private Collection<TeachingUnit> teachingUnits;
 
 	@Setter(AccessLevel.NONE)
