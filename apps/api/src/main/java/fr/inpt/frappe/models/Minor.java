@@ -33,7 +33,6 @@ public class Minor {
 
 	/** A minor have several teaching units. */
 	@Setter(AccessLevel.NONE)
-	@Column(name = "teaching_units")
 	@ManyToMany(mappedBy = "minors")
 	private Collection<TeachingUnit> teachingUnits;
 

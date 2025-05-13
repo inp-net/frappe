@@ -27,7 +27,6 @@ public class School {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Setter(AccessLevel.NONE)
 	@Column(unique = true, nullable = false)
 	private String uid;
 

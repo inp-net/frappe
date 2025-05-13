@@ -29,7 +29,6 @@ public class Major {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Setter(AccessLevel.NONE)
 	@Column(unique = true, nullable = false)
 	private String uid;
 
@@ -39,7 +38,6 @@ public class Major {
 	@Column(nullable = false)
 	private boolean discontinued = false;
 
-	@Column(name = "teaching_units")
 	@ManyToMany(mappedBy = "majors")
 	private Collection<TeachingUnit> teachingUnits;
 

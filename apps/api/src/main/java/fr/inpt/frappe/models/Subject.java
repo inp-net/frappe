@@ -35,7 +35,7 @@ public class Subject {
 	private Collection<Document> documents;
 
 	@ManyToMany
-	@JoinTable(name = "subjects_teaching_units", joinColumns = @JoinColumn(name = "teaching_unit_id"), inverseJoinColumns = @JoinColumn(name = "subject_id"))
+	@JoinTable(name = "subjects_teaching_units", joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "teaching_unit_id"))
 	private Collection<TeachingUnit> teachingUnits;
 
 	public Subject(String name, Collection<TeachingUnit> teachingUnits) {
