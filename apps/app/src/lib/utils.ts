@@ -1,14 +1,18 @@
 import type { AuthUser } from './types/AuthUser';
 
 /**
- *
- * @description This function takes a JWT token and decodes it. It returns the payload of the token.
- * @param token JWT token
- * @returns Parsed payload of the token
+ * @description This function safely parses a JWT token and returns its payload.
+ * @param token JWT token string
+ * @returns Parsed payload or throws an error
  */
 export function parseJWT(token: string): { [key: string]: any } {
-	const payload = token.split('.')[1];
-	return JSON.parse(atob(payload));
+	var base64Url = token.split('.')[1];
+	var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+	var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+	    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+	}).join(''));
+	
+	return JSON.parse(jsonPayload);
 }
 
 /**
