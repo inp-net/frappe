@@ -35,12 +35,10 @@ public abstract class MajorMapper {
 	@Mapping(source = "school_uid", target = "school", qualifiedByName = "mapSchool")
 	@Mapping(target = "minors", ignore = true)
 	@Mapping(target = "teachingUnits", ignore = true)
-	@Mapping(target = "discontinued", ignore = true)
 	public abstract Major createMajorFromDto(MajorCreateDTO dto);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	@Mapping(target = "uid", ignore = true)
-	@Mapping(target = "school", ignore = true)
+	@Mapping(source = "school_uid", target = "school", qualifiedByName = "mapSchool")
 	@Mapping(target = "minors", ignore = true)
 	@Mapping(target = "teachingUnits", ignore = true)
 	public abstract void updateMajorFromDto(MajorUpdateDTO dto, @MappingTarget Major major);

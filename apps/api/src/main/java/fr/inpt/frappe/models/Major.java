@@ -47,7 +47,6 @@ public class Major {
 	private Collection<Minor> minors;
 
 	@ManyToOne(optional = false)
-	@JsonIgnore
 	private School school;
 
 	public Major(String uid, String name, School school) {

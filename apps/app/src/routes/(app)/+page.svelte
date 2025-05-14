@@ -10,4 +10,7 @@
 	<li>
 		<a href="/schools">Schools</a>
 	</li>
+	<li>
+		<a href="/majors">Majors</a>
+	</li>
 </ul>

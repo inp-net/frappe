@@ -53,7 +53,7 @@ class MajorControllerTest {
 		school = new School("n7", "ENSEEIHT");
 		major = new Major("sdn", "Science du Numérique", school);
 		majorCreateDTO = new MajorCreateDTO("sdn", "Science du Numérique", "n7", null);
-		majorUpdateDTO = new MajorUpdateDTO("SN", false);
+		majorUpdateDTO = new MajorUpdateDTO("Science du numérique", "sdn", "n7", false);
 	}
 
 	@Test
@@ -99,6 +99,7 @@ class MajorControllerTest {
 	@Test
 	void testUpdateMajor() throws Exception {
 		when(majorRepository.findById(anyLong())).thenReturn(Optional.of(major));
+		when(schoolRepository.findByUid(any(String.class))).thenReturn(Optional.of(school));
 		when(majorRepository.save(any(Major.class))).thenReturn(major);
 		mockMvc.perform(patch("/major/1")
 				.contentType(MediaType.APPLICATION_JSON)
