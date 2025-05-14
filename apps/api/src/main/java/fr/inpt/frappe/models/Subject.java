@@ -2,6 +2,8 @@ package fr.inpt.frappe.models;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +34,7 @@ public class Subject {
 	private String name;
 
 	@OneToMany(mappedBy = "subject")
+	@JsonIgnore
 	private Collection<Document> documents;
 
 	@ManyToMany

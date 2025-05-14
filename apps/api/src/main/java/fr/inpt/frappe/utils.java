@@ -1,5 +1,6 @@
 package fr.inpt.frappe;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,48 @@ public class utils {
 		}
 
 		return Optional.empty();
+	}
+
+	/**
+	 * Return the file extension according to the myme type if the type of file is
+	 * allowed
+	 * 
+	 * @Param mimeType the type to match
+	 * @return The extension matching the mimeType, null if it is not allowed
+	 */
+	public static String getExtension(String mimeType) {
+
+		String extension;
+
+		// Check the autorized filetype
+		switch (mimeType) {
+			case "application/pdf":
+				extension = ".pdf";
+				break;
+
+			default:
+				extension = null;
+		}
+
+		return extension;
+	}
+
+	/**
+	 * Sanitize filename
+	 * 
+	 * @Param fileName the name of the file
+	 * @return the name of the file sanitized
+	 */
+	public static String sanitize(String fileName) {
+
+		// Sanitize filename
+		// Remove path parts
+		String cleaned = Paths.get(fileName).getFileName().toString();
+
+		// Remove illegal characters and control characters
+		cleaned = cleaned.replaceAll("[^a-zA-Z0-9\\.\\-\\_]", "_");
+
+		return cleaned;
 	}
 
 }

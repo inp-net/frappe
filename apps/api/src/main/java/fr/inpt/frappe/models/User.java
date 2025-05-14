@@ -1,6 +1,9 @@
 package fr.inpt.frappe.models;
 
+import java.util.Collection;
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -51,6 +55,10 @@ public class User {
 
 	@ManyToOne
 	private Minor minor;
+
+	@OneToMany(mappedBy = "author")
+	@JsonIgnore
+	private Collection<Document> documents;
 
 	public User(String uid) {
 		this.uid = uid;

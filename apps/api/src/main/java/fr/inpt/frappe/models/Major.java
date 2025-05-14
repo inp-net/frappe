@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -43,7 +42,7 @@ public class Major {
 	private Collection<TeachingUnit> teachingUnits;
 
 	@Setter(AccessLevel.NONE)
-	@OneToMany(mappedBy = "major")
+	@ManyToMany(mappedBy = "major")
 	@JsonIgnore
 	private Collection<Minor> minors;
 

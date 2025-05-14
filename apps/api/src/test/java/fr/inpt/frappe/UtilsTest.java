@@ -138,4 +138,45 @@ class UtilsTest {
 		Optional<School> result = utils.findSchool(oidcSchools, schoolRepository);
 		assertFalse(result.isPresent());
 	}
+
+	@Test
+	void testGetExtension() {
+		assert (utils.getExtension("application/pdf").equals(".pdf"));
+		assert (utils.getExtension("image/jpeg") == null);
+	}
+
+	@Test
+	void testSanitizePath() {
+		// Test path traversal robustness
+		assert (utils.sanitize("/cool/path/traversal/file.pdf").equals("file.pdf"));
+		assert (utils.sanitize("/../../../file.pdf").equals("file.pdf"));
+		assert (utils.sanitize("/file.pdf").equals("file.pdf"));
+
+		// Test removing illegal caracter
+		assert (utils.sanitize("azertyuiopmlkjhgfdsqwxcvbn1234567890AZERTYUIOPMLKJHGFDSQWXCVBN-._.pdf")
+				.equals("azertyuiopmlkjhgfdsqwxcvbn1234567890AZERTYUIOPMLKJHGFDSQWXCVBN-._.pdf"));
+		assert (utils.sanitize("\\.pdf").equals("_.pdf"));
+		assert (utils.sanitize("\".pdf").equals("_.pdf"));
+		assert (utils.sanitize("&.pdf").equals("_.pdf"));
+		assert (utils.sanitize("/.pdf").equals(".pdf"));
+		assert (utils.sanitize("|.pdf").equals("_.pdf"));
+		assert (utils.sanitize("[.pdf").equals("_.pdf"));
+		assert (utils.sanitize("].pdf").equals("_.pdf"));
+		assert (utils.sanitize("{.pdf").equals("_.pdf"));
+		assert (utils.sanitize("}.pdf").equals("_.pdf"));
+		assert (utils.sanitize("#.pdf").equals("_.pdf"));
+		assert (utils.sanitize("~.pdf").equals("_.pdf"));
+		assert (utils.sanitize("'.pdf").equals("_.pdf"));
+		assert (utils.sanitize("(.pdf").equals("_.pdf"));
+		assert (utils.sanitize("_.pdf").equals("_.pdf"));
+		assert (utils.sanitize(").pdf").equals("_.pdf"));
+		assert (utils.sanitize("=.pdf").equals("_.pdf"));
+		assert (utils.sanitize("^.pdf").equals("_.pdf"));
+		assert (utils.sanitize("$.pdf").equals("_.pdf"));
+		assert (utils.sanitize("!.pdf").equals("_.pdf"));
+		assert (utils.sanitize(":.pdf").equals("_.pdf"));
+		assert (utils.sanitize(";.pdf").equals("_.pdf"));
+		assert (utils.sanitize(",.pdf").equals("_.pdf"));
+		assert (utils.sanitize("é.pdf").equals("_.pdf"));
+	}
 }

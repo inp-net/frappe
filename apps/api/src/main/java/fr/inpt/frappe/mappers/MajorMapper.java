@@ -44,4 +44,5 @@ public abstract class MajorMapper {
 	@Mapping(target = "minors", ignore = true)
 	@Mapping(target = "teachingUnits", ignore = true)
 	public abstract void updateMajorFromDto(MajorUpdateDTO dto, @MappingTarget Major major);
+
 }

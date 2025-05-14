@@ -145,5 +145,7 @@ dist
 .env
 .vscode
 
+uploads/*
+
 # OpenAPI schema
 schema.json

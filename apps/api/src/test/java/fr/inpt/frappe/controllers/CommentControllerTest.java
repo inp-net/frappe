@@ -71,7 +71,7 @@ class CommentControllerTest {
 		major = new Major("sdn", "Science du Numérique", school);
 		teachingUnit = new TeachingUnit("Architecture des systèmes d'exploitation", null, List.of(major));
 		subject = new Subject("Archi système", List.of(teachingUnit));
-		document = new Document("un partiel", "Cool ce partiel", subject, null, null);
+		document = new Document("un partiel", subject);
 		comment = new Comment("En effet ce partiel est trop cool", document, user);
 
 		commentCreateDTO = new CommentCreateDTO(comment.getContent(), UUID.randomUUID(), UUID.randomUUID());
