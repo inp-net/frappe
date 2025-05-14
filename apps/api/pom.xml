@@ -153,6 +153,18 @@
 				<configuration>
 					<jvmArguments>--add-opens java.base/java.time=ALL-UNNAMED</jvmArguments>
 				</configuration>
+				<executions>
+					<execution>
+						<id>doc-start</id>
+						<phase>pre-integration-test</phase>
+						<goals><goal>start</goal></goals>
+					</execution>
+					<execution>
+						<id>doc-stop</id>
+						<phase>post-integration-test</phase>
+						<goals><goal>stop</goal></goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.liquibase</groupId>
@@ -192,9 +204,9 @@
 				<artifactId>springdoc-openapi-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
+						<id>doc-generate</id>
+						<phase>integration-test</phase>
+						<goals><goal>generate</goal></goals>
 					</execution>
 				</executions>
 				<configuration>

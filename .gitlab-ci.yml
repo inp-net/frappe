@@ -4,3 +4,4 @@ stages:
 
 include:
   - apps/api/.gitlab-ci.yml
+  - apps/app/.gitlab-ci.yml

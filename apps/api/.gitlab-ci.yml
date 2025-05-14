@@ -10,8 +10,21 @@
 build:api:
   extends: .api
   stage: build
+  services:
+    - name: postgres:17
+      alias: postgres
+  variables:
+    POSTGRES_DB: frappe
+    POSTGRES_USER: frappe
+    POSTGRES_PASSWORD: frappe
+    DATABASE_URL: postgresql://frappe:frappe@postgres:5432/frappe
   script:
     - mvn compile
+    - mvn verify -Pgenerate-docs -DskipTests
+  artifacts:
+    paths:
+      - schema.json
+    expire_in: 20 minutes
 
 test:api:
   extends: .api

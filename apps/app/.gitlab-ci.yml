@@ -1,0 +1,32 @@
+.app:
+  image: node:latest
+  needs:
+    - job: build:api
+      artifacts: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  before_script:
+    - cp .env.ci .env
+    - cd apps/app
+    - corepack enable
+    - pnpm i --frozen-lockfile
+    - pnpm generate
+
+build:app:
+  extends: .app
+  stage: build
+  script:
+    - pnpm build
+
+lint:app:
+  extends: .app
+  stage: test
+  script:
+    - pnpm lint
+
+check:app:
+  extends: .app
+  stage: test
+  script:
+    - pnpm check
