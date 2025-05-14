@@ -38,7 +38,6 @@ public class Minor {
 	private Collection<TeachingUnit> teachingUnits;
 
 	@ManyToOne(optional = false)
-	@JsonIgnore
 	private Major major;
 
 	public Minor(String name, Major major) {

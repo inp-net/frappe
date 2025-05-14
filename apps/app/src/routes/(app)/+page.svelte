@@ -13,4 +13,7 @@
 	<li>
 		<a href="/majors">Majors</a>
 	</li>
+	<li>
+		<a href="/minors">Minors</a>
+	</li>
 </ul>
