@@ -33,6 +33,9 @@ importers:
       eslint-config-prettier:
         specifier: ^10.0.1
         version: 10.1.5(eslint@9.26.0)
+      eslint-formatter-rdjson:
+        specifier: ^1.0.6
+        version: 1.0.6
       eslint-plugin-svelte:
         specifier: ^3.0.0
         version: 3.6.0(eslint@9.26.0)(svelte@5.28.6)
@@ -733,6 +736,9 @@ packages:
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
+
+  eslint-formatter-rdjson@1.0.6:
+    resolution: {integrity: sha512-RiBsXfe340Mof5pVkg7u0UXiLTm3cRhF9XYUf4hVHEzpIwk5jAIbkifugPpn51CeNxj00RkJU1MfJYoHbUwLFg==}
 
   eslint-plugin-svelte@3.6.0:
     resolution: {integrity: sha512-IIf6Cj6yQuCwL7Qd8bX13BZspz+DQsOkClozMF9EkW20FSxI75Ndd5ZzbviCn32DdXRo9FUWXn+YMIL46qPOOg==}
@@ -2139,6 +2145,8 @@ snapshots:
   eslint-config-prettier@10.1.5(eslint@9.26.0):
     dependencies:
       eslint: 9.26.0
+
+  eslint-formatter-rdjson@1.0.6: {}
 
   eslint-plugin-svelte@3.6.0(eslint@9.26.0)(svelte@5.28.6):
     dependencies:

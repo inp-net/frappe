@@ -1,3 +1,5 @@
+.reviewdog_setup: &reviewdog_setup curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b /bin
+
 .app:
   image: node:latest
   needs:
@@ -7,6 +9,7 @@
     - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   before_script:
+    - *reviewdog_setup
     - cp .env.ci .env
     - cd apps/app
     - corepack enable
@@ -23,10 +26,13 @@ lint:app:
   extends: .app
   stage: test
   script:
-    - pnpm lint
+    - pnpm exec eslint . -f rdjson | reviewdog -f=rdjson -name="eslint" -reporter=gitlab-mr-discussion -level=error
+    - |
+      pnpm exec prettier --check . 2>&1 | awk '/\[warn\]/ { print $2 ":1:1: File is not properly formatted." }' | reviewdog -efm="%f:%l:%c: %m" -name="prettier" -reporter=gitlab-mr-discussion -filter-mode=nofilter
 
 check:app:
   extends: .app
   stage: test
   script:
-    - pnpm check
+    - pnpm exec svelte-kit sync
+    - pnpm exec svelte-check --tsconfig ./tsconfig.json
