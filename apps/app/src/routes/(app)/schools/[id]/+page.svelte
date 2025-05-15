@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import client from '$lib/api/client';
 	import type { PageProps } from './$types';
 
@@ -19,11 +20,20 @@
 			}
 		});
 
-		alert('School updated successfully');
+		goto('./');
+	}
+
+	async function deleteSchool(id: number) {
+		await client.DELETE(`/school/{id}`, {
+			params: { path: { id } }
+		});
+		goto('./');
 	}
 </script>
 
 <h1>School #{data.school?.id}</h1>
+
+<h3>Update</h3>
 
 <form onsubmit={save}>
 	<input type="hidden" name="id" value={data.school?.id} />
@@ -32,3 +42,10 @@
 
 	<button type="submit">Save</button>
 </form>
+
+<h3>Delete</h3>
+
+<button onclick={() => deleteSchool(data.school?.id ?? 0)}>Delete</button>
+<br />
+<br />
+<button onclick={() => goto('./')}> Go back </button>

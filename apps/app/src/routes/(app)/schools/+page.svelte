@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import client from '$lib/api/client';
 	import type { PageProps } from './$types';
 
@@ -23,14 +24,21 @@
 	}
 </script>
 
+<h3>List</h3>
+
 <ul>
 	{#each schools as school (school.id)}
 		<li><a href={`/schools/${school.id}`}>{school.name} ({school.uid})</a></li>
 	{/each}
 </ul>
 
+<h3>Create</h3>
+
 <form onsubmit={create}>
 	<input type="text" name="name" placeholder="Name" required />
 	<input type="text" name="uid" placeholder="UID" required />
 	<button type="submit">Create</button>
 </form>
+<br />
+<br />
+<button onclick={() => goto('../')}> Go back </button>

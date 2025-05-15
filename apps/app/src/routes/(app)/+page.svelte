@@ -17,6 +17,9 @@
 		<a href="/minors">Minors</a>
 	</li>
 	<li>
+		<a href="/subjects">Subjects</a>
+	</li>
+	<li>
 		<a href="/tags">Tags</a>
 	</li>
 </ul>
