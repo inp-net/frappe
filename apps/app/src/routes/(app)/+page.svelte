@@ -22,4 +22,7 @@
 	<li>
 		<a href="/tags">Tags</a>
 	</li>
+	<li>
+		<a href="/documents">Documents</a>
+	</li>
 </ul>
