@@ -55,7 +55,7 @@ public class TeachingUnitController {
 	@PostMapping("/")
 	public ResponseEntity<TeachingUnit> create(
 			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The teaching unit") @Valid TeachingUnitCreateDTO teachingUnit) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(mapper.createTeachingUnitFromDto(teachingUnit));
+		return ResponseEntity.status(HttpStatus.CREATED).body(teachingUnits.save(mapper.createTeachingUnitFromDto(teachingUnit)));
 	}
 
 	@Operation(summary = "Get a teaching unit by ID", description = "Retrieves a teaching unit by its ID.")

@@ -121,6 +121,7 @@ public class TeachingUnitControllerTest {
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.name").value(teachingUnit1.getName()));
 
+		when(teachingUnitRepository.save(any(TeachingUnit.class))).thenReturn(teachingUnit2);
 		when(majorRepository.findAllById(anyCollection())).thenReturn(List.of(major));
 		mockMvc.perform(post("/teachingunit/")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -140,6 +141,7 @@ public class TeachingUnitControllerTest {
 				.content(objectMapper.writeValueAsString(teachingUnitCreateDTO2)))
 				.andExpect(status().isNotFound());
 
+		when(teachingUnitRepository.save(any(TeachingUnit.class))).thenReturn(teachingUnit1);
 		mockMvc.perform(post("/teachingunit/")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(teachingUnitCreateDTO3)))
