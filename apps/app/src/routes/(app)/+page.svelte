@@ -17,7 +17,13 @@
 		<a href="/minors">Minors</a>
 	</li>
 	<li>
+		<a href="/teaching-units">Teaching Units</a>
+	</li>
+	<li>
 		<a href="/subjects">Subjects</a>
+	</li>
+	<li>
+		<a href="/teaching-units">Teaching Units</a>
 	</li>
 	<li>
 		<a href="/tags">Tags</a>
