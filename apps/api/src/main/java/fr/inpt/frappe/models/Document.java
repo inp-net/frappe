@@ -39,10 +39,9 @@ public class Document {
 	private String description;
 
 	@ManyToOne(optional = false)
-	@JsonIgnore
 	private Subject subject;
 
-	@ManyToMany(mappedBy = "documents", fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "documents", fetch = FetchType.EAGER)
 	private Collection<Tag> tags;
 
 	@OneToMany(mappedBy = "document")

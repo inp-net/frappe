@@ -46,6 +46,9 @@ public abstract class DocumentMapper {
 
 	@Named("mapTags")
 	public Collection<Tag> mapTags(Collection<Long> tags) {
+		if (tags == null || tags.isEmpty())
+			return null;
+
 		return tagRepository.findAllById(tags);
 	}
 
