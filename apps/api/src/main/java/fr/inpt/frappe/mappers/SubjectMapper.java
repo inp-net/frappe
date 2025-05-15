@@ -27,23 +27,37 @@ public abstract class SubjectMapper {
 	@Autowired
 	protected TeachingUnitRepository teachingUnits;
 
-	@Named("mapTeachingUnit")
-	public Collection<TeachingUnit> mapTeachingUnit(Collection<Long> teaching_units) {
+	@Named("mapTeachingUnitCreate")
+	public Collection<TeachingUnit> mapTeachingUnitCreate(Collection<Long> teaching_units) {
 		if (teaching_units == null || teaching_units.isEmpty())
-			return null;
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"There should be at least one teaching unit");
 		Collection<TeachingUnit> result = teachingUnits.findAllById(teaching_units);
 		if (result.isEmpty())
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid ID(s) for teaching unit " + teaching_units);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Invalid ID(s) for teaching unit " + teaching_units);
 
 		return result;
 	}
 
-	@Mapping(source = "teaching_units", target = "teachingUnits", qualifiedByName = "mapTeachingUnit")
+	@Named("mapTeachingUnitUpdate")
+	public Collection<TeachingUnit> mapTeachingUnitUpdate(Collection<Long> teaching_units) {
+		if (teaching_units == null || teaching_units.isEmpty())
+			return null;
+		Collection<TeachingUnit> result = teachingUnits.findAllById(teaching_units);
+		if (result.isEmpty())
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Invalid ID(s) for teaching unit " + teaching_units);
+
+		return result;
+	}
+
+	@Mapping(source = "teaching_units", target = "teachingUnits", qualifiedByName = "mapTeachingUnitCreate")
 	@Mapping(target = "documents", ignore = true)
 	public abstract Subject createSubjectFromDTO(SubjectCreateDTO dto);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	@Mapping(source = "teaching_units", target = "teachingUnits", qualifiedByName = "mapTeachingUnit")
+	@Mapping(source = "teaching_units", target = "teachingUnits", qualifiedByName = "mapTeachingUnitUpdate")
 	@Mapping(target = "documents", ignore = true)
 	public abstract void updateSubjectFromDto(SubjectUpdateDTO dto, @MappingTarget Subject subject);
 }

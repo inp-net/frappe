@@ -5,31 +5,32 @@
 
 	let { data }: PageProps = $props();
 
-	let minors = $state(data.minors);
+	let subjects = $state(data.subjects);
 
 	async function create(e: SubmitEvent) {
 		e.preventDefault();
 		const formData = new FormData(e.target as HTMLFormElement);
 		const name = formData.get('name')?.toString() ?? '';
-		const major_uid = formData.get('major_uid')?.toString() ?? '';
-
-		const newMinor = await client.POST('/minor/', {
+		const teachingunit_ids = (formData.getAll('teachingunit_id') ?? []).map(Number);
+		const newSubject = await client.POST('/subject/', {
 			body: {
 				name: name ?? '',
-				major_uid: major_uid ?? ''
+				teaching_units: teachingunit_ids ?? []
 			}
 		});
-
-		minors.push(newMinor.data ?? {});
+		console.log(newSubject.data);
+		if (newSubject.data !== null && newSubject.data !== undefined) {
+			subjects.push(newSubject.data ?? {});
+		}
 	}
 </script>
 
 <h3>List</h3>
 
 <ul>
-	{#each minors as minor (minor.id)}
+	{#each subjects as subject (subject.id)}
 		<li>
-			<a href={`/minors/${minor.id}`}>{minor.name} ({minor.id}) major:{minor.major?.name}</a>
+			<a href={`/subjects/${subject.id}`}>{subject.name} ({subject.id}) </a>
 		</li>
 	{/each}
 </ul>
@@ -37,9 +38,9 @@
 <h3>Create</h3>
 <form onsubmit={create}>
 	<input type="text" name="name" placeholder="Name" required />
-	<select name="major_uid">
-		{#each data.majors as major (major.id)}
-			<option value={major.uid}>{major.uid}</option>
+	<select multiple name="teachingunit_id">
+		{#each data.teachingunits as teachingunit (teachingunit.id)}
+			<option value={teachingunit.id}>{teachingunit.name}</option>
 		{/each}
 	</select>
 	<button type="submit">Create</button>
