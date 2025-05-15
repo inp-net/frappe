@@ -142,7 +142,8 @@ class UtilsTest {
 	@Test
 	void testGetExtension() {
 		assert (utils.getExtension("application/pdf").equals(".pdf"));
-		assert (utils.getExtension("image/jpeg") == null);
+		assert (utils.getExtension("image/jpeg") == ".jpg");
+		assert (utils.getExtension("application/vnd.openxmlformats-officedocument.presentationml.presentation") == null);
 	}
 
 	@Test
@@ -153,8 +154,8 @@ class UtilsTest {
 		assert (utils.sanitize("/file.pdf").equals("file.pdf"));
 
 		// Test removing illegal caracter
-		assert (utils.sanitize("azertyuiopmlkjhgfdsqwxcvbn1234567890AZERTYUIOPMLKJHGFDSQWXCVBN-._.pdf")
-				.equals("azertyuiopmlkjhgfdsqwxcvbn1234567890AZERTYUIOPMLKJHGFDSQWXCVBN-._.pdf"));
+		assert (utils.sanitize("azertyuiopmlkjhgfdsqwxcvbn1234567890AZERTYUIOPMLKJHGFDSQWXCVBN-._éèàç.pdf")
+				.equals("azertyuiopmlkjhgfdsqwxcvbn1234567890AZERTYUIOPMLKJHGFDSQWXCVBN-._éèàç.pdf"));
 		assert (utils.sanitize("\\.pdf").equals("_.pdf"));
 		assert (utils.sanitize("\".pdf").equals("_.pdf"));
 		assert (utils.sanitize("&.pdf").equals("_.pdf"));
@@ -177,6 +178,5 @@ class UtilsTest {
 		assert (utils.sanitize(":.pdf").equals("_.pdf"));
 		assert (utils.sanitize(";.pdf").equals("_.pdf"));
 		assert (utils.sanitize(",.pdf").equals("_.pdf"));
-		assert (utils.sanitize("é.pdf").equals("_.pdf"));
 	}
 }

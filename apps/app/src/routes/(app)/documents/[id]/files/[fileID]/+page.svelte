@@ -11,8 +11,8 @@
 		const id = formData.get('id')?.toString() as string;
 		const name = formData.get('name')?.toString() ?? '';
 
-		await client.PATCH(`/document/{id}/files/{fileID}`, {
-			params: { path: { id: data.documentID as string, fileID: id }, query: { name } }
+		await client.PATCH(`/document/file/{fileID}`, {
+			params: { path: { fileID: id }, query: { name } }
 		});
 		goto('../');
 	}
@@ -30,3 +30,6 @@
 	<input type="text" name="name" value={data.file?.name} required />
 	<button type="submit">Save</button>
 </form>
+<br />
+<br />
+<button onclick={() => goto('../')}> Go back </button>
