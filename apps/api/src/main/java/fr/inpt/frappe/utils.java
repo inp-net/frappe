@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+import fr.inpt.frappe.models.File;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.SchoolRepository;
 
@@ -126,4 +130,13 @@ public class utils {
 		return cleaned;
 	}
 
+	public static void removeFile(String basePath, File file) {
+
+		String extension = utils.getExtension(file.getExtension());
+		if (extension == null)
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "filetype is not allowed");
+
+		new java.io.File(
+				basePath + "/" + file.getId().toString() + extension).delete();
+	}
 }

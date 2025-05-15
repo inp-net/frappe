@@ -49,6 +49,7 @@ import fr.inpt.frappe.repositories.TagRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -129,11 +130,11 @@ public class DocumentController {
 	@Operation(summary = "Create a new File and store it", description = "Creates and returns a new file.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "File created successfully"),
-			@ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
+			@ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
 	})
 	public ResponseEntity<File> uploadFile(
 			@PathVariable UUID id,
-			@Parameter(description = "File to upload") @RequestPart("file") MultipartFile file) {
+			@Parameter(description = "File to upload", content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE, schema = @Schema(type = "string", format = "binary"))) @RequestPart("file") MultipartFile file) {
 
 		File createdFile = new File();
 		String mimeType = "";
@@ -197,8 +198,8 @@ public class DocumentController {
 				return ResponseEntity.ok()
 						.contentType(MediaType.APPLICATION_OCTET_STREAM)
 						.header(HttpHeaders.CONTENT_DISPOSITION,
-								"attachment; filename=\"" + file.getName() + "\"") // Put the original name for the
-																					// download
+								"inline; filename=\"" + file.getName() + "\"") // Put the original name for the
+																				// download
 						.body(resource);
 			} else {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -222,59 +223,27 @@ public class DocumentController {
 				"Document not found"));
 	}
 
-	@PatchMapping(path = "/{id}/files/{fileID}", consumes = "multipart/form-data")
-	@Operation(summary = "Update a file", description = "Update the specified file.")
+	@PatchMapping(path = "/{id}/files/{fileID}")
+	@Operation(summary = "Rename a file", description = "Update the specified file name.")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "File updated successfully"),
+			@ApiResponse(responseCode = "200", description = "File name updated successfully"),
 			@ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
 			@ApiResponse(responseCode = "404", description = "File not found", content = @Content)
 	})
-	public ResponseEntity<File> updateFile(
+	public ResponseEntity<File> renameFile(
 			@PathVariable UUID id,
 			@PathVariable UUID fileID,
-			@Parameter(description = "File to upload") @RequestPart("file") MultipartFile file) {
+			@Parameter(description = "New file name") String name) {
 
-		String mimeType = "";
-		try {
-			mimeType = tika.detect(file.getInputStream());
-
-		} catch (IOException e) {
-			logger.error("Could not read the file type : \n" + e.getMessage());
-		}
-
-		String cleanedName = utils.sanitize(file.getOriginalFilename());
-
-		// Update the file
-		File oldFile = files.findById(fileID).orElseThrow(() -> new ResponseStatusException(
+		File file = files.findById(fileID).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"File not found"));
-		fileMapper.updateFileFromDto(new FileDTO(cleanedName, mimeType, id), oldFile);
-		oldFile = files.save(oldFile);
 
-		// Make sure the directory exists
-		java.io.File uploadDir = new java.io.File(basePath);
-		if (!uploadDir.exists()) {
-			uploadDir.mkdirs();
-		}
-
-		String extension = utils.getExtension(mimeType);
-		if (extension == null)
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "filetype is not allowed");
-
-		try (FileOutputStream fileOutputStream = new FileOutputStream(
-				basePath + "/" + oldFile.getId().toString() + extension)) {
-			fileOutputStream.write(file.getBytes());
-
-		} catch (IOException e) {
-			logger.error("Error in saving the file to the server : \n" + e.toString());
-		}
-
-		logger.debug(
-				"Modified " + cleanedName + " of type: " + mimeType + " as " + oldFile.getId().toString() + extension);
+		file.setName(name);
 
 		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(oldFile);
+				.status(HttpStatus.OK)
+				.body(files.save(file));
 	}
 
 	@Operation(summary = "Update a document", description = "Updates the desired document.")
@@ -305,6 +274,11 @@ public class DocumentController {
 	public ResponseEntity<Void> delete(@PathVariable UUID id) {
 		Document document = documents.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Document not found"));
+
+		Collection<File> files = document.getFiles();
+		if (files != null)
+			files.forEach(file -> utils.removeFile(basePath, file));
+
 		documents.delete(document);
 
 		return ResponseEntity.noContent().build();
@@ -322,17 +296,7 @@ public class DocumentController {
 				HttpStatus.NOT_FOUND,
 				"File not found"));
 
-		String extension = utils.getExtension(oldFile.getExtension());
-		if (extension == null)
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "filetype is not allowed");
-
-		java.io.File toRemoveFile = new java.io.File(
-				basePath + "/" + oldFile.getId().toString() + extension);
-		if (toRemoveFile.delete()) {
-			logger.debug("Deleted the file: " + toRemoveFile.getName());
-		} else {
-			logger.debug("Failed to delete the file on the filesystem.");
-		}
+		utils.removeFile(basePath, oldFile);
 
 		return ResponseEntity.noContent().build();
 	}
