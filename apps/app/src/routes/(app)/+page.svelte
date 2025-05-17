@@ -28,4 +28,7 @@
 	<li>
 		<a href="/admin/documents">Documents</a>
 	</li>
+	<li>
+		<a href="/documents-users">User view</a>
+	</li>
 </ul>

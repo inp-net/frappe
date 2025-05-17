@@ -1,0 +1,14 @@
+@font-face {
+	font-family: 'Roboto';
+	src: url('../../../static/fonts/roboto.ttf') format('ttf');
+	font-display: swap;
+}
+
+:global(html) :global(body) {
+	font-family: 'Roboto', sans-serif;
+}
+
+:global(p) {
+	padding: 0;
+	margin: 0;
+}

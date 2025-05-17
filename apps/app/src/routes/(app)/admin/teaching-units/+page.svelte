@@ -1,6 +1,7 @@
 <script lang="ts">
 	import client from '$lib/api/client';
 	import type { PageProps } from './$types';
+	import { goto } from '$app/navigation';
 
 	let { data }: PageProps = $props();
 
@@ -44,19 +45,21 @@
 <form class="form" onsubmit={create}>
 	<input name="name" type="text" placeholder="Nom" required />
 	<label for="majors_id">Choisir des majeures</label>
-	<select name="majors_id" multiple required>
+	<select name="majors_id" multiple>
 		{#each majors as major (major.id)}
 			<option value={major.id}>{major.name}</option>
 		{/each}
 	</select>
 	<label for="minors_id">Choisir des mineures</label>
-	<select name="minors_id" multiple required>
+	<select name="minors_id" multiple>
 		{#each minors as minor (minor.id)}
 			<option value={minor.id}>{minor.name}</option>
 		{/each}
 	</select>
 	<button type="submit">Create</button>
 </form>
+
+<button onclick={() => goto('../')}>Go back</button>
 
 <style>
 	.form {
