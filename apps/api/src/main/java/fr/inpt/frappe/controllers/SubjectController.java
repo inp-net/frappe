@@ -1,6 +1,7 @@
 package fr.inpt.frappe.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,6 +25,7 @@ import fr.inpt.frappe.controllers.dtos.subject.SubjectCreateDTO;
 import fr.inpt.frappe.controllers.dtos.subject.SubjectUpdateDTO;
 import fr.inpt.frappe.mappers.SubjectMapper;
 import fr.inpt.frappe.models.Subject;
+import fr.inpt.frappe.models.specification.SubjectSpecification;
 import fr.inpt.frappe.repositories.SubjectRepository;
 
 import java.util.List;
@@ -43,8 +46,16 @@ public class SubjectController {
 			@ApiResponse(responseCode = "200", description = "The list of subjects")
 	})
 	@GetMapping("/")
-	public List<Subject> list() {
-		return subjects.findAll();
+	public List<Subject> list(@RequestParam(required = false) Long schoolId,
+			@RequestParam(required = false) Long majorId,
+			@RequestParam(required = false) Long minorId,
+			@RequestParam(required = false) Long teachingUnitId) {
+				
+		Specification<Subject> spec = Specification.where(SubjectSpecification.hasSchool(schoolId))
+				.and(SubjectSpecification.hasMajor(majorId))
+				.and(SubjectSpecification.hasMinor(minorId))
+				.and(SubjectSpecification.hasTeachingUnit(teachingUnitId));
+		return subjects.findAll(spec);
 	}
 
 	@Operation(summary = "Create a new subject", description = "Creates and returns a new subject.")
