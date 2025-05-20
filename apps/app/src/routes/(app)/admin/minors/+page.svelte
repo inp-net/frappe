@@ -29,7 +29,9 @@
 <ul>
 	{#each minors as minor (minor.id)}
 		<li>
-			<a href={`/admin/minors/${minor.id}`}>{minor.name} ({minor.id}) major:{minor.major?.name}</a>
+			<a href={`/admin/minors/${minor.id}`}
+				>{minor.name} ({minor.id}) major:{minor.major?.name}</a
+			>
 		</li>
 	{/each}
 </ul>
