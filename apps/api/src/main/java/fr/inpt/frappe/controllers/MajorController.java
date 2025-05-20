@@ -3,6 +3,7 @@ package fr.inpt.frappe.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,6 +21,7 @@ import fr.inpt.frappe.controllers.dtos.major.MajorCreateDTO;
 import fr.inpt.frappe.controllers.dtos.major.MajorUpdateDTO;
 import fr.inpt.frappe.mappers.MajorMapper;
 import fr.inpt.frappe.models.Major;
+import fr.inpt.frappe.models.specification.MajorSpecification;
 import fr.inpt.frappe.repositories.MajorRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,8 +46,9 @@ public class MajorController {
 			@ApiResponse(responseCode = "200", description = "The list of majors")
 	})
 	@GetMapping("/")
-	public List<Major> list() {
-		return majors.findAll();
+	public List<Major> list(@RequestParam(required = false) Long schoolId) {
+		Specification<Major> spec = Specification.where(MajorSpecification.hasSchool(schoolId));
+		return majors.findAll(spec);
 	}
 
 	@Operation(summary = "Create a new major", description = "Creates and returns a new major.")
