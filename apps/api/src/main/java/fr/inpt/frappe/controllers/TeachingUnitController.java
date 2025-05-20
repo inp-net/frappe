@@ -1,6 +1,7 @@
 package fr.inpt.frappe.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,6 +25,7 @@ import fr.inpt.frappe.controllers.dtos.teaching_units.TeachingUnitCreateDTO;
 import fr.inpt.frappe.controllers.dtos.teaching_units.TeachingUnitUpdateDTO;
 import fr.inpt.frappe.mappers.TeachingUnitMapper;
 import fr.inpt.frappe.models.TeachingUnit;
+import fr.inpt.frappe.models.specification.TeachingUnitSpecification;
 import fr.inpt.frappe.repositories.TeachingUnitRepository;
 
 import java.util.List;
@@ -43,8 +46,15 @@ public class TeachingUnitController {
 			@ApiResponse(responseCode = "200", description = "The list of teaching units")
 	})
 	@GetMapping("/")
-	public List<TeachingUnit> list() {
-		return teachingUnits.findAll();
+	public List<TeachingUnit> list(@RequestParam(required = false) Long schoolId,
+			@RequestParam(required = false) Long majorId,
+			@RequestParam(required = false) Long minorId) {
+
+		Specification<TeachingUnit> spec = Specification.where(TeachingUnitSpecification.hasSchool(schoolId))
+				.and(TeachingUnitSpecification.hasMajor(majorId))
+				.and(TeachingUnitSpecification.hasMinor(minorId));
+
+		return teachingUnits.findAll(spec);
 	}
 
 	@Operation(summary = "Create a new teaching unit", description = "Creates and returns a new teaching unit.")
@@ -55,7 +65,8 @@ public class TeachingUnitController {
 	@PostMapping("/")
 	public ResponseEntity<TeachingUnit> create(
 			@RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "The teaching unit") @Valid TeachingUnitCreateDTO teachingUnit) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(teachingUnits.save(mapper.createTeachingUnitFromDto(teachingUnit)));
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(teachingUnits.save(mapper.createTeachingUnitFromDto(teachingUnit)));
 	}
 
 	@Operation(summary = "Get a teaching unit by ID", description = "Retrieves a teaching unit by its ID.")
