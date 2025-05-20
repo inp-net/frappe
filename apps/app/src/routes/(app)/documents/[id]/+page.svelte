@@ -77,9 +77,9 @@
 			<a href="/documents/{data.document?.id}/files/{file.id}"><button>Edit</button></a>
 			<button
 				onclick={async () => {
-					await client.DELETE('/document/{id}/files/{fileID}', {
+					await client.DELETE('/document/file/{fileID}', {
 						params: {
-							path: { id: data.document?.id as string, fileID: file.id as string }
+							path: { fileID: file.id as string }
 						}
 					});
 					files = files.filter((f) => f.id !== file.id);

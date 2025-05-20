@@ -3,8 +3,6 @@ package fr.inpt.frappe.models;
 import java.util.Collection;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

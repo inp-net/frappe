@@ -7,9 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
 import fr.inpt.frappe.models.File;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.repositories.SchoolRepository;
@@ -104,7 +101,27 @@ public class utils {
 			case "application/pdf":
 				extension = ".pdf";
 				break;
-
+			case "image/jpeg":
+				extension = ".jpg";
+				break;
+			case "image/bmp":
+				extension = ".bmp";
+				break;
+			case "image/vnd.microsoft.icon":
+				extension = ".ico";
+				break;
+			case "image/gif":
+				extension = ".gif";
+				break;
+			case "image/png":
+				extension = ".png";
+				break;
+			case "image/tiff":
+				extension = ".tiff";
+				break;
+			case "image/svg+xml":
+				extension = ".svg";
+				break;
 			default:
 				extension = null;
 		}
@@ -125,18 +142,20 @@ public class utils {
 		String cleaned = Paths.get(fileName).getFileName().toString();
 
 		// Remove illegal characters and control characters
-		cleaned = cleaned.replaceAll("[^a-zA-Z0-9\\.\\-\\_]", "_");
+		cleaned = cleaned.replaceAll("[^a-zA-Z0-9\\.\\-\\_éèàç]", "_");
 
 		return cleaned;
 	}
 
+	/**
+	 * Remove a file from the file system
+	 * 
+	 * @param basePath the path to the file system
+	 * @param file te file to be removed
+	 */
 	public static void removeFile(String basePath, File file) {
 
-		String extension = utils.getExtension(file.getExtension());
-		if (extension == null)
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "filetype is not allowed");
-
 		new java.io.File(
-				basePath + "/" + file.getId().toString() + extension).delete();
+				basePath + "/" + file.getId().toString()).delete();
 	}
 }

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,11 +146,16 @@ public class DocumentController {
 			logger.error("Could not read the file type : \n" + e.getMessage());
 		}
 
-		String cleanedName = utils.sanitize(file.getOriginalFilename());
+		String extension = utils.getExtension(mimeType);
+
+		if (extension == null)
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "filetype is not allowed");
+
+		String cleanedName = FilenameUtils.removeExtension(utils.sanitize(file.getOriginalFilename()));
 
 		// Save the file to the DB
 		createdFile = files.save(fileMapper
-				.createFileFromDto(new FileDTO(cleanedName, mimeType, id)));
+				.createFileFromDto(new FileDTO(cleanedName, extension, id)));
 
 		// Make sure the directory exists
 		java.io.File uploadDir = new java.io.File(basePath);
@@ -157,12 +163,8 @@ public class DocumentController {
 			uploadDir.mkdirs();
 		}
 
-		String extension = utils.getExtension(mimeType);
-		if (extension == null)
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "filetype is not allowed");
-
 		try (FileOutputStream fileOutputStream = new FileOutputStream(
-				basePath + "/" + createdFile.getId().toString() + extension)) {
+				basePath + "/" + createdFile.getId().toString())) {
 			fileOutputStream.write(file.getBytes());
 
 		} catch (IOException e) {
@@ -191,15 +193,16 @@ public class DocumentController {
 			File file = files.findById(fileID).orElseThrow(() -> new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
 					"File not found"));
-			Path filePath = Paths.get(basePath).resolve(fileID + utils.getExtension(file.getExtension())).normalize();
+			Path filePath = Paths.get(basePath).resolve(fileID.toString());
 			UrlResource resource = new UrlResource(filePath.toUri());
 
 			if (resource.exists() && resource.isReadable()) {
 				return ResponseEntity.ok()
 						.contentType(MediaType.APPLICATION_OCTET_STREAM)
 						.header(HttpHeaders.CONTENT_DISPOSITION,
-								"inline; filename=\"" + file.getName() + "\"") // Put the original name for the
-																				// download
+								"inline; filename=\"" + file.getName() + file.getExtension() + "\"") // Put the original
+																										// name for the
+						// download
 						.body(resource);
 			} else {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -223,7 +226,7 @@ public class DocumentController {
 				"Document not found"));
 	}
 
-	@PatchMapping(path = "/{id}/files/{fileID}")
+	@PatchMapping(path = "/file/{fileID}")
 	@Operation(summary = "Rename a file", description = "Update the specified file name.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "File name updated successfully"),
@@ -231,7 +234,6 @@ public class DocumentController {
 			@ApiResponse(responseCode = "404", description = "File not found", content = @Content)
 	})
 	public ResponseEntity<File> renameFile(
-			@PathVariable UUID id,
 			@PathVariable UUID fileID,
 			@Parameter(description = "New file name") String name) {
 
@@ -239,7 +241,7 @@ public class DocumentController {
 				HttpStatus.NOT_FOUND,
 				"File not found"));
 
-		file.setName(name);
+		file.setName(FilenameUtils.removeExtension(utils.sanitize(name)));
 
 		return ResponseEntity
 				.status(HttpStatus.OK)
@@ -284,19 +286,21 @@ public class DocumentController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("/{id}/files/{fileID}")
+	@DeleteMapping("/file/{fileID}")
 	@Operation(summary = "Delete a file", description = "Deletes the desired file.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "File deleted successfully"),
 			@ApiResponse(responseCode = "404", description = "File not found", content = @Content)
 	})
-	public ResponseEntity<Void> deleteFile(@PathVariable UUID id, @PathVariable UUID fileID) {
+	public ResponseEntity<Void> deleteFile(@PathVariable UUID fileID) {
 
 		File oldFile = files.findById(fileID).orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND,
 				"File not found"));
 
 		utils.removeFile(basePath, oldFile);
+
+		files.delete(oldFile);
 
 		return ResponseEntity.noContent().build();
 	}
