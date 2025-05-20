@@ -5,38 +5,38 @@
 
 	let { data }: PageProps = $props();
 
-	let schools = $state(data.schools);
+	let tags = $state(data.tags);
 
 	async function create(e: SubmitEvent) {
 		e.preventDefault();
 		const formData = new FormData(e.target as HTMLFormElement);
 		const name = formData.get('name')?.toString() ?? '';
-		const uid = formData.get('uid')?.toString() ?? '';
 
-		const newSchool = await client.POST('/school/', {
+		const newTag = await client.POST('/tag/', {
 			body: {
-				name: name ?? '',
-				uid: uid ?? ''
+				name
 			}
 		});
 
-		schools.push(newSchool.data ?? {});
+		tags.push(newTag.data ?? {});
 	}
 </script>
 
 <h3>List</h3>
 
 <ul>
-	{#each schools as school (school.id)}
-		<li><a href={`/schools/${school.id}`}>{school.name} ({school.uid})</a></li>
+	{#each tags as tag (tag.id)}
+		<li>
+			<a href={`/admin/tags/${tag.id}`}>
+				{tag.name} ({tag.id})
+			</a>
+		</li>
 	{/each}
 </ul>
 
 <h3>Create</h3>
-
 <form onsubmit={create}>
 	<input type="text" name="name" placeholder="Name" required />
-	<input type="text" name="uid" placeholder="UID" required />
 	<button type="submit">Create</button>
 </form>
 <br />
