@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,10 +43,10 @@ import fr.inpt.frappe.controllers.dtos.document.DocumentUpdateDTO;
 import fr.inpt.frappe.mappers.DocumentMapper;
 import fr.inpt.frappe.mappers.FileMapper;
 import fr.inpt.frappe.models.Document;
+import fr.inpt.frappe.models.specification.DocumentSpecification;
 import fr.inpt.frappe.models.File;
 import fr.inpt.frappe.repositories.DocumentRepository;
 import fr.inpt.frappe.repositories.FileRepository;
-import fr.inpt.frappe.repositories.TagRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -65,9 +65,6 @@ public class DocumentController {
 
 	@Autowired
 	private FileRepository files;
-
-	@Autowired
-	private TagRepository tagRepository;
 
 	@Autowired
 	private DocumentMapper mapper;
@@ -93,20 +90,21 @@ public class DocumentController {
 			@ApiResponse(responseCode = "404", description = "Tag ID not found")
 	})
 	@GetMapping("/")
-	public Collection<Document> list(@RequestParam(required = false) List<Long> tagIDs) {
+	public Collection<Document> list(@RequestParam(required = false) List<Long> tagIds,
+			@RequestParam(required = false) Long schoolId,
+			@RequestParam(required = false) Long majorId,
+			@RequestParam(required = false) Long minorId,
+			@RequestParam(required = false) List<Long> teachingUnitIds,
+			@RequestParam(required = false) List<Long> subjectIds) {
 
-		if (tagIDs == null)
-			return documents.findAll();
+		Specification<Document> spec = Specification.where(DocumentSpecification.hasTags(tagIds))
+				.and(DocumentSpecification.hasSubjects(subjectIds))
+				.and(DocumentSpecification.hasTeachingUnits(teachingUnitIds))
+				.and(DocumentSpecification.hasMinor(minorId))
+				.and(DocumentSpecification.hasMajor(majorId))
+				.and(DocumentSpecification.hasSchool(schoolId));
 
-		HashSet<Document> docList = new HashSet<>();
-
-		for (Long tagID : tagIDs) {
-			docList.addAll(tagRepository.findById(tagID).orElseThrow(() -> new ResponseStatusException(
-					HttpStatus.NOT_FOUND,
-					"Tag of id " + tagID + " not found")).getDocuments());
-		}
-
-		return docList;
+		return documents.findAll(spec);
 	}
 
 	@Operation(summary = "Create a new document", description = "Creates and returns a new document.")

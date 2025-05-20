@@ -21,9 +21,11 @@ import fr.inpt.frappe.repositories.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -117,23 +119,20 @@ class DocumentControllerTest {
 
 	@Test
 	void testListDocuments() throws Exception {
-		when(documentRepository.findAll()).thenReturn(Arrays.asList(document));
+		when(documentRepository.findAll(ArgumentMatchers.<Specification<Document>>any()))
+				.thenReturn(Arrays.asList(document));
 		mockMvc.perform(get("/document/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].title").value(document.getTitle()));
 
-		when(tagRepository.findById(anyLong())).thenReturn(Optional.of(tag));
+		when(documentRepository.findAll(ArgumentMatchers.<Specification<Document>>any()))
+				.thenReturn(Arrays.asList(document, documentM));
 		mockMvc.perform(get("/document/?tagIDs=1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].title").value(documentM.getTitle()))
-				.andExpect(jsonPath("$[1].title").value(document.getTitle()));
-
-		when(tagRepository.findById(anyLong())).thenReturn(Optional.empty());
-		mockMvc.perform(get("/document/?tagIDs=69&tagIDs=42")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound());
+				.andExpect(jsonPath("$[0].title").value(document.getTitle()))
+				.andExpect(jsonPath("$[1].title").value(documentM.getTitle()));
 	}
 
 	@Test
