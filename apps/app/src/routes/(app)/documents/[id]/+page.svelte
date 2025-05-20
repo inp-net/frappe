@@ -6,6 +6,7 @@
 	let { data }: PageProps = $props();
 
 	let files = $state(data.document?.files ?? []);
+	let comments = $state(data.document?.comments ?? []);
 
 	async function deleteDocument(id: string) {
 		await client.DELETE('/document/{id}', {
@@ -93,6 +94,46 @@
 <form onsubmit={upload}>
 	<input type="file" name="files" multiple />
 	<button type="submit">Upload</button>
+</form>
+
+<h4>Comments</h4>
+
+<ul>
+	{#each comments as comment (comment.id)}
+		<li>
+			<p>{comment.content}</p>
+			<p>by {comment.user?.firstname} {comment.user?.lastname}</p>
+			<button
+				onclick={async () => {
+					await client.DELETE('/comment/{id}', {
+						params: { path: { id: comment.id as string } }
+					});
+
+					comments = comments.filter((c) => c.id !== comment.id);
+				}}
+			>
+				delete
+			</button>
+		</li>
+	{/each}
+</ul>
+<form
+	onsubmit={async (e: SubmitEvent) => {
+		e.preventDefault();
+		const formData = new FormData(e.target as HTMLFormElement);
+		const content = formData.get('content')?.toString() ?? '';
+		let comment = await client.POST('/comment/', {
+			body: {
+				content,
+				document: data.document?.id as string
+			}
+		});
+
+		comments.push(comment.data ?? {});
+	}}
+>
+	<input type="text" name="content" placeholder="Comment" required />
+	<button type="submit">Add comment</button>
 </form>
 
 <h3>Update</h3>

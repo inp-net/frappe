@@ -31,6 +31,8 @@
 		if (!documentId) throw new Error('Error creating document');
 
 		for (const file of files) {
+			if (file.size === 0) continue;
+
 			await client.POST('/document/{id}/upload', {
 				params: {
 					path: { id: documentId }
