@@ -33,7 +33,7 @@
 <ul>
 	{#each majors as major (major.id)}
 		<li>
-			<a href={`/majors/${major.id}`}
+			<a href={`/admin/majors/${major.id}`}
 				>{major.name} ({major.uid}) school:{major.school?.name}</a
 			>
 		</li>

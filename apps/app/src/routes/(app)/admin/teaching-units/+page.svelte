@@ -33,7 +33,7 @@
 <ul>
 	{#each teaching_units as teaching_unit (teaching_unit.id)}
 		<li>
-			<a href={`/teaching-units/${teaching_unit.id}`}
+			<a href={`/admin/teaching-units/${teaching_unit.id}`}
 				>#{teaching_unit.id} - {teaching_unit.name}</a
 			>
 		</li>
