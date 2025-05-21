@@ -11,6 +11,7 @@
 		e.preventDefault();
 		const formData = new FormData(e.target as HTMLFormElement);
 		const title = formData.get('title')?.toString() ?? '';
+		const year = Number(formData.get('Year')?.toString());
 		const description = formData.get('description')?.toString() ?? '';
 		const subject_id = Number(formData.get('subject_id')?.toString());
 		const tags = formData.getAll('tags').map((id) => Number(id));
@@ -20,6 +21,7 @@
 		const newDocument = await client.POST('/document/', {
 			body: {
 				title,
+				year,
 				description,
 				subject_id,
 				tags,
@@ -64,7 +66,8 @@
 <h3>Create</h3>
 <form onsubmit={create}>
 	<input type="text" name="title" placeholder="Title" required />
-	<input type="text" name="description" placeholder="Description" required />
+	<input type="number" name="Year" value={new Date().getFullYear()} required />
+	<input type="text" name="description" placeholder="Description" />
 	<select name="subject_id" required>
 		{#each data.subjects as subject (subject.id)}
 			<option value={subject.id}>{subject.name}</option>

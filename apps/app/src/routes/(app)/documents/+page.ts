@@ -7,6 +7,6 @@ export const load: PageLoad = async ({ fetch }) => {
 	});
 
 	return {
-		documents: documents.data ?? []
+		documents: documents.data?.content ?? []
 	};
 };
