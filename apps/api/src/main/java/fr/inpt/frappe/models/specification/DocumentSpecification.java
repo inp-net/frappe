@@ -72,8 +72,8 @@ public class DocumentSpecification {
 
 			// Path 2: Indirect via TeachingUnit -> Minor -> Major
 			Join<TeachingUnit, Minor> minor = tu.join("minors", JoinType.LEFT);
-			Join<Minor, Major> minorMajor = minor.join("major", JoinType.LEFT); // assuming Minor has `@ManyToOne Major
-																				// major`
+			Join<Minor, Major> minorMajor = minor.join("major", JoinType.LEFT);
+			
 			Predicate majorViaMinor = cb.equal(minorMajor.get("id"), majorId);
 
 			return cb.or(majorDirect, majorViaMinor);
@@ -102,6 +102,14 @@ public class DocumentSpecification {
 
 			// Combine both paths
 			return cb.or(directMatch, indirectMatch);
+		};
+	}
+
+	public static Specification<Document> hasYears(List<Integer> years) {
+		return (root, query, cb) -> {
+			if (years == null || years.isEmpty())
+				return null;
+			return root.get("year").in(years);
 		};
 	}
 }

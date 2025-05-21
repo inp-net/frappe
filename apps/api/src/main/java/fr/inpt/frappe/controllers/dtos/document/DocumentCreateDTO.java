@@ -21,6 +21,9 @@ public class DocumentCreateDTO {
 	@Size(max = 255, message = "Document title must be less than 255 chars")
 	private String title;
 
+	@NotNull(message = "The year of the document is required")
+	private int year;
+
 	@Size(max = 255, message = "Document description must be less than 255 chars")
 	private String description;
 

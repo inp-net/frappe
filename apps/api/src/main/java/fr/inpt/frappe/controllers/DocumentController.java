@@ -15,6 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -90,21 +94,29 @@ public class DocumentController {
 			@ApiResponse(responseCode = "404", description = "Tag ID not found")
 	})
 	@GetMapping("/")
-	public Collection<Document> list(@RequestParam(required = false) List<Long> tagIds,
+	public Page<Document> list(@RequestParam(required = false) List<Long> tagIds,
 			@RequestParam(required = false) Long schoolId,
 			@RequestParam(required = false) Long majorId,
 			@RequestParam(required = false) Long minorId,
 			@RequestParam(required = false) List<Long> teachingUnitIds,
-			@RequestParam(required = false) List<Long> subjectIds) {
+			@RequestParam(required = false) List<Long> subjectIds,
+			@RequestParam(required = false) List<Integer> year,
+			@RequestParam(defaultValue = "0") int pageNum,
+			@RequestParam(defaultValue = "50") int size) {
 
 		Specification<Document> spec = Specification.where(DocumentSpecification.hasTags(tagIds))
+				.and(DocumentSpecification.hasYears(year))
 				.and(DocumentSpecification.hasSubjects(subjectIds))
 				.and(DocumentSpecification.hasTeachingUnits(teachingUnitIds))
 				.and(DocumentSpecification.hasMinor(minorId))
 				.and(DocumentSpecification.hasMajor(majorId))
 				.and(DocumentSpecification.hasSchool(schoolId));
 
-		return documents.findAll(spec);
+		Sort sortOrder = Sort.by(Sort.Order.desc("year"));
+
+		Pageable pageable = PageRequest.of(pageNum, size, sortOrder);
+
+		return documents.findAll(spec, pageable);
 	}
 
 	@Operation(summary = "Create a new document", description = "Creates and returns a new document.")

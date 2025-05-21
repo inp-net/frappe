@@ -34,6 +34,9 @@ public class Document {
 	@Column(nullable = false)
 	private String title;
 
+	@Column(nullable = false)
+	private int year;
+
 	private String description;
 
 	@ManyToOne(optional = false)
@@ -57,8 +60,9 @@ public class Document {
 		this.subject = subject;
 	}
 
-	public Document(String title, String description, Subject subject) {
+	public Document(String title, int year, String description, Subject subject) {
 		this.title = title;
+		this.year = year;
 		this.description = description;
 		this.subject = subject;
 	}
