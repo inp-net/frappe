@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import Icon from '@iconify/svelte';
 	import Tag from './Tag.svelte';
 	let { document } = $props();
 	let numberFiles = document.files.length;
@@ -10,7 +10,9 @@
 	<p class="title">{document.title}</p>
 	<div class="infos">
 		<div class="info">
-			<span class="material-symbols-outlined">folder</span>
+			<div class="info-icon">
+				<Icon icon="heroicons:folder" />
+			</div>
 			<p>
 				{numberFiles}
 				{#if numberFiles <= 1}
@@ -21,7 +23,9 @@
 			</p>
 		</div>
 		<div class="info">
-			<span class="material-symbols-outlined">person</span>
+			<div class="info-icon">
+				<Icon icon="heroicons:user-circle" />
+			</div>
 			<p>{document.author.firstname} {document.author.lastname}</p>
 		</div>
 		<div class="info tags">
@@ -31,23 +35,19 @@
 		</div>
 	</div>
 	<div class="actions">
-		<button onclick={() => goto(`/documents/${document.id}`)}>
-			<span class="material-symbols-outlined">description</span>
-		</button>
-		<button onclick={() => goto(`/documents/${document.id}`)}>
-			<span class="material-symbols-outlined">visibility</span>
-		</button>
-		<button onclick={() => goto(`/files/${document.files[0].id}`)}>
-			<span class="material-symbols-outlined">download</span>
-		</button>
+		<a class="button" href="/files/{document.files[0].id}">
+			<Icon icon="heroicons:document-chart-bar" />
+		</a>
+		<a class="button middle" href="/files/{document.files[0].id}">
+			<Icon icon="heroicons:eye" />
+		</a>
+		<a class="button" href="/files/{document.files[0].id}">
+			<Icon icon="heroicons:arrow-down-tray-solid" />
+		</a>
 	</div>
 </section>
 
 <style lang="scss">
-	span {
-		color: #66686b;
-	}
-
 	.document-wrapper {
 		display: flex;
 		flex-direction: column;
@@ -81,15 +81,17 @@
 			font-size: 0.9rem;
 			color: #212529;
 
-			.material-symbols-outlined {
-				font-size: 1rem;
-				margin-right: 0.5rem;
-				height: 100%;
-			}
-
 			.info {
 				display: flex;
 				align-items: center;
+
+				.info-icon {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					margin-right: 0.5rem;
+					height: 100%;
+				}
 			}
 
 			.tags {
@@ -109,7 +111,7 @@
 			margin-top: auto;
 			overflow: hidden;
 
-			button {
+			.button {
 				display: flex;
 				justify-content: center;
 				align-items: center;
@@ -118,27 +120,19 @@
 				background: none;
 				padding: 0.25rem 0;
 				cursor: pointer;
-
-				span {
-					font-size: 1.2rem;
-				}
+				color: #66686b;
+				transition: background-color 0.2s ease;
 
 				&:hover {
-					background-color: #66686b;
-
-					span {
-						color: #f8f9fa;
-					}
+					background-color: #989898;
+					color: #f8f9fa;
 				}
 			}
-		}
 
-		> :first-child {
-			border-right: solid 1px #66686b;
-		}
-
-		> :last-child {
-			border-left: solid 1px #66686b;
+			.middle {
+				border-left: solid 1px #66686b;
+				border-right: solid 1px #66686b;
+			}
 		}
 	}
 </style>
