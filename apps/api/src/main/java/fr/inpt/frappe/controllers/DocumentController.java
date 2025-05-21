@@ -254,9 +254,9 @@ public class DocumentController {
 			File file = files.findById(fileID).orElseThrow(() -> new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
 					"File not found"));
-			Path filePath = Paths.get(basePath).resolve("/preview/" + fileID.toString())
+			Path filePath = Paths.get(basePath).resolve("preview/" + fileID.toString() + ".jpg")
 					.normalize();
-			UrlResource resource = new UrlResource(filePath.toUri() + "/preview");
+			UrlResource resource = new UrlResource(filePath.toUri());
 
 			if (resource.exists() && resource.isReadable()) {
 				return ResponseEntity.ok()

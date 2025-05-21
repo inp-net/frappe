@@ -19,8 +19,8 @@ import net.coobird.thumbnailator.Thumbnails;
 
 public class Thumbnail {
 	private static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
-	private static final int THUMBNAIL_WIDTH = 200;
-	private static final int THUMBNAIL_HEIHT = 200;
+	private static final int THUMBNAIL_WIDTH = 512;
+	private static final int THUMBNAIL_HEIHT = 512;
 	private static final String THUMBNAIL_TEMP_PATH = Paths.get(System.getProperty("java.io.tmpdir")).toString() + "/preview/";
 
 	public static void saveThumnail(String basePath, UUID fileID, String mimeType) {

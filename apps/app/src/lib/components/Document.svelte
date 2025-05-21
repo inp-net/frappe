@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import PdfThumbnail from './PdfThumbnail.svelte';
+	import Tag from './Tag.svelte';
 	let { document } = $props();
 	let numberFiles = document.files.length;
 </script>
 
 <section class="document-wrapper">
-	<PdfThumbnail fileID={document.files[0].id} />
+	<img src="/files/{document.files[0].id}/preview" alt="" />
 	<p class="title">{document.title}</p>
 	<div class="infos">
 		<div class="info">
@@ -24,17 +24,10 @@
 			<span class="material-symbols-outlined">person</span>
 			<p>{document.author.firstname} {document.author.lastname}</p>
 		</div>
-		<div class="info">
-			<span class="material-symbols-outlined">label</span>
-			<p>
-				{#each document.tags as tag, index (tag.id)}
-					{#if index !== document.tags.length - 1}
-						{tag.name + ', '}
-					{:else}
-						{tag.name}
-					{/if}
-				{/each}
-			</p>
+		<div class="info tags">
+			{#each document.tags as tag (tag.id)}
+				<Tag {tag} />
+			{/each}
 		</div>
 	</div>
 	<div class="actions">
@@ -65,6 +58,13 @@
 		width: 12rem;
 		overflow: hidden;
 
+		img {
+			width: 100%;
+			height: 10rem;
+			object-fit: cover;
+			object-position: top;
+		}
+
 		.title {
 			display: flex;
 			align-items: center;
@@ -90,6 +90,13 @@
 			.info {
 				display: flex;
 				align-items: center;
+			}
+
+			.tags {
+				margin-top: 0.5rem;
+				flex-wrap: wrap;
+				gap: 0.25rem;
+				font-size: 0.7rem;
 			}
 		}
 
