@@ -107,20 +107,8 @@ public class utils {
 			case "image/bmp":
 				extension = ".bmp";
 				break;
-			case "image/vnd.microsoft.icon":
-				extension = ".ico";
-				break;
-			case "image/gif":
-				extension = ".gif";
-				break;
 			case "image/png":
 				extension = ".png";
-				break;
-			case "image/tiff":
-				extension = ".tiff";
-				break;
-			case "image/svg+xml":
-				extension = ".svg";
 				break;
 			default:
 				extension = null;
