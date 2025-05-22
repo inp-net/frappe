@@ -18,6 +18,15 @@
 	</div>
 </header>
 
+<p class="nb-docs">
+	{documents.length}
+	{#if documents.length <= 1}
+		document
+	{:else}
+		documents
+	{/if}
+</p>
+
 <section>
 	{#each documents as document (document.id)}
 		<Document {document} />
@@ -29,7 +38,7 @@
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
-		margin-bottom: 1rem;
+		margin-bottom: 0.25rem;
 
 		.selectors {
 			display: flex;
@@ -39,6 +48,10 @@
 		h1 {
 			font-size: 1.5rem;
 		}
+	}
+
+	.nb-docs {
+		margin-bottom: 1rem;
 	}
 
 	section {

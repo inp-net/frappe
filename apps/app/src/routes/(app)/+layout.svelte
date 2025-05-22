@@ -17,7 +17,7 @@
 
 		main {
 			width: 100%;
-			margin: 1rem 1rem 1rem 4rem;
+			margin: 2rem 2rem 2rem 5rem;
 		}
 	}
 </style>
