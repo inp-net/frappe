@@ -1,34 +1,38 @@
 <script lang="ts">
+	import Document from '$lib/components/Document.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
+
+	let documents = $state(data.documents);
 </script>
 
-<h1>Bonjour {data.me?.firstName}</h1>
+<header>
+	<h1>Documents</h1>
+</header>
 
-<ul>
-	<li>
-		<a href="/admin/schools">Schools</a>
-	</li>
-	<li>
-		<a href="/admin/majors">Majors</a>
-	</li>
-	<li>
-		<a href="/admin/minors">Minors</a>
-	</li>
-	<li>
-		<a href="/admin/teaching-units">Teaching Units</a>
-	</li>
-	<li>
-		<a href="/admin/subjects">Subjects</a>
-	</li>
-	<li>
-		<a href="/admin/tags">Tags</a>
-	</li>
-	<li>
-		<a href="/admin/documents">Documents</a>
-	</li>
-	<li>
-		<a href="/documents-users">User view</a>
-	</li>
-</ul>
+<section>
+	{#each documents as document (document.id)}
+		<Document {document} />
+	{/each}
+</section>
+
+<style lang="scss">
+	header {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		margin-bottom: 1rem;
+
+		h1 {
+			font-size: 1.5rem;
+		}
+	}
+
+	section {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+		gap: 0.5rem;
+		width: 100%;
+	}
+</style>

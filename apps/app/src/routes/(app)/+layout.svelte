@@ -13,7 +13,11 @@
 
 <style>
 	.app {
-		display: grid;
-		grid-template-columns: 80px auto;
+		display: flex;
+
+		main {
+			width: 100%;
+			margin: 1rem 1rem 1rem 4rem;
+		}
 	}
 </style>
