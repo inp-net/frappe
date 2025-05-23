@@ -22,14 +22,14 @@
 			}
 		});
 
-		goto('../');
+		goto('./');
 	}
 
 	async function deleteTeachingUnit(id: number) {
 		await client.DELETE(`/teachingunit/{id}`, {
 			params: { path: { id } }
 		});
-		goto('../');
+		goto('./');
 	}
 </script>
 
@@ -77,7 +77,7 @@
 <button onclick={() => deleteTeachingUnit(data.teaching_unit?.id ?? 0)}> Delete </button>
 <br />
 <br />
-<button onclick={() => goto('../')}> Go back </button>
+<button onclick={() => goto('./')}> Go back </button>
 
 <style>
 	.form {

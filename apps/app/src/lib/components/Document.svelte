@@ -66,11 +66,14 @@
 		}
 
 		.title {
-			display: flex;
-			align-items: center;
+			display: inline-block;
+			box-sizing: border-box;
 			padding: 0.5rem;
 			border-bottom: solid 1px #e6e6e6;
 			color: #212529;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 
 		.infos {

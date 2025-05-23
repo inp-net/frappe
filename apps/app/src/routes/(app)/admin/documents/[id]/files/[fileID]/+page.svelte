@@ -14,7 +14,7 @@
 		await client.PATCH(`/document/file/{fileID}`, {
 			params: { path: { fileID: id }, query: { name } }
 		});
-		goto('../');
+		goto('./');
 	}
 </script>
 
@@ -32,4 +32,4 @@
 </form>
 <br />
 <br />
-<button onclick={() => goto('../')}> Go back </button>
+<button onclick={() => goto('./')}> Go back </button>

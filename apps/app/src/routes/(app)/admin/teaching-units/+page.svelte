@@ -59,7 +59,7 @@
 	<button type="submit">Create</button>
 </form>
 
-<button onclick={() => goto('../')}>Go back</button>
+<button onclick={() => goto('./')}>Go back</button>
 
 <style>
 	.form {
