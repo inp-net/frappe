@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { DropdownMenu } from 'bits-ui';
+	import { DropdownMenu, Label } from 'bits-ui';
 	import { Checkbox } from 'bits-ui';
 
 	let { name, data } = $props();
@@ -17,16 +17,13 @@
 	<DropdownMenu.Content>
 		{#each data as dataItem, index (dataItem.id)}
 			<DropdownMenu.CheckboxItem closeOnSelect={false}>
-				<Checkbox.Root bind:checked={selecteds[index]}>
+				<Checkbox.Root id={dataItem.id} bind:checked={selecteds[index]}>
 					{#if selecteds[index]}
 						<Icon icon="heroicons:check-20-solid" />
 					{/if}
 				</Checkbox.Root>
-				{dataItem.name}
+				<Label.Root for={dataItem.id}>{dataItem.name}</Label.Root>
 			</DropdownMenu.CheckboxItem>
 		{/each}
 	</DropdownMenu.Content>
 </DropdownMenu.Root>
-
-<style lang="scss">
-</style>

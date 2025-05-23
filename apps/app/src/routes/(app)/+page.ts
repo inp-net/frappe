@@ -22,11 +22,16 @@ export const load: PageLoad = async ({ fetch }) => {
 		fetch
 	});
 
+	const tags = await client.GET('/tag/', {
+		fetch
+	});
+
 	return {
 		documents: documents.data ?? [],
 		majors: majors.data ?? [],
 		minors: minors.data ?? [],
 		teaching_units: teaching_units.data ?? [],
-		subjects: subjects.data ?? []
+		subjects: subjects.data ?? [],
+		tags: tags.data ?? []
 	};
 };

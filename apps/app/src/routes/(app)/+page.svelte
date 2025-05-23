@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Selector from '$components/Selector.svelte';
+	import DropdownMenuCheck from '$components/DropdownMenuCheck.svelte';
+	import DropdownMenuRadio from '$components/DropdownMenuRadio.svelte';
 	import Document from '$lib/components/Document.svelte';
 	import type { PageProps } from './$types';
 
@@ -10,12 +11,6 @@
 
 <header>
 	<h1>Documents</h1>
-	<div class="selectors">
-		<Selector name="Majeures" data={data.majors} />
-		<Selector name="Mineures" data={data.minors} />
-		<Selector name="UEs" data={data.teaching_units} />
-		<Selector name="Cours" data={data.subjects} />
-	</div>
 </header>
 
 <p class="nb-docs">
@@ -26,6 +21,14 @@
 		documents
 	{/if}
 </p>
+
+<div class="selectors">
+	<DropdownMenuRadio name="Majeures" data={data.majors} />
+	<DropdownMenuCheck name="Mineures" data={data.minors} />
+	<DropdownMenuCheck name="UEs" data={data.teaching_units} />
+	<DropdownMenuCheck name="Cours" data={data.subjects} />
+	<DropdownMenuCheck name="Tags" data={data.tags} />
+</div>
 
 <section>
 	{#each documents as document (document.id)}
@@ -40,14 +43,14 @@
 		width: 100%;
 		margin-bottom: 0.25rem;
 
-		.selectors {
-			display: flex;
-			gap: 0.5rem;
-		}
-
 		h1 {
 			font-size: 1.5rem;
 		}
+	}
+
+	.selectors {
+		display: flex;
+		gap: 0.5rem;
 	}
 
 	.nb-docs {
