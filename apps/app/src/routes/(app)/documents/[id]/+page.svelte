@@ -144,7 +144,7 @@
 <form onsubmit={update}>
 	<input type="text" name="title" value={data.document?.title} required />
 	<input type="number" name="Year" value={data.document?.year} required />
-	<input type="text" name="description" value={data.document?.description} required />
+	<input type="text" name="description" value={data.document?.description} />
 	<select name="subject_id" required>
 		{#each data.subjects as subject (subject.id)}
 			<option value={subject.id}>{subject.name}</option>

@@ -42,7 +42,8 @@ public class Document {
 	@ManyToOne(optional = false)
 	private Subject subject;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "documents", fetch = FetchType.EAGER)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@JoinTable(name = "tags_documents", joinColumns = @JoinColumn(name = "documents_id"), inverseJoinColumns = @JoinColumn(name = "tags_id"))
 	private Collection<Tag> tags;
 
 	@OneToMany(mappedBy = "document")
