@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
+
 import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import fr.inpt.frappe.Thumbnail;
 import fr.inpt.frappe.utils;
 import fr.inpt.frappe.auth.AuthUser;
 import fr.inpt.frappe.auth.JwtProvider;
@@ -151,7 +153,6 @@ public class DocumentController {
 		String mimeType = "";
 		try {
 			mimeType = tika.detect(file.getInputStream());
-
 		} catch (IOException e) {
 			logger.error("Could not read the file type : \n" + e.getMessage());
 		}
@@ -179,6 +180,22 @@ public class DocumentController {
 
 		} catch (IOException e) {
 			logger.error("Error in saving the file to the server : \n" + e.toString());
+		}
+
+		// Create a thumbnail and save it to the server filesystem
+
+		// Make sure the previews directory exists
+		java.io.File previewDir = new java.io.File(basePath + "/preview");
+		if (!previewDir.exists()) {
+			previewDir.mkdirs();
+		}
+
+		try {
+			Thumbnail.saveThumnail(basePath, createdFile.getId(), mimeType);
+		} catch (Exception e) {
+			logger.error("Error in creating the thumbnail : \n" + e.toString());
+		// } catch (IOException e) {
+		// 	logger.error("Error in saving the file to the server : \n" + e.toString());
 		}
 
 		logger.debug(
@@ -213,6 +230,40 @@ public class DocumentController {
 								"inline; filename=\"" + file.getName() + file.getExtension() + "\"") // Put the original
 																										// name for the
 						// download
+						.body(resource);
+			} else {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+						"File not found and may does not exist anymore");
+			}
+		} catch (MalformedURLException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Malformated url to get the file");
+		}
+	}
+
+	@Operation(summary = "Get the thumbnail", description = "Get the thumbnail of a specific file")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Thumbnail retrived successfully"),
+			@ApiResponse(responseCode = "400", description = "Invalid file ID", content = @Content),
+			@ApiResponse(responseCode = "404", description = "File not found", content = @Content),
+			@ApiResponse(responseCode = "500", description = "Malformated URL to get the ressource", content = @Content)
+	})
+	@GetMapping("/file/{fileID}/preview")
+	public ResponseEntity<UrlResource> getFileThumbnail(@PathVariable UUID fileID) {
+		try {
+			File file = files.findById(fileID).orElseThrow(() -> new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"File not found"));
+			Path filePath = Paths.get(basePath).resolve("preview/" + fileID.toString() + ".jpg")
+					.normalize();
+			UrlResource resource = new UrlResource(filePath.toUri());
+
+			if (resource.exists() && resource.isReadable()) {
+				return ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_OCTET_STREAM)
+						.header(HttpHeaders.CONTENT_DISPOSITION,
+								"inline; filename=\"" + file.getName() + "\"") // Put the original name for the
+																				// download
 						.body(resource);
 			} else {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND,

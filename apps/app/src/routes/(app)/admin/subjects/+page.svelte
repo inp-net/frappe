@@ -30,7 +30,7 @@
 <ul>
 	{#each subjects as subject (subject.id)}
 		<li>
-			<a href={`/subjects/${subject.id}`}>{subject.name} ({subject.id}) </a>
+			<a href={`/admin/subjects/${subject.id}`}>{subject.name} ({subject.id}) </a>
 		</li>
 	{/each}
 </ul>
@@ -47,4 +47,4 @@
 </form>
 <br />
 <br />
-<button onclick={() => goto('../')}> Go back </button>
+<button onclick={() => goto('./')}> Go back </button>

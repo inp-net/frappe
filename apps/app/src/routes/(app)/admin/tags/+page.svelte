@@ -27,7 +27,7 @@
 <ul>
 	{#each tags as tag (tag.id)}
 		<li>
-			<a href={`/tags/${tag.id}`}>
+			<a href={`/admin/tags/${tag.id}`}>
 				{tag.name} ({tag.id})
 			</a>
 		</li>
@@ -41,4 +41,4 @@
 </form>
 <br />
 <br />
-<button onclick={() => goto('../')}> Go back </button>
+<button onclick={() => goto('./')}> Go back </button>

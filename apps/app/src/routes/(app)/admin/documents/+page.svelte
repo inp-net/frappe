@@ -59,7 +59,7 @@
 
 <ul>
 	{#each documents as document (document.id)}
-		<li><a href={`/documents/${document.id}`}>{document.title} ({document.id})</a></li>
+		<li><a href={`/admin/documents/${document.id}`}>{document.title} ({document.id})</a></li>
 	{/each}
 </ul>
 
@@ -94,4 +94,4 @@
 </form>
 <br />
 <br />
-<button onclick={() => goto('../')}> Go back </button>
+<button onclick={() => goto('./')}> Go back </button>

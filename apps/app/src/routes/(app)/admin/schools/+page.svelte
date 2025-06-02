@@ -28,7 +28,7 @@
 
 <ul>
 	{#each schools as school (school.id)}
-		<li><a href={`/schools/${school.id}`}>{school.name} ({school.uid})</a></li>
+		<li><a href={`/admin/schools/${school.id}`}>{school.name} ({school.uid})</a></li>
 	{/each}
 </ul>
 
@@ -41,4 +41,4 @@
 </form>
 <br />
 <br />
-<button onclick={() => goto('../')}> Go back </button>
+<button onclick={() => goto('./')}> Go back </button>
