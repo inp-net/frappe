@@ -47,7 +47,7 @@ public class MajorController {
 	})
 	@GetMapping("/")
 	public List<Major> list(@RequestParam(required = false) Long schoolId) {
-		Specification<Major> spec = Specification.where(MajorSpecification.hasSchool(schoolId));
+		Specification<Major> spec = MajorSpecification.hasSchool(schoolId);
 		return majors.findAll(spec);
 	}
 

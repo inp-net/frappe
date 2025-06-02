@@ -7,6 +7,7 @@ export const load: PageLoad = async ({ fetch }) => {
 	});
 
 	return {
-		documents: documents.data?.content ?? []
+		documents: documents.data?.content ?? [],
+		page: documents.data?.pageable?.pageNumber ?? 0
 	};
 };

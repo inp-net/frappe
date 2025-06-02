@@ -48,7 +48,7 @@ public class MinorController {
 	@GetMapping("/")
 	public List<Minor> list(@RequestParam(required = false) Long schoolId,
 			@RequestParam(required = false) Long majorId) {
-		Specification<Minor> spec = Specification.where(MinorSpecification.hasMajor(majorId))
+		Specification<Minor> spec = MinorSpecification.hasMajor(majorId)
 				.and(MinorSpecification.hasSchool(schoolId));
 		return minors.findAll(spec);
 	}

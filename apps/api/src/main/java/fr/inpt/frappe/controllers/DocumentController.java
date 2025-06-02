@@ -105,9 +105,9 @@ public class DocumentController {
 			@RequestParam(required = false) List<Long> subjectIds,
 			@RequestParam(required = false) List<Integer> year,
 			@RequestParam(defaultValue = "0") int pageNum,
-			@RequestParam(defaultValue = "50") int size) {
+			@RequestParam(defaultValue = "50") Integer size) {
 
-		Specification<Document> spec = Specification.where(DocumentSpecification.hasTags(tagIds))
+		Specification<Document> spec = DocumentSpecification.hasTags(tagIds)
 				.and(DocumentSpecification.hasYears(year))
 				.and(DocumentSpecification.hasSubjects(subjectIds))
 				.and(DocumentSpecification.hasTeachingUnits(teachingUnitIds))
@@ -115,7 +115,7 @@ public class DocumentController {
 				.and(DocumentSpecification.hasMajor(majorId))
 				.and(DocumentSpecification.hasSchool(schoolId));
 
-		Sort sortOrder = Sort.by(Sort.Order.desc("year"));
+		Sort sortOrder = Sort.by(Sort.Order.desc("year"), Sort.Order.asc("title"), Sort.Order.desc("id"));
 
 		Pageable pageable = PageRequest.of(pageNum, size, sortOrder);
 		return documents.findAll(spec, pageable);
@@ -194,8 +194,6 @@ public class DocumentController {
 			Thumbnail.saveThumnail(basePath, createdFile.getId(), mimeType);
 		} catch (Exception e) {
 			logger.error("Error in creating the thumbnail : \n" + e.toString());
-		// } catch (IOException e) {
-		// 	logger.error("Error in saving the file to the server : \n" + e.toString());
 		}
 
 		logger.debug(
