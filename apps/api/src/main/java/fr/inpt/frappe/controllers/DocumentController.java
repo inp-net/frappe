@@ -15,6 +15,7 @@ import org.apache.tika.Tika;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,6 +61,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 
 @RestController
@@ -83,13 +85,14 @@ public class DocumentController {
 
 	private final Tika tika = new Tika();
 
-	// Upload path
-	private String basePath = Paths.get("")
-			.toAbsolutePath() // e.g., /path/to/frappe/apps/api
-			.getParent() // -> /path/to/frappe/apps
-			.getParent() // -> /path/to/frappe
-			.resolve("uploads") // -> /path/to/frappe/uploads
-			.toString();
+	@Value("${UPLOAD_PATH}")
+	private String uploadPath;
+	private String basePath;
+
+	@PostConstruct
+	public void init() {
+		basePath = Paths.get(uploadPath).toAbsolutePath().toString();
+	}
 
 	@Operation(summary = "Get all documents", description = "Returns a list of documents that has one of the desired tag (if there is no tags return all the documents).")
 	@ApiResponses(value = {
