@@ -34,12 +34,16 @@ public class Document {
 	@Column(nullable = false)
 	private String title;
 
+	@Column(nullable = false)
+	private int year;
+
 	private String description;
 
 	@ManyToOne(optional = false)
 	private Subject subject;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "documents", fetch = FetchType.EAGER)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@JoinTable(name = "tags_documents", joinColumns = @JoinColumn(name = "documents_id"), inverseJoinColumns = @JoinColumn(name = "tags_id"))
 	private Collection<Tag> tags;
 
 	@OneToMany(mappedBy = "document")
@@ -57,8 +61,9 @@ public class Document {
 		this.subject = subject;
 	}
 
-	public Document(String title, String description, Subject subject) {
+	public Document(String title, int year, String description, Subject subject) {
 		this.title = title;
+		this.year = year;
 		this.description = description;
 		this.subject = subject;
 	}

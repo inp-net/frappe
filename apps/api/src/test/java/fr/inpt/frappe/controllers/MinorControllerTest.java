@@ -13,9 +13,11 @@ import fr.inpt.frappe.repositories.SchoolRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -65,7 +67,7 @@ class MinorControllerTest {
 
 	@Test
 	void testListMinors() throws Exception {
-		when(minorRepository.findAll()).thenReturn(Arrays.asList(minor));
+		when(minorRepository.findAll(ArgumentMatchers.<Specification<Minor>>any())).thenReturn(Arrays.asList(minor));
 		mockMvc.perform(get("/minor/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())

@@ -67,7 +67,7 @@ ALTER TABLE comments ADD CONSTRAINT "FKccw7klbfv0lkycbtfxa53sqja" FOREIGN KEY (d
 ALTER TABLE teaching_units ADD CONSTRAINT "FKg97m9yhhddf3rajujm8w8n7qc" FOREIGN KEY (minor_id) REFERENCES minors (id);
 
 -- changeset db_init:20250323173836-23
-ALTER TABLE tags_documents ADD CONSTRAINT "FKhabi3tf4abyte7b88bksegsuv" FOREIGN KEY (documents_id) REFERENCES documents (id);
+ALTER TABLE tags_documents ADD CONSTRAINT "FKhabi3tf4abyte7b88bksegsuv" FOREIGN KEY (documents_id) REFERENCES documents (id) ON DELETE CASCADE;
 
 -- changeset db_init:20250323173836-24
 ALTER TABLE users ADD CONSTRAINT "FKkw5ffx2ufp42oxqx7py9wa7nq" FOREIGN KEY (major_id) REFERENCES majors (id);

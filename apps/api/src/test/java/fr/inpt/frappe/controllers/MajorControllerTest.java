@@ -11,9 +11,11 @@ import fr.inpt.frappe.repositories.SchoolRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -58,7 +60,7 @@ class MajorControllerTest {
 
 	@Test
 	void testListMajors() throws Exception {
-		when(majorRepository.findAll()).thenReturn(Arrays.asList(major));
+		when(majorRepository.findAll(ArgumentMatchers.<Specification<Major>>any())).thenReturn(Arrays.asList(major));
 		mockMvc.perform(get("/major/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())

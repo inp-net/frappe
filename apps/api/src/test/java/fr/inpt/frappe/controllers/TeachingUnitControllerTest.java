@@ -14,9 +14,11 @@ import fr.inpt.frappe.repositories.TeachingUnitRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -104,7 +106,7 @@ public class TeachingUnitControllerTest {
 
 	@Test
 	void testListTeachingUnit() throws Exception {
-		when(teachingUnitRepository.findAll()).thenReturn(Arrays.asList(teachingUnit1));
+		when(teachingUnitRepository.findAll(ArgumentMatchers.<Specification<TeachingUnit>>any())).thenReturn(Arrays.asList(teachingUnit1));
 		mockMvc.perform(get("/teachingunit/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())

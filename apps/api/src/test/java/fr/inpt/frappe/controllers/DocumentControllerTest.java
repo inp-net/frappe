@@ -21,15 +21,19 @@ import fr.inpt.frappe.repositories.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -83,6 +87,9 @@ class DocumentControllerTest {
 	private DocumentUpdateDTO documentUpdateDTO1;
 	private DocumentUpdateDTO documentUpdateDTO2;
 
+	private Page<Document> page1;
+	private Page<Document> page2;
+
 	@BeforeEach
 	void setUp() {
 		user = new User("JC", "Jacques", "Célere", 1);
@@ -92,48 +99,42 @@ class DocumentControllerTest {
 		ArrayList<TeachingUnit> ltu = new ArrayList<>();
 		ltu.add(teachingUnit);
 		subject = new Subject("Application WEB", ltu);
-		document = new Document("partiel 1", "partiel d'application web", subject);
-		documentM = new Document("partiel 2", "partiel d'Application Web", subject);
-
-		ArrayList<Document> docList = new ArrayList<>();
-		docList.add(document);
-		docList.add(documentM);
+		document = new Document("partiel 1", 2025, "partiel d'application web", subject);
+		documentM = new Document("partiel 2", 2024, "partiel d'Application Web", subject);
 
 		tag = new Tag("partiel");
-
-		tag.setDocuments(docList);
 
 		ArrayList<Long> tagList = new ArrayList<>();
 		tagList.add(Long.valueOf(1));
 
-		documentCreateDTO = new DocumentCreateDTO("partiel 1", "partiel d'application web", Long.valueOf(1),
+		documentCreateDTO = new DocumentCreateDTO("partiel 1", 2025, "partiel d'application web", Long.valueOf(1),
 				UUID.fromString("49e561d4-58f2-477b-bd18-4e603f81d2cb"), tagList);
 
-		documentUpdateDTO1 = new DocumentUpdateDTO("partiel 2", "partiel d'Application Web",
+		documentUpdateDTO1 = new DocumentUpdateDTO("partiel 2", 2024, "partiel d'Application Web",
 				UUID.fromString("49e561d4-58f2-477b-bd18-4e603f81d2cb"), tagList);
-		documentUpdateDTO2 = new DocumentUpdateDTO(null, null,
+		documentUpdateDTO2 = new DocumentUpdateDTO(null, null, null,
 				null, tagList);
+
+		page1 = new PageImpl<>(List.of(document));
+		page2 = new PageImpl<>(List.of(document, documentM));
 	}
 
 	@Test
 	void testListDocuments() throws Exception {
-		when(documentRepository.findAll()).thenReturn(Arrays.asList(document));
+		when(documentRepository.findAll(ArgumentMatchers.<Specification<Document>>any(),
+				ArgumentMatchers.any(Pageable.class)))
+				.thenReturn(page1);
 		mockMvc.perform(get("/document/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].title").value(document.getTitle()));
+				.andExpect(jsonPath("$.content.[0].title").value(document.getTitle()));
 
-		when(tagRepository.findById(anyLong())).thenReturn(Optional.of(tag));
+		when(documentRepository.findAll(ArgumentMatchers.<Specification<Document>>any(),
+				ArgumentMatchers.any(Pageable.class))).thenReturn(page2);
 		mockMvc.perform(get("/document/?tagIDs=1")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].title").value(documentM.getTitle()))
-				.andExpect(jsonPath("$[1].title").value(document.getTitle()));
-
-		when(tagRepository.findById(anyLong())).thenReturn(Optional.empty());
-		mockMvc.perform(get("/document/?tagIDs=69&tagIDs=42")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound());
+				.andExpect(jsonPath("$.content[1].title").value(documentM.getTitle()));
 	}
 
 	@Test

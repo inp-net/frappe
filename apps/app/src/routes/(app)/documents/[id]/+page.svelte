@@ -39,6 +39,7 @@
 		e.preventDefault();
 		const formData = new FormData(e.target as HTMLFormElement);
 		const title = formData.get('title')?.toString() ?? '';
+		const year = Number(formData.get('Year')?.toString());
 		const description = formData.get('description')?.toString() ?? '';
 		const subject_id = Number(formData.get('subject_id')?.toString());
 		const tags = formData.getAll('tags').map((id) => Number(id));
@@ -48,6 +49,7 @@
 			params: { path: { id: data.document?.id as string } },
 			body: {
 				title,
+				year,
 				description,
 				subject_id,
 				tags,
@@ -62,8 +64,9 @@
 <h1>Document #{data.document?.id}</h1>
 
 <p>
-	Title : {data.document?.title}, description : {data.document?.description}, subject : {data
-		.document?.subject?.name}, author: {data.document?.author?.firstname}
+	Title : {data.document?.title}, year : {data.document?.year}, description : {data.document
+		?.description}, subject : {data.document?.subject?.name}, author: {data.document?.author
+		?.firstname}
 	{data.document?.author?.lastname}, tags : {data.document?.tags
 		?.map((tag) => tag.name)
 		.join(', ')},
@@ -140,7 +143,8 @@
 
 <form onsubmit={update}>
 	<input type="text" name="title" value={data.document?.title} required />
-	<input type="text" name="description" value={data.document?.description} required />
+	<input type="number" name="Year" value={data.document?.year} required />
+	<input type="text" name="description" value={data.document?.description} />
 	<select name="subject_id" required>
 		{#each data.subjects as subject (subject.id)}
 			<option value={subject.id}>{subject.name}</option>

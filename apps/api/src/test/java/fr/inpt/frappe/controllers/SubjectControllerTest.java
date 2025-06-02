@@ -15,9 +15,11 @@ import fr.inpt.frappe.repositories.TeachingUnitRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +31,8 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -92,7 +96,7 @@ class SubjectControllerTest {
 
 	@Test
 	void testListSubjects() throws Exception {
-		when(subjectRepository.findAll()).thenReturn(Arrays.asList(subject));
+		when(subjectRepository.findAll(ArgumentMatchers.<Specification<Subject>>any())).thenReturn(Arrays.asList(subject));
 		mockMvc.perform(get("/subject/")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
