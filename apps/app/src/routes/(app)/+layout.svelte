@@ -14,10 +14,11 @@
 <style>
 	.app {
 		display: flex;
+		height: 100dvh;
 
 		main {
 			width: 100%;
-			margin: 2rem 2rem 2rem 5rem;
+			margin: 1rem 1rem 1rem 4rem;
 		}
 	}
 </style>

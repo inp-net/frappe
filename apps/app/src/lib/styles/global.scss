@@ -4,13 +4,103 @@
 }
 
 :global(p),
-:global(h1) {
+:global(h1),
+:global(h2) {
 	padding: 0;
 	margin: 0;
 }
 
-:global(h1) {
+:global(p),
+:global(h1),
+:global(h2) {
 	color: #212529;
+}
+
+:global([data-button-root]) {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	background-color: transparent;
+	border: solid 1px #0f5aa6;
+	border-radius: 0.25rem;
+	color: #0f5aa6;
+	cursor: pointer;
+	transition: color 0.2s ease;
+	transition: background-color 0.2s ease;
+
+	&:hover {
+		color: #ffffff;
+		background-color: #0f5aa6;
+	}
+}
+
+:global([data-dialog-trigger]) {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	background-color: transparent;
+	border: solid 1px #0f5aa6;
+	border-radius: 0.25rem;
+	color: #0f5aa6;
+	cursor: pointer;
+	transition: color 0.2s ease;
+	transition: background-color 0.2s ease;
+
+	&:hover {
+		color: #ffffff;
+		background-color: #0f5aa6;
+	}
+}
+
+:global([data-dialog-overlay][data-state='open']) {
+	display: block;
+	position: fixed;
+	top: 0;
+	width: 100dvw;
+	height: 100dvh;
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+:global([data-dialog-content][data-state='open']) {
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 40rem;
+	padding: 1.5rem;
+	padding-top: calc(1.5rem * 0.75);
+	background-color: #ffffff;
+	border: solid 2px #e6e6e6;
+	border-radius: 0.5rem;
+}
+
+:global([data-dialog-title]) {
+	display: flex;
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-bottom: 0.25rem;
+	color: #212529;
+}
+
+:global([data-dialog-description]) {
+	font-size: 1rem;
+	margin-bottom: 2rem;
+	color: #646464;
+}
+
+:global([data-dialog-close]) {
+	display: flex;
+	justify-content: right;
+	align-items: center;
+	margin-top: 2rem;
+	background-color: transparent;
+	border: none;
 }
 
 :global([data-label-root]) {
@@ -26,6 +116,14 @@
 	border: solid 1px #0f5aa6;
 	border-radius: 0.25rem;
 	color: #0f5aa6;
+	cursor: pointer;
+	transition: color 0.2s ease;
+	transition: background-color 0.2s ease;
+
+	&:hover {
+		color: #ffffff;
+		background-color: #0f5aa6;
+	}
 }
 
 :global([data-dropdown-menu-content]) {
@@ -76,6 +174,7 @@
 		opacity: 0;
 		transform: scale(0.95);
 	}
+
 	to {
 		opacity: 1;
 		transform: scale(1);
@@ -87,6 +186,7 @@
 		opacity: 1;
 		transform: scale(1);
 	}
+
 	to {
 		opacity: 0;
 		transform: scale(0.95);

@@ -62,6 +62,8 @@ public class SecurityConfig {
 		http
 				.cors(cors -> cors.configure(http))
 				.csrf(csrf -> csrf.disable())
+				.headers(headers -> headers
+						.frameOptions(frameOptions -> frameOptions.sameOrigin()))
 				.sessionManagement(
 						sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize

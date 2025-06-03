@@ -104,9 +104,6 @@ public class utils {
 			case "image/jpeg":
 				extension = ".jpg";
 				break;
-			case "image/bmp":
-				extension = ".bmp";
-				break;
 			case "image/png":
 				extension = ".png";
 				break;
