@@ -10,6 +10,9 @@
 		</a>
 	</div>
 	<div class="bottom">
+		<a href="/upload" class={{ active: page.url.pathname.startsWith('/upload') }}>
+			<Icon icon="heroicons:plus-circle" />
+		</a>
 		<a href="/user" class={{ active: page.url.pathname.startsWith('/user') }}>
 			<Icon icon="heroicons:user-circle" />
 		</a>
