@@ -63,3 +63,4 @@ release:api:
       variables:
         TAG: export TAG=$(echo $CI_COMMIT_TAG)
         PUSH: "true"
+        TARGET: api

@@ -28,10 +28,10 @@
           --local context=. \
           --local dockerfile=. \
           --opt target=$TARGET \
-          --output "type=image,name=$CI_REGISTRY_IMAGE/$TARGET:v$TAG,push=$PUSH"
+          --output "type=image,name=$CI_REGISTRY_IMAGE/$TARGET:$TAG,push=$PUSH"
     - |
       if [ "$PUSH" == "true" ]; then \
-        echo "Successfully built and pushed $CI_REGISTRY_IMAGE/$TARGET:v$TAG"; \
+        echo "Successfully built and pushed $CI_REGISTRY_IMAGE/$TARGET:$TAG"; \
       else \
-        echo "Successfully built $CI_REGISTRY_IMAGE/$TARGET:v$TAG"; \
+        echo "Successfully built $CI_REGISTRY_IMAGE/$TARGET:$TAG"; \
       fi
