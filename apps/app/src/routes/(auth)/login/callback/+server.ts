@@ -12,6 +12,7 @@ export const GET: RequestHandler = ({ url, cookies }) => {
 	cookies.set('token', token, {
 		path: '/',
 		httpOnly: false,
+		secure: false,
 		expires: new Date((payload['exp'] as number) * 1000)
 	});
 
