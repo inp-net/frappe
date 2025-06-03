@@ -7,6 +7,7 @@ BEGIN
 			('BE'),
 			('TD'),
 			('TP'),
-			('Fiche');
+			('Fiche'),
+			('Rapport');
 	END IF;
 END $$;

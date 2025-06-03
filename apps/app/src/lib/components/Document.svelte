@@ -12,6 +12,12 @@
 		<div class="infos">
 			<div class="info">
 				<div class="info-icon">
+					<Icon icon="heroicons:academic-cap" />
+				</div>
+				<p>{document.subject.name}</p>
+			</div>
+			<div class="info">
+				<div class="info-icon">
 					<Icon icon="heroicons:folder" />
 				</div>
 				<p>
@@ -22,12 +28,6 @@
 						fichiers
 					{/if}
 				</p>
-			</div>
-			<div class="info">
-				<div class="info-icon">
-					<Icon icon="heroicons:user-circle" />
-				</div>
-				<p>{document.author.firstname} {document.author.lastname}</p>
 			</div>
 			<div class="info">
 				<div class="info-icon">

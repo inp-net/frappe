@@ -48,7 +48,12 @@
 		<Header title="Document" />
 		<h2 class="title">{document.title}</h2>
 		<p class="description">{document.description}</p>
-
+		<div class="info">
+			<div class="info-icon">
+				<Icon icon="heroicons:academic-cap" />
+			</div>
+			<p>{document.subject?.name}</p>
+		</div>
 		<div class="info">
 			<div class="info-icon">
 				<Icon icon="heroicons:folder" />
@@ -89,8 +94,10 @@
 
 		<div class="comments">
 			<div class="comment-input">
-				<input type="text" class="input" />
-				<Button.Root><Icon icon="heroicons:arrow-down-solid" /></Button.Root>
+				<input type="text" class="input" required />
+				<Button.Root form="comment-form"
+					><Icon icon="heroicons:arrow-down-solid" /></Button.Root
+				>
 			</div>
 			{#each comments as comment (comment.id)}
 				<div class="comment">

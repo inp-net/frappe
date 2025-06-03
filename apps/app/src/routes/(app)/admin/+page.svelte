@@ -4,7 +4,7 @@
 	let { data }: PageProps = $props();
 </script>
 
-<h1>Bonjour {data.me?.firstName}</h1>
+<h1>Bonjour {data.me?.firstname}</h1>
 
 <ul>
 	<li>

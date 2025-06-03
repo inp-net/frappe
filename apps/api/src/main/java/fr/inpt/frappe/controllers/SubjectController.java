@@ -48,13 +48,13 @@ public class SubjectController {
 	@GetMapping("/")
 	public List<Subject> list(@RequestParam(required = false) Long schoolId,
 			@RequestParam(required = false) Long majorId,
-			@RequestParam(required = false) Long minorId,
-			@RequestParam(required = false) Long teachingUnitId) {
+			@RequestParam(required = false) List<Long> minorIds,
+			@RequestParam(required = false) List<Long> teachingUnitIds) {
 				
 		Specification<Subject> spec = SubjectSpecification.hasSchool(schoolId)
 				.and(SubjectSpecification.hasMajor(majorId))
-				.and(SubjectSpecification.hasMinor(minorId))
-				.and(SubjectSpecification.hasTeachingUnit(teachingUnitId));
+				.and(SubjectSpecification.hasMinor(minorIds))
+				.and(SubjectSpecification.hasTeachingUnit(teachingUnitIds));
 		return subjects.findAll(spec);
 	}
 

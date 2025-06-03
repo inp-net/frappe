@@ -48,11 +48,11 @@ public class TeachingUnitController {
 	@GetMapping("/")
 	public List<TeachingUnit> list(@RequestParam(required = false) Long schoolId,
 			@RequestParam(required = false) Long majorId,
-			@RequestParam(required = false) Long minorId) {
+			@RequestParam(required = false) List<Long> minorIds) {
 
 		Specification<TeachingUnit> spec = TeachingUnitSpecification.hasSchool(schoolId)
 				.and(TeachingUnitSpecification.hasMajor(majorId))
-				.and(TeachingUnitSpecification.hasMinor(minorId));
+				.and(TeachingUnitSpecification.hasMinor(minorIds));
 
 		return teachingUnits.findAll(spec);
 	}

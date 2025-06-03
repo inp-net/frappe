@@ -57,14 +57,14 @@ public class DocumentSpecification {
 		};
 	}
 
-	public static Specification<Document> hasMinor(Long minorId) {
+	public static Specification<Document> hasMinor(List<Long> minorIds) {
 		return (root, query, cb) -> {
-			if (minorId == null)
+			if (minorIds == null || minorIds.isEmpty())
 				return null;
 			Join<Document, Subject> subject = root.join("subject");
 			Join<Subject, TeachingUnit> tu = subject.join("teachingUnits");
-			Join<TeachingUnit, Minor> minor = tu.join("minors");
-			return cb.equal(minor.get("id"), minorId);
+			Join<TeachingUnit, Minor> minors = tu.join("minors");
+			return minors.get("id").in(minorIds);
 		};
 	}
 

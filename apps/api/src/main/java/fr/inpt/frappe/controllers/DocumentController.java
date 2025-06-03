@@ -103,7 +103,7 @@ public class DocumentController {
 	public Page<Document> list(@RequestParam(required = false) List<Long> tagIds,
 			@RequestParam(required = false) Long schoolId,
 			@RequestParam(required = false) Long majorId,
-			@RequestParam(required = false) Long minorId,
+			@RequestParam(required = false) List<Long> minorIds,
 			@RequestParam(required = false) List<Long> teachingUnitIds,
 			@RequestParam(required = false) List<Long> subjectIds,
 			@RequestParam(required = false) List<Integer> year,
@@ -115,7 +115,7 @@ public class DocumentController {
 				.and(DocumentSpecification.hasYears(year))
 				.and(DocumentSpecification.hasSubjects(subjectIds))
 				.and(DocumentSpecification.hasTeachingUnits(teachingUnitIds))
-				.and(DocumentSpecification.hasMinor(minorId))
+				.and(DocumentSpecification.hasMinor(minorIds))
 				.and(DocumentSpecification.hasMajor(majorId))
 				.and(DocumentSpecification.hasSchool(schoolId))
 				.and(DocumentSpecification.hasAuthor(author));

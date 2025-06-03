@@ -1,7 +1,8 @@
 package fr.inpt.frappe.models.specification;
 
-import org.springframework.data.jpa.domain.Specification;
+import java.util.List;
 
+import org.springframework.data.jpa.domain.Specification;
 import fr.inpt.frappe.models.Major;
 import fr.inpt.frappe.models.Minor;
 import fr.inpt.frappe.models.School;
@@ -14,25 +15,34 @@ public class TeachingUnitSpecification {
 	public static Specification<TeachingUnit> hasMajor(Long majorId) {
 		return (root, query, cb) -> {
 			if (majorId == null)
-				return null;
-			Join<TeachingUnit, Major> major = root.join("majors");
-			return cb.equal(major.get("id"), majorId);
+				return cb.conjunction();
+
+			// Path 1: via Major
+			Join<TeachingUnit, Major> major = root.join("majors", JoinType.LEFT);
+			Predicate viaMajor = cb.equal(major.get("id"), majorId);
+
+			// Path 2: via Minor -> Major
+			Join<TeachingUnit, Minor> minor = root.join("minors", JoinType.LEFT);
+			Join<Minor, Major> minorMajor = minor.join("major", JoinType.LEFT);
+			Predicate viaMinor = cb.equal(minorMajor.get("id"), majorId);
+
+			return cb.or(viaMajor, viaMinor);
 		};
 	}
 
-	public static Specification<TeachingUnit> hasMinor(Long minorId) {
+	public static Specification<TeachingUnit> hasMinor(List<Long> minorIds) {
 		return (root, query, cb) -> {
-			if (minorId == null)
-				return null;
-			Join<TeachingUnit, Minor> minor = root.join("minors");
-			return cb.equal(minor.get("id"), minorId);
+			if (minorIds == null || minorIds.isEmpty())
+				return cb.conjunction();
+			Join<TeachingUnit, Minor> minors = root.join("minors", JoinType.LEFT);
+			return minors.get("id").in(minorIds);
 		};
 	}
 
 	public static Specification<TeachingUnit> hasSchool(Long schoolId) {
 		return (root, query, cb) -> {
 			if (schoolId == null)
-				return null;
+				return cb.conjunction();
 
 			// Path 1: via Major
 			Join<TeachingUnit, Major> major = root.join("majors", JoinType.LEFT);

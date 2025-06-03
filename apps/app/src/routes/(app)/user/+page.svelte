@@ -6,4 +6,4 @@
 	let user = data.me;
 </script>
 
-<Header title={`Bonjour ${user?.firstName}`} />
+<Header title={`Bonjour ${user?.firstname}`} />

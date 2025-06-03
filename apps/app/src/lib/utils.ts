@@ -1,3 +1,4 @@
+import client from './api/client';
 import type { AuthUser } from './types/AuthUser';
 
 /**
@@ -31,4 +32,77 @@ export function getAuthUserFromJWT(token: string | undefined): AuthUser | undefi
 	if (!token) return undefined;
 	const payload = parseJWT(token);
 	return payload['user_info'] as AuthUser;
+}
+
+/**
+ * Fetches minors associated with a specific major.
+ *
+ * @param major The ID of the major for which to retrieve minors.
+ * @returns
+ */
+export async function getMinors(major: number | undefined) {
+	const data = await client.GET('/minor/', {
+		params: {
+			query: {
+				majorId: major
+			}
+		}
+	});
+
+	return data.data ?? [];
+}
+
+export async function getTeachingUnit(major: number | undefined, minors: number[]) {
+	const data = await client.GET('/teachingunit/', {
+		params: {
+			query: {
+				majorId: major,
+				minorIds: minors
+			}
+		}
+	});
+
+	return data.data ?? [];
+}
+
+export async function getSubjects(
+	major: number | undefined,
+	minors: number[],
+	teachingUnits: number[]
+) {
+	const data = await client.GET('/subject/', {
+		params: {
+			query: {
+				majorId: major,
+				minorIds: minors,
+				teachingUnitIds: teachingUnits
+			}
+		}
+	});
+
+	return data.data ?? [];
+}
+
+export async function getDocuments(
+	page: number,
+	major: number | undefined,
+	minors: number[],
+	teachingUnits: number[],
+	subjects: number[],
+	tags: number[]
+) {
+	const data = await client.GET('/document/', {
+		params: {
+			query: {
+				pageNum: page,
+				majorId: major,
+				minorIds: minors,
+				teachingUnitIds: teachingUnits,
+				subjectIds: subjects,
+				tagIds: tags
+			}
+		}
+	});
+
+	return data.data;
 }

@@ -3,9 +3,7 @@
 	import { DropdownMenu, Label } from 'bits-ui';
 	import { RadioGroup } from 'bits-ui';
 
-	let { name, data } = $props();
-
-	let selected = $state('');
+	let { name, data, selected = $bindable() } = $props();
 </script>
 
 <DropdownMenu.Root>
