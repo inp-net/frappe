@@ -18,6 +18,11 @@ build:api:
     POSTGRES_USER: frappe
     POSTGRES_PASSWORD: frappe
     DATABASE_URL: postgresql://frappe:frappe@postgres:5432/frappe
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: $CI_COMMIT_TAG
+
   script:
     - mvn compile
     - mvn verify -Pgenerate-docs -DskipTests
