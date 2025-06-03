@@ -1,7 +1,12 @@
 stages:
   - build
   - test
+  - release
 
 include:
+  #  generic ci files
+  - ci/docker.gitlab-ci.yml
+
+  # specific ci files
   - apps/api/.gitlab-ci.yml
   - apps/app/.gitlab-ci.yml

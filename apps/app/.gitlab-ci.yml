@@ -36,3 +36,16 @@ check:app:
   script:
     - pnpm exec svelte-kit sync
     - pnpm exec svelte-check --tsconfig ./tsconfig.json
+
+release:app:
+  extends: .docker
+  stage: release
+  interruptible: false
+  needs:
+    - job: build:api
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG
+      variables:
+        TAG: export TAG=$(echo $CI_COMMIT_TAG)
+        PUSH: 'true'
