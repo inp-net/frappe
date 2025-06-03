@@ -30,7 +30,7 @@ public class Tag {
 	@Column(nullable = false)
 	private String name;
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "tags")
 	@JsonIgnore
 	private Collection<Document> documents;
 

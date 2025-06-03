@@ -1,6 +1,7 @@
 package fr.inpt.frappe.models.specification;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,6 +13,7 @@ import fr.inpt.frappe.models.Major;
 import fr.inpt.frappe.models.Minor;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.models.TeachingUnit;
+import fr.inpt.frappe.models.User;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -46,6 +48,15 @@ public class DocumentSpecification {
 		};
 	}
 
+	public static Specification<Document> hasAuthor(UUID authorId) {
+		return (root, query, cb) -> {
+			if (authorId == null)
+				return null;
+			Join<Document, User> u = root.join("author");
+			return u.get("id").in(authorId);
+		};
+	}
+
 	public static Specification<Document> hasMinor(Long minorId) {
 		return (root, query, cb) -> {
 			if (minorId == null)
@@ -73,7 +84,7 @@ public class DocumentSpecification {
 			// Path 2: Indirect via TeachingUnit -> Minor -> Major
 			Join<TeachingUnit, Minor> minor = tu.join("minors", JoinType.LEFT);
 			Join<Minor, Major> minorMajor = minor.join("major", JoinType.LEFT);
-			
+
 			Predicate majorViaMinor = cb.equal(minorMajor.get("id"), majorId);
 
 			return cb.or(majorDirect, majorViaMinor);
