@@ -2,11 +2,39 @@
 	import DropdownMenuCheck from '$components/DropdownMenuCheck.svelte';
 	import DropdownMenuRadio from '$components/DropdownMenuRadio.svelte';
 	import Document from '$lib/components/Document.svelte';
+	import { InfiniteLoader, LoaderState } from 'svelte-infinite';
 	import type { PageProps } from './$types';
+	import client from '$lib/api/client';
 
 	let { data }: PageProps = $props();
 
 	let documents = $state(data.documents);
+	let page = data.page;
+
+	let hasMore = true;
+	let loaderState = new LoaderState();
+
+	let loadMore = async () => {
+		if (!hasMore) return;
+
+		page += 1;
+		const nextDocs = await client.GET('/document/', {
+			params: {
+				query: {
+					pageNum: page
+				}
+			}
+		});
+		const newDocs = nextDocs.data?.content ?? [];
+		documents = [...documents, ...newDocs];
+
+		if (nextDocs.data?.last) {
+			hasMore = false;
+			loaderState.complete();
+			return;
+		}
+		loaderState.loaded();
+	};
 </script>
 
 <header>
@@ -31,9 +59,16 @@
 </div>
 
 <section>
-	{#each documents as document (document.id)}
-		<Document {document} />
-	{/each}
+	<InfiniteLoader {loaderState} triggerLoad={loadMore}>
+		<section class="grid">
+			{#each documents as document (document.id)}
+				<Document {document} />
+			{/each}
+		</section>
+		{#snippet loading()}
+			Loading ...
+		{/snippet}
+	</InfiniteLoader>
 </section>
 
 <style lang="scss">
@@ -58,7 +93,7 @@
 		margin-bottom: 1rem;
 	}
 
-	section {
+	.grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
 		gap: 0.5rem;

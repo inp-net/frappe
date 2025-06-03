@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import client from '$lib/api/client';
+	import { InfiniteLoader, LoaderState } from 'svelte-infinite';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
 	let documents = $state(data.documents);
+	let page = $state(data.page);
 
 	async function create(e: SubmitEvent) {
 		e.preventDefault();
@@ -53,15 +55,32 @@
 
 		documents.push(newDocument.data ?? {});
 	}
+
+	let hasMore = true;
+	let loaderState = new LoaderState();
+
+	let loadMore = async () => {
+		if (!hasMore) return;
+
+		page += 1;
+		const nextDocs = await client.GET('/document/', {
+			params: {
+				query: {
+					pageNum: page
+				}
+			}
+		});
+		const newDocs = nextDocs.data?.content ?? [];
+		documents = [...documents, ...newDocs];
+
+		if (nextDocs.data?.last) {
+			hasMore = false;
+			loaderState.complete();
+			return;
+		}
+		loaderState.loaded();
+	};
 </script>
-
-<h3>List</h3>
-
-<ul>
-	{#each documents as document (document.id)}
-		<li><a href={`/admin/documents/${document.id}`}>{document.title} ({document.id})</a></li>
-	{/each}
-</ul>
 
 <h3>Create</h3>
 <form onsubmit={create}>
@@ -95,3 +114,28 @@
 <br />
 <br />
 <button onclick={() => goto('./')}> Go back </button>
+
+<h3>List</h3>
+
+<div class="scroll-container">
+	<InfiniteLoader {loaderState} triggerLoad={loadMore}>
+		<ul>
+			{#each documents as document (document.id)}
+				<li>
+					<a href={`/admin/documents/${document.id}`}>{document.title} ({document.id})</a>
+				</li>
+			{/each}
+		</ul>
+		{#snippet loading()}
+			Loading...
+		{/snippet}
+	</InfiniteLoader>
+</div>
+
+<style>
+	.scroll-container {
+		height: 60vh;
+		overflow-y: auto;
+		border: 1px solid black;
+	}
+</style>

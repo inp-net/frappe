@@ -51,7 +51,7 @@ public class SubjectController {
 			@RequestParam(required = false) Long minorId,
 			@RequestParam(required = false) Long teachingUnitId) {
 				
-		Specification<Subject> spec = Specification.where(SubjectSpecification.hasSchool(schoolId))
+		Specification<Subject> spec = SubjectSpecification.hasSchool(schoolId)
 				.and(SubjectSpecification.hasMajor(majorId))
 				.and(SubjectSpecification.hasMinor(minorId))
 				.and(SubjectSpecification.hasTeachingUnit(teachingUnitId));

@@ -27,7 +27,8 @@ export const load: PageLoad = async ({ fetch }) => {
 	});
 
 	return {
-		documents: documents.data ?? [],
+		documents: documents.data?.content ?? [],
+		page: documents.data?.pageable?.pageNumber ?? 0,
 		majors: majors.data ?? [],
 		minors: minors.data ?? [],
 		teaching_units: teaching_units.data ?? [],

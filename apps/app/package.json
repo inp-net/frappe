@@ -39,6 +39,6 @@
 	"dependencies": {
 		"bits-ui": "^1.5.3",
 		"pdfjs-dist": "^5.2.133",
-		"sass-embedded": "^1.89.0"
+		"svelte-infinite": "^0.5.0"
 	}
 }
