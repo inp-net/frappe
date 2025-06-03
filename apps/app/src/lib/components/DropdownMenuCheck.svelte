@@ -3,9 +3,23 @@
 	import { DropdownMenu, Label } from 'bits-ui';
 	import { Checkbox } from 'bits-ui';
 
-	let { name, data } = $props();
+	let { name, data, selecteds = $bindable() } = $props();
 
-	let selecteds = $state(Array(data.length).fill(false));
+	let initialSelecteds = Array.isArray(selecteds) ? selecteds : [selecteds];
+
+	let checkeds = $state(
+		Array(data.length)
+			.fill(false)
+			.map((_, index) => {
+				return initialSelecteds.includes(data[index].id);
+			})
+	);
+
+	$effect(() => {
+		selecteds = checkeds
+			.map((checked, index) => (checked ? data[index].id : null))
+			.filter(Boolean);
+	});
 </script>
 
 <DropdownMenu.Root>
@@ -17,8 +31,8 @@
 	<DropdownMenu.Content>
 		{#each data as dataItem, index (dataItem.id)}
 			<DropdownMenu.CheckboxItem closeOnSelect={false}>
-				<Checkbox.Root id={dataItem.id} bind:checked={selecteds[index]}>
-					{#if selecteds[index]}
+				<Checkbox.Root id={dataItem.id} bind:checked={checkeds[index]}>
+					{#if checkeds[index]}
 						<Icon icon="heroicons:check-20-solid" />
 					{/if}
 				</Checkbox.Root>

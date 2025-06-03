@@ -12,7 +12,7 @@ public class MinorSpecification {
 		return (root, query, cb) -> {
 			if (majorId == null)
 				return null;
-			Join<Minor, Major> major = root.join("major");
+			Join<Minor, Major> major = root.join("major", jakarta.persistence.criteria.JoinType.INNER);
 			return cb.equal(major.get("id"), majorId);
 		};
 	}
@@ -21,8 +21,8 @@ public class MinorSpecification {
 		return (root, query, cb) -> {
 			if (schoolId == null)
 				return null;
-			Join<Minor, Major> major = root.join("major");
-			Join<Major, School> school = major.join("school");
+			Join<Minor, Major> major = root.join("major", jakarta.persistence.criteria.JoinType.INNER);
+			Join<Major, School> school = major.join("school", jakarta.persistence.criteria.JoinType.INNER);
 			return cb.equal(school.get("id"), schoolId);
 		};
 	}

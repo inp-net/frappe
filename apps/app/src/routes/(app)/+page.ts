@@ -1,38 +1,21 @@
 import client from '$lib/api/client';
 import type { PageLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch }) => {
+export const load: PageLoad = async ({ fetch, parent }) => {
+	const data = await parent();
 	const documents = await client.GET('/document/', {
-		fetch
-	});
-
-	const majors = await client.GET('/major/', {
-		fetch
-	});
-
-	const minors = await client.GET('/minor/', {
-		fetch
-	});
-
-	const teaching_units = await client.GET('/teachingunit/', {
-		fetch
-	});
-
-	const subjects = await client.GET('/subject/', {
-		fetch
-	});
-
-	const tags = await client.GET('/tag/', {
+		params: {
+			query: {
+				schoolId: data.me?.school?.id,
+				majorId: data.me?.major?.id,
+				minorId: data.me?.minor?.id ? [data.me.minor.id as number] : []
+			}
+		},
 		fetch
 	});
 
 	return {
 		documents: documents.data?.content ?? [],
-		page: documents.data?.pageable?.pageNumber ?? 0,
-		majors: majors.data ?? [],
-		minors: minors.data ?? [],
-		teaching_units: teaching_units.data ?? [],
-		subjects: subjects.data ?? [],
-		tags: tags.data ?? []
+		page: documents.data?.pageable?.pageNumber ?? 0
 	};
 };

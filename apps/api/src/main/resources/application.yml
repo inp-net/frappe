@@ -46,3 +46,9 @@ spring:
 logging:
   level:
     '[fr.inpt.frappe]': DEBUG
+
+server:
+  max-http-request-header-size: 16384
+  tomcat:
+    max-http-response-header-size: 16384
+

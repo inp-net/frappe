@@ -1,5 +1,7 @@
 package fr.inpt.frappe.models.specification;
 
+import java.util.List;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import fr.inpt.frappe.models.Major;
@@ -12,12 +14,12 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 
 public class SubjectSpecification {
-	public static Specification<Subject> hasTeachingUnit(Long tuId) {
+	public static Specification<Subject> hasTeachingUnit(List<Long> tuIds) {
 		return (root, query, cb) -> {
-			if (tuId == null)
+			if (tuIds == null || tuIds.isEmpty())
 				return null;
-			Join<Subject, TeachingUnit> tu = root.join("teachingUnits");
-			return cb.equal(tu.get("id"), tuId);
+			Join<Subject, TeachingUnit> tus = root.join("teachingUnits");
+			return tus.get("id").in(tuIds);
 		};
 	}
 
@@ -25,19 +27,26 @@ public class SubjectSpecification {
 		return (root, query, cb) -> {
 			if (majorId == null)
 				return null;
-			Join<Subject, TeachingUnit> tu = root.join("teachingUnits");
-			Join<TeachingUnit, Major> major = tu.join("majors");
-			return cb.equal(major.get("id"), majorId);
+			Join<Subject, TeachingUnit> tu = root.join("teachingUnits", JoinType.LEFT);
+
+			Join<TeachingUnit, Major> major = tu.join("majors", JoinType.LEFT);
+			Predicate viaMajor = cb.equal(major.get("id"), majorId);
+
+			Join<TeachingUnit, Minor> minor = tu.join("minors", JoinType.LEFT);
+			Join<Minor, Major> minorMajor = minor.join("major", JoinType.LEFT);
+			Predicate viaMinor = cb.equal(minorMajor.get("id"), majorId);
+
+			return cb.or(viaMajor, viaMinor);
 		};
 	}
 
-	public static Specification<Subject> hasMinor(Long minorId) {
+	public static Specification<Subject> hasMinor(List<Long> minorIds) {
 		return (root, query, cb) -> {
-			if (minorId == null)
+			if (minorIds == null || minorIds.isEmpty())
 				return null;
 			Join<Subject, TeachingUnit> tu = root.join("teachingUnits");
-			Join<TeachingUnit, Minor> minor = tu.join("minors");
-			return cb.equal(minor.get("id"), minorId);
+			Join<TeachingUnit, Minor> minors = tu.join("minors");
+			return minors.get("id").in(minorIds);
 		};
 	}
 
