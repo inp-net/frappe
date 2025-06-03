@@ -6,7 +6,7 @@
 </script>
 
 <section class="document-wrapper">
-	{#if numberFiles !== 0}
+	{#if numberFiles > 0}
 		<img src="/files/{document.files[0].id}/preview" alt="" />
 		<p class="title">{document.title}</p>
 		<div class="infos">
@@ -29,6 +29,12 @@
 				</div>
 				<p>{document.author.firstname} {document.author.lastname}</p>
 			</div>
+			<div class="info">
+				<div class="info-icon">
+					<Icon icon="heroicons:calendar-solid" />
+				</div>
+				<p>{document.year}</p>
+			</div>
 			<div class="info tags">
 				{#each document.tags as tag (tag.id)}
 					<Tag {tag} />
@@ -36,7 +42,7 @@
 			</div>
 		</div>
 		<div class="actions">
-			<a class="button" href="/files/{document.files[0].id}">
+			<a class="button" href="/document/{document.id}">
 				<Icon icon="heroicons:document-chart-bar" />
 			</a>
 			<a class="button middle" href="/files/{document.files[0].id}">
@@ -47,7 +53,7 @@
 			</a>
 		</div>
 	{:else}
-		<p>{document.id} pas de files</p>
+		<p>Le document {document.title} ne contient pas de fichier.</p>
 	{/if}
 </section>
 

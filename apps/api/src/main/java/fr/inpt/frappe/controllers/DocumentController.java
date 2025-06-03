@@ -225,10 +225,28 @@ public class DocumentController {
 					"File not found"));
 			Path filePath = Paths.get(basePath).resolve(fileID.toString());
 			UrlResource resource = new UrlResource(filePath.toUri());
+			MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+
+			switch (file.getExtension()) {
+				case ".pdf":
+					mediaType = MediaType.APPLICATION_PDF;
+					break;
+
+				case ".jpg":
+					mediaType = MediaType.IMAGE_JPEG;
+					break;
+
+				case ".png":
+					mediaType = MediaType.IMAGE_PNG;
+					break;
+
+				default:
+					break;
+			}
 
 			if (resource.exists() && resource.isReadable()) {
 				return ResponseEntity.ok()
-						.contentType(MediaType.APPLICATION_OCTET_STREAM)
+						.contentType(mediaType)
 						.header(HttpHeaders.CONTENT_DISPOSITION,
 								"inline; filename=\"" + file.getName() + file.getExtension() + "\"") // Put the original
 																										// name for the
