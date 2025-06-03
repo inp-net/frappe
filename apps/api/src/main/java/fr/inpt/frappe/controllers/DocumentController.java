@@ -104,6 +104,7 @@ public class DocumentController {
 			@RequestParam(required = false) List<Long> teachingUnitIds,
 			@RequestParam(required = false) List<Long> subjectIds,
 			@RequestParam(required = false) List<Integer> year,
+			@RequestParam(required = false) UUID author,
 			@RequestParam(defaultValue = "0") int pageNum,
 			@RequestParam(defaultValue = "50") Integer size) {
 
@@ -113,7 +114,8 @@ public class DocumentController {
 				.and(DocumentSpecification.hasTeachingUnits(teachingUnitIds))
 				.and(DocumentSpecification.hasMinor(minorId))
 				.and(DocumentSpecification.hasMajor(majorId))
-				.and(DocumentSpecification.hasSchool(schoolId));
+				.and(DocumentSpecification.hasSchool(schoolId))
+				.and(DocumentSpecification.hasAuthor(author));
 
 		Sort sortOrder = Sort.by(Sort.Order.desc("year"), Sort.Order.asc("title"), Sort.Order.desc("id"));
 

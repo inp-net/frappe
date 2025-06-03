@@ -53,7 +53,6 @@ public class Document {
 	private Collection<File> files;
 
 	@ManyToOne(cascade = CascadeType.DETACH)
-	@JoinTable(name = "documents_user", joinColumns = @JoinColumn(name = "document_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private User author;
 
 	public Document(String title, Subject subject) {
