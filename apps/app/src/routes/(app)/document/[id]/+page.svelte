@@ -6,13 +6,17 @@
 	import Icon from '@iconify/svelte';
 	import { Button } from 'bits-ui';
 	import { goto } from '$app/navigation';
-	import client from '$lib/api/client.js';
+	import client from '$lib/api/client';
 
 	let { data } = $props();
 	let document = data.document ?? {};
 	let nbFiles = (document.files ?? []).length;
 	let currentFile: number = $state(0);
-	let currentFileId = $state((document.files ?? [])[0].id);
+	let currentFileId = $state('');
+
+	if (document.files?.[0]?.id) {
+		currentFileId = document.files[0].id;
+	}
 
 	let comments = $state(document.comments ?? []);
 
@@ -22,7 +26,7 @@
 			if (currentFile == 0) currentFile = nbFiles - 1;
 			else currentFile--;
 		}
-		currentFileId = (document.files ?? [])[currentFile].id;
+		currentFileId = (document.files ?? [])[currentFile].id ?? '';
 	}
 
 	async function createComment(e: SubmitEvent) {
@@ -47,6 +51,7 @@
 
 	// Make sure the viewer don't overflow from the screen.
 	// More user friendly
+	// svelte-ignore non_reactive_update
 	let viewer: HTMLElement;
 
 	function resizeDiv() {
@@ -110,7 +115,17 @@
 			<Button.Root onclick={() => goto('../')}
 				><Icon icon="heroicons:arrow-left-solid" />Retour</Button.Root
 			>
-			<Button.Root><Icon icon="heroicons:arrow-down-tray-solid" />Télécharger</Button.Root>
+			<Button.Root href="/files/{currentFileId}"
+				><Icon icon="heroicons:arrow-down-tray-solid" />Télécharger</Button.Root
+			>
+			<Button.Root
+				onclick={() => {
+					client.DELETE('/document/{id}', {
+						params: { path: { id: document.id ?? '' } }
+					});
+					goto('../');
+				}}><Icon icon="heroicons:trash-20-solid" />Supprimer</Button.Root
+			>
 		</div>
 
 		<div class="comments">
@@ -141,20 +156,22 @@
 			{/each}
 		</div>
 	</section>
-	<section class="pdf-nav" bind:this={viewer}>
-		{#key currentFileId}
-			<PdfViewer fileID={currentFileId} />
-		{/key}
-		<div class="files-nav">
-			<button class="left" onclick={() => updateFile('prev')}>
-				<Icon icon="heroicons:chevron-left-solid" />
-			</button>
-			<p>Fichier {currentFile + 1} / {nbFiles}</p>
-			<button class="right" onclick={() => updateFile('next')}>
-				<Icon icon="heroicons:chevron-right-solid" />
-			</button>
-		</div>
-	</section>
+	{#if document.files !== undefined && document.files.length >= 1}
+		<section class="pdf-nav" bind:this={viewer}>
+			{#key currentFileId}
+				<PdfViewer fileID={currentFileId} />
+			{/key}
+			<div class="files-nav">
+				<button class="left" onclick={() => updateFile('prev')}>
+					<Icon icon="heroicons:chevron-left-solid" />
+				</button>
+				<p>Fichier {currentFile + 1} / {nbFiles}</p>
+				<button class="right" onclick={() => updateFile('next')}>
+					<Icon icon="heroicons:chevron-right-solid" />
+				</button>
+			</div>
+		</section>
+	{/if}
 </section>
 
 <style lang="scss">
