@@ -54,6 +54,9 @@
 		</div>
 	{:else}
 		<p>Le document {document.title} ne contient pas de fichier.</p>
+		<a class="button" href="/document/{document.id}">
+			<Icon icon="heroicons:document-chart-bar" />
+		</a>
 	{/if}
 </section>
 
@@ -145,6 +148,23 @@
 			.middle {
 				border-left: solid 1px #66686b;
 				border-right: solid 1px #66686b;
+			}
+		}
+		.button {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex: 1;
+			border: none;
+			background: none;
+			padding: 0.25rem 0;
+			cursor: pointer;
+			color: #66686b;
+			transition: background-color 0.2s ease;
+
+			&:hover {
+				background-color: #989898;
+				color: #f8f9fa;
 			}
 		}
 	}
