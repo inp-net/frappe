@@ -8,7 +8,7 @@ export const load: PageLoad = async ({ fetch, parent }) => {
 			query: {
 				schoolId: data.me?.school?.id,
 				majorId: data.me?.major?.id,
-				minorId: data.me?.minor?.id ? [data.me.minor.id as number] : []
+				minorIds: data.me?.minor?.id ? [data.me.minor.id as number] : []
 			}
 		},
 		fetch

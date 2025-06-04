@@ -6,6 +6,7 @@
 	import Icon from '@iconify/svelte';
 	import { Button } from 'bits-ui';
 	import { goto } from '$app/navigation';
+	import client from '$lib/api/client.js';
 
 	let { data } = $props();
 	let document = data.document ?? {};
@@ -13,7 +14,7 @@
 	let currentFile: number = $state(0);
 	let currentFileId = $state((document.files ?? [])[0].id);
 
-	let comments = document.comments ?? [];
+	let comments = $state(document.comments ?? []);
 
 	function updateFile(direction: string) {
 		if (direction === 'next') currentFile = (currentFile + 1) % nbFiles;
@@ -22,6 +23,26 @@
 			else currentFile--;
 		}
 		currentFileId = (document.files ?? [])[currentFile].id;
+	}
+
+	async function createComment(e: SubmitEvent) {
+		e.preventDefault();
+		const form = e.target as HTMLFormElement;
+		const formData = new FormData(e.target as HTMLFormElement);
+		const content = formData.get('content')?.toString() ?? '';
+		const response = await client.POST('/comment/', {
+			body: {
+				content,
+				document: data.document?.id as string
+			}
+		});
+
+		const newComment = response.data;
+
+		if (newComment) {
+			comments.push(newComment);
+			form.reset();
+		}
 	}
 
 	// Make sure the viewer don't overflow from the screen.
@@ -94,7 +115,15 @@
 
 		<div class="comments">
 			<div class="comment-input">
-				<input type="text" class="input" required />
+				<form id="comment-form" class="comment-form" onsubmit={createComment}>
+					<input
+						class="input"
+						type="text"
+						name="content"
+						placeholder="Ecrivez un commentaire"
+						required
+					/>
+				</form>
 				<Button.Root form="comment-form"
 					><Icon icon="heroicons:arrow-down-solid" /></Button.Root
 				>
@@ -201,6 +230,13 @@
 					gap: 0.5rem;
 					width: 100%;
 
+					.comment-form {
+						display: flex;
+						justify-content: center;
+						gap: 0.5rem;
+						width: 100%;
+					}
+
 					.input {
 						font-size: 1rem;
 						padding: 0.5rem;
@@ -236,7 +272,6 @@
 			flex-direction: column;
 			align-items: center;
 			position: sticky;
-			// margin-bottom: 1rem;
 			top: 1rem;
 			gap: 1rem;
 			width: 100%;
