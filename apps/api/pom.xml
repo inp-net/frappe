@@ -77,7 +77,8 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>annotationProcessor</scope>
+			<version>1.18.38</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
@@ -117,18 +118,6 @@
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers-standard-package</artifactId>
 			<version>3.2.0</version>
-		</dependency>
-
-		<dependency>
-    		<groupId>org.apache.pdfbox</groupId>
-    		<artifactId>pdfbox</artifactId>
-    		<version>3.0.5</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.coobird</groupId>
-			<artifactId>thumbnailator</artifactId>
-			<version>0.4.20</version>
 		</dependency>
 
 		<dependency>
@@ -224,6 +213,7 @@
 			<plugin>
 				<groupId>org.springdoc</groupId>
 				<artifactId>springdoc-openapi-maven-plugin</artifactId>
+				<version>1.5</version>
 				<executions>
 					<execution>
 						<id>doc-generate</id>
