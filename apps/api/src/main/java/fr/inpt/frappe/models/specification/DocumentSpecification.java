@@ -139,6 +139,32 @@ public class DocumentSpecification {
 		};
 	}
 
+	public static Specification<Document> hasSchoolViaView(Long schoolId) {
+		return (root, query, cb) -> {
+			if (schoolId == null)
+				return null;
+
+			query.distinct(true);
+
+			// Document → Subject → TeachingUnit
+			Join<Document, Subject> subject = root.join("subject");
+			Join<Subject, TeachingUnit> tu = subject.join("teachingUnits");
+
+			// TeachingUnit → TeachingUnitMajorView (manual join)
+			Root<TeachingUnitMajorView> viewRoot = query.from(TeachingUnitMajorView.class);
+			Predicate joinCondition = cb.equal(tu.get("id"), viewRoot.get("teachingUnitId"));
+
+			// TeachingUnitMajorView → Major (manual join)
+			Root<Major> majorRoot = query.from(Major.class);
+			Predicate joinCondition2 = cb.equal(viewRoot.get("majorId"), majorRoot.get("id"));
+
+			Join<Major, School> schools = majorRoot.join("school", JoinType.LEFT);
+			Predicate schoolMatch = cb.equal(schools.get("id"), schoolId);
+
+			return cb.and(schoolMatch, cb.and(joinCondition, joinCondition2));
+		};
+	}
+
 	public static Specification<Document> hasYears(List<Integer> years) {
 		return (root, query, cb) -> {
 			if (years == null || years.isEmpty())

@@ -117,7 +117,7 @@ public class DocumentController {
 				.and(DocumentSpecification.hasTeachingUnits(teachingUnitIds))
 				.and(DocumentSpecification.hasMinor(minorIds))
 				.and(DocumentSpecification.hasMajorViaView(majorId))
-				.and(DocumentSpecification.hasSchool(schoolId))
+				.and(DocumentSpecification.hasSchoolViaView(schoolId))
 				.and(DocumentSpecification.hasAuthor(author));
 
 		Sort sortOrder = Sort.by(Sort.Order.desc("year"), Sort.Order.asc("title"), Sort.Order.desc("id"));
