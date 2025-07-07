@@ -116,7 +116,7 @@ public class DocumentController {
 				.and(DocumentSpecification.hasSubjects(subjectIds))
 				.and(DocumentSpecification.hasTeachingUnits(teachingUnitIds))
 				.and(DocumentSpecification.hasMinor(minorIds))
-				.and(DocumentSpecification.hasMajor(majorId))
+				.and(DocumentSpecification.hasMajorViaView(majorId))
 				.and(DocumentSpecification.hasSchool(schoolId))
 				.and(DocumentSpecification.hasAuthor(author));
 

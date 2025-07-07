@@ -13,10 +13,12 @@ import fr.inpt.frappe.models.Major;
 import fr.inpt.frappe.models.Minor;
 import fr.inpt.frappe.models.School;
 import fr.inpt.frappe.models.TeachingUnit;
+import fr.inpt.frappe.models.TeachingUnitMajorView;
 import fr.inpt.frappe.models.User;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 public class DocumentSpecification {
 
@@ -88,6 +90,27 @@ public class DocumentSpecification {
 			Predicate majorViaMinor = cb.equal(minorMajor.get("id"), majorId);
 
 			return cb.or(majorDirect, majorViaMinor);
+		};
+	}
+
+	public static Specification<Document> hasMajorViaView(Long majorId) {
+		return (root, query, cb) -> {
+			if (majorId == null) {
+				return null;
+			}
+
+			query.distinct(true);
+
+			// Document → Subject → TeachingUnit
+			Join<Document, Subject> subject = root.join("subject");
+			Join<Subject, TeachingUnit> tu = subject.join("teachingUnits");
+
+			// TeachingUnit → TeachingUnitMajorView (manual join)
+			Root<TeachingUnitMajorView> viewRoot = query.from(TeachingUnitMajorView.class);
+			Predicate joinCondition = cb.equal(tu.get("id"), viewRoot.get("teachingUnitId"));
+			Predicate majorMatch = cb.equal(viewRoot.get("majorId"), majorId);
+
+			return cb.and(joinCondition, majorMatch);
 		};
 	}
 
